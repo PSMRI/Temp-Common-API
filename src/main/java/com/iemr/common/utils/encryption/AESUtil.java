@@ -68,19 +68,14 @@ public class AESUtil {
 
     public String decrypt(String salt, String iv, String passPhrase, String cipherText) {
         try {
-        	logger.info("passPhrase : " + passPhrase);
-            SecretKey key = generateKey(salt, passPhrase);
-            logger.info("key : " + key);
+        	SecretKey key = generateKey(salt, passPhrase);
             byte[] encrypted;
             if (dataType.equals(DataType.HEX)) {
                 encrypted = fromHex(cipherText);
-                logger.info("encrypted 1 : " + encrypted);
             } else {
                 encrypted = fromBase64(cipherText);
-                logger.info("encrypted 2 : " + encrypted);
             }
             byte[] decrypted = doFinal(Cipher.DECRYPT_MODE, key, iv, encrypted);
-            logger.info("decrypted : " + decrypted);
             return new String(Objects.requireNonNull(decrypted), StandardCharsets.UTF_8);
         } catch (Exception e) {
             return null;
@@ -89,15 +84,10 @@ public class AESUtil {
 
     public String decrypt(String passPhrase, String cipherText) {
         try {
-        	logger.info("cipherText : " + cipherText);
-            String salt = cipherText.substring(0, saltLength);
-            logger.info("salt : " + salt);
+        	String salt = cipherText.substring(0, saltLength);
             int ivLength = IV_SIZE / 4;
-            logger.info("ivLength : " + ivLength);
             String iv = cipherText.substring(saltLength, saltLength + ivLength);
-            logger.info("iv : " + iv);
             String ct = cipherText.substring(saltLength + ivLength);
-            logger.info("ct : " + ct);
             return decrypt(salt, iv, passPhrase, ct);
         } catch (Exception e) {
             return null;
@@ -124,26 +114,21 @@ public class AESUtil {
     }
 
     private static byte[] fromHex(String str) {
-    	logger.info("fromHex " + str);
-        return DatatypeConverter.parseHexBinary(str);
+    	return DatatypeConverter.parseHexBinary(str);
     }
 
     private static String toHex(byte[] ba) {
-    	logger.info("toHex " + ba);
-        return DatatypeConverter.printHexBinary(ba);
+    	return DatatypeConverter.printHexBinary(ba);
     }
 
     private byte[] doFinal(int mode, SecretKey secretKey, String iv, byte[] bytes) throws IllegalBlockSizeException, BadPaddingException {
         try {
-        	logger.info("Indide do finel method ");
-            cipher.init(mode, secretKey, new IvParameterSpec(fromHex(iv)));
-            logger.info("Indide do finel method 2 : "+bytes);
+        	cipher.init(mode, secretKey, new IvParameterSpec(fromHex(iv)));
             return cipher.doFinal(bytes);
         } catch (InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException
                 | InvalidKeyException e) {
         	logger.info(e.getMessage());
         }
-        logger.info("outside of dofinal : "+ bytes);
         return cipher.doFinal(bytes);
     }
 
