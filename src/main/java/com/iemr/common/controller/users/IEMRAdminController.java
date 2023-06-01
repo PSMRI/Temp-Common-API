@@ -36,6 +36,7 @@ import com.iemr.common.model.user.ForceLogoutRequestModel;
 import com.iemr.common.model.user.LoginRequestModel;
 import com.iemr.common.model.user.LoginResponseModel;
 import com.iemr.common.service.users.IEMRAdminUserService;
+import com.iemr.common.utils.encryption.AESUtil;
 import com.iemr.common.utils.exception.IEMRException;
 import com.iemr.common.utils.mapper.InputMapper;
 import com.iemr.common.utils.mapper.OutputMapper;
@@ -54,6 +55,13 @@ public class IEMRAdminController {
 	private InputMapper inputMapper = new InputMapper();
 
 	private IEMRAdminUserService iemrAdminUserServiceImpl;
+	
+	private AESUtil aesUtil;
+
+	@Autowired
+	public void setAesUtil(AESUtil aesUtil) {
+	this.aesUtil = aesUtil;
+	}
 
 	@Autowired
 	public void setIemrAdminUserService(IEMRAdminUserService iemrAdminUserService) {
@@ -92,7 +100,9 @@ public class IEMRAdminController {
 		OutputResponse response = new OutputResponse();
 		logger.info("userAuthenticate request - " + m_User + " " + m_User.getUserName() + " " + m_User.getPassword());
 		try {
-			List<User> mUser = iemrAdminUserServiceImpl.userAuthenticate(m_User.getUserName(), m_User.getPassword());
+			String decryptPassword = aesUtil.decrypt("Piramal12Piramal", m_User.getPassword());
+			logger.info("decryptPassword : " + decryptPassword);
+			List<User> mUser = iemrAdminUserServiceImpl.userAuthenticate(m_User.getUserName(), decryptPassword);
 			JSONObject resMap = new JSONObject();
 			JSONObject serviceRoleMultiMap = new JSONObject();
 			JSONObject serviceRoleMap = new JSONObject();
@@ -429,8 +439,9 @@ public class IEMRAdminController {
 			}
 			User mUser = mUsers.get(0);
 			String setStatus;
-			noOfRowModified = iemrAdminUserServiceImpl.setForgetPassword(mUser, m_user.getPassword(),
-					m_user.getTransactionId(),m_user.getIsAdmin());
+			String decryptPassword = aesUtil.decrypt("Piramal12Piramal", m_user.getPassword());
+			noOfRowModified = iemrAdminUserServiceImpl.setForgetPassword(mUser, decryptPassword,
+			m_user.getTransactionId(), m_user.getIsAdmin());
 			if (noOfRowModified > 0) {
 				setStatus = "Password Changed";
 			} else {
