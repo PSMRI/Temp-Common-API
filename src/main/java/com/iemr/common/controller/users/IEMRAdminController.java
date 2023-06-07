@@ -285,7 +285,8 @@ public class IEMRAdminController {
 			if (!m_User.getUserName().equalsIgnoreCase("SuperAdmin")) {
 				throw new IEMRException("Please log with admin credentials");
 			}
-			User mUser = iemrAdminUserServiceImpl.superUserAuthenticate(m_User.getUserName(), m_User.getPassword());
+			String decryptPassword = aesUtil.decrypt("Piramal12Piramal", m_User.getPassword());
+			User mUser = iemrAdminUserServiceImpl.superUserAuthenticate(m_User.getUserName(), decryptPassword);
 			JSONObject resMap = new JSONObject();
 			JSONObject previlegeObj = new JSONObject();
 			//condition added to check for concurrent login
