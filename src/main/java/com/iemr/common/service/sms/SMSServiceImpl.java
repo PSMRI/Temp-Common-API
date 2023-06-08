@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -74,6 +73,7 @@ import com.iemr.common.repository.sms.SMSTemplateRepository;
 import com.iemr.common.repository.sms.SMSTypeRepository;
 import com.iemr.common.repository.users.IEMRUserRepositoryCustom;
 import com.iemr.common.service.beneficiary.IEMRSearchUserService;
+import com.iemr.common.utils.CryptoUtil;
 import com.iemr.common.utils.config.ConfigProperties;
 import com.iemr.common.utils.http.HttpUtils;
 import com.iemr.common.utils.mapper.OutputMapper;
@@ -86,7 +86,10 @@ public class SMSServiceImpl implements SMSService {
 	private String prescription;
 	@Autowired
 	SMSMapper smsMapper;
-
+	
+	@Autowired
+	private CryptoUtil cryptoUtil;
+	
 	@Autowired
 	SMSTemplateRepository smsTemplateRepository;
 
@@ -873,15 +876,13 @@ public class SMSServiceImpl implements SMSService {
 	public void publishSMS() {
 		if (!SMSServiceImpl.publishingSMS) {
 			try {
-				StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-				encryptor.setAlgorithm("PBEWithMD5AndDES");
-				encryptor.setPassword("dev-env-secret");
+				
 				SMSServiceImpl.publishingSMS = true;
 				Boolean doSendSMS = ConfigProperties.getBoolean("send-sms");
 				String sendSMSURL = ConfigProperties.getPropertyByName("send-message-url");
 				String sendSMSAPI = SMSServiceImpl.SMS_GATEWAY_URL + "/" + sendSMSURL;
-				String senderName = encryptor.decrypt(ConfigProperties.getPropertyByName("sms-username"));
-				String senderPassword = encryptor.decrypt(ConfigProperties.getPropertyByName("sms-password"));
+				String senderName = cryptoUtil.decrypt(ConfigProperties.getPropertyByName("sms-username"));
+				String senderPassword = cryptoUtil.decrypt(ConfigProperties.getPropertyByName("sms-password"));
 				String senderNumber = ConfigProperties.getPropertyByName("sms-sender-number");
 				sendSMSAPI = sendSMSAPI.replace("USERNAME", senderName).replace("PASSWORD", senderPassword)
 						.replace("SENDER_NUMBER", senderNumber);

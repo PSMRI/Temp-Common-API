@@ -11,7 +11,6 @@ import java.util.Properties;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +35,17 @@ import com.iemr.common.repository.email.MDSR_CDREmailRepository;
 import com.iemr.common.repository.email.StockAlertDataRepo;
 import com.iemr.common.repository.feedback.FeedbackRepository;
 import com.iemr.common.service.beneficiary.IEMRSearchUserService;
+import com.iemr.common.utils.CryptoUtil;
 import com.iemr.common.utils.config.ConfigProperties;
 import com.iemr.common.utils.http.HttpUtils;
 import com.iemr.common.utils.mapper.InputMapper;
 
 @Service
 public class EmailServiceImpl implements EmailService {
-
+	
+	@Autowired
+	private CryptoUtil cryptoUtil;
+	
 	private InputMapper inputMapper = new InputMapper();
 	@Autowired
 	private JavaMailSender javaMailSender;
@@ -485,11 +488,9 @@ public class EmailServiceImpl implements EmailService {
 			 JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 	            mailSender.setHost(host);
 	            mailSender.setPort(Integer.parseInt(port));
-	            StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-	    		encryptor.setAlgorithm("PBEWithMD5AndDES");
-	    		encryptor.setPassword("dev-env-secret");
-	    		String decryptSender = encryptor.decrypt(sender);
-	    		String decryptPass = encryptor.decrypt(password);
+	            
+	    		String decryptSender = cryptoUtil.decrypt(sender);
+	    		String decryptPass = cryptoUtil.decrypt(password);
 	    		
 	           mailSender.setUsername(decryptSender);
 	            mailSender.setPassword(decryptPass);

@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +30,15 @@ import com.iemr.common.data.door_to_door_app.RequestParser;
 import com.iemr.common.data.door_to_door_app.V_doortodooruserdetails;
 import com.iemr.common.model.user.LoginRequestModel;
 import com.iemr.common.repo.door_to_door_app.V_doortodooruserdetailsRepo;
+import com.iemr.common.utils.CryptoUtil;
 import com.iemr.common.utils.mapper.InputMapper;
 
 @Service
 @PropertySource("classpath:application.properties")
 public class DoorToDoorServiceImpl implements DoorToDoorService {
+	
+	@Autowired
+	private CryptoUtil cryptoUtil;
 
 	@Value("${avniRegistrationLimit}")
 	private String avniRegistrationLimit;
@@ -264,11 +268,13 @@ public class DoorToDoorServiceImpl implements DoorToDoorService {
 
 	public String amritUserAuthenticate() {
 		String authorization = "";
-		StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-		encryptor.setAlgorithm("PBEWithMD5AndDES");
-		encryptor.setPassword("dev-env-secret");
-		String amritUser = encryptor.decrypt(amritUserName);
-		String amritPass = encryptor.decrypt(amritPassword);
+		/*
+		 * StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+		 * encryptor.setAlgorithm("PBEWithMD5AndDES");
+		 * encryptor.setPassword("dev-env-secret");
+		 */
+		String amritUser = cryptoUtil.decrypt(amritUserName);
+		String amritPass = cryptoUtil.decrypt(amritPassword);
 		LoginRequestModel loginCredentials = new LoginRequestModel(amritUser, amritPass);
 		loginCredentials.setDoLogout(true);
 		MultiValueMap<String, String> headersLogin = new LinkedMultiValueMap<String, String>();

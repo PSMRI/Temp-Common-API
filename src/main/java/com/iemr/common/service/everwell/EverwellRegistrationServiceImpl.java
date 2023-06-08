@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +35,15 @@ import com.iemr.common.model.user.LoginRequestModel;
 import com.iemr.common.repository.everwell.EverwellFetchAndSync;
 import com.iemr.common.repository.location.LocationDistrictRepository;
 import com.iemr.common.repository.location.LocationStateRepository;
+import com.iemr.common.utils.CryptoUtil;
 import com.iemr.common.utils.mapper.InputMapper;
 import com.iemr.common.utils.response.OutputResponse;
 
 @Service
 @PropertySource("classpath:application.properties")
 public class EverwellRegistrationServiceImpl implements EverwellRegistrationService {
+	@Autowired
+	private CryptoUtil cryptoUtil;
 
 	private InputMapper inputMapper = new InputMapper();
 
@@ -124,11 +126,9 @@ public class EverwellRegistrationServiceImpl implements EverwellRegistrationServ
 		try {
 
 			// 1097 user authentication
-			StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-			encryptor.setAlgorithm("PBEWithMD5AndDES");
-			encryptor.setPassword("dev-env-secret");
-			String amritUser = encryptor.decrypt(amritUserName);
-			String amritPass = encryptor.decrypt(amritPassword);
+		
+			String amritUser = cryptoUtil.decrypt(amritUserName);
+			String amritPass = cryptoUtil.decrypt(amritPassword);
 			LoginRequestModel loginCredentials1097 = new LoginRequestModel(amritUser, amritPass);
 
 			MultiValueMap<String, String> headersLogin = new LinkedMultiValueMap<String, String>();

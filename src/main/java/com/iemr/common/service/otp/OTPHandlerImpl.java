@@ -5,7 +5,6 @@ import java.security.SecureRandom;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +18,7 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.primitives.Ints;
 import com.iemr.common.data.otp.OTPRequestParsor;
 import com.iemr.common.service.users.IEMRAdminUserServiceImpl;
+import com.iemr.common.utils.CryptoUtil;
 import com.iemr.common.utils.config.ConfigProperties;
 import com.iemr.common.utils.http.HttpUtils;
 
@@ -32,7 +32,10 @@ import com.iemr.common.utils.http.HttpUtils;
 
 @Service
 public class OTPHandlerImpl implements OTPHandler {
-
+	
+	@Autowired
+	private CryptoUtil cryptoUtil;
+	
 	@Autowired
 	HttpUtils httpUtils;
 	@Autowired
@@ -135,13 +138,11 @@ public class OTPHandlerImpl implements OTPHandler {
 	// send SMS to user
 	private void sendSMS(int otp, String phoneNo, String msgText) throws Exception {
 		// Boolean doSendSMS = ConfigProperties.getBoolean("send-sms");
-		StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-		encryptor.setAlgorithm("PBEWithMD5AndDES");
-		encryptor.setPassword("dev-env-secret");
+		
 		String sendSMSURL = ConfigProperties.getPropertyByName("send-message-url");
 		String sendSMSAPI = OTPHandlerImpl.SMS_GATEWAY_URL + "/" + sendSMSURL;
-		String senderName = encryptor.decrypt(ConfigProperties.getPropertyByName("sms-username"));
-		String senderPassword = encryptor.decrypt(ConfigProperties.getPropertyByName("sms-password"));
+		String senderName = cryptoUtil.decrypt(ConfigProperties.getPropertyByName("sms-username"));
+		String senderPassword = cryptoUtil.decrypt(ConfigProperties.getPropertyByName("sms-password"));
 		String senderNumber = ConfigProperties.getPropertyByName("sms-sender-number");
 
 		sendSMSAPI = sendSMSAPI.replace("USERNAME", senderName).replace("PASSWORD", senderPassword)
