@@ -1,4 +1,4 @@
-# Common API Module 
+# AMRIT - Common Service 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  
 
 Common API is a microservice whch acts as a gateway for AMRIT. There are many APIs that are exposed by Common-API. It contains APIs of common integrators like c-Zentrix, Everwell, Openkm and some master APIs like location master, alerts,  notification,language and location messages.
