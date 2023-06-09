@@ -1,4 +1,29 @@
+# Ignore the target directory
 target/
-.settings
+
+# Ignore the .settings directory
+.settings/
+
+# Ignore the .project file
 .project
 
+# Ignore the .classpath file
+.classpath
+
+# Ignore the .factorypath file
+.factorypath
+
+# Ignore the .sts4-cache folder
+.sts4-cache/
+
+# Ignore the Maven wrapper files
+mvnw
+mvnw.cmd
+
+# Ignore the logs folder
+logs/
+
+# Ignore specific files
+swaasaPathcoughSoundAssessment1234567890121678177840715.wav
+replay_pid89928.log
+hs_err_pid89928.log
