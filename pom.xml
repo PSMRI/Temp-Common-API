@@ -3,9 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<!-- <artifactId>iemr_1097</artifactId> <packaging>war</packaging> <name>1097 
-		services</name> <description></description> <url></url> <version>1.0</version> -->
-
+	
 	<groupId>com.iemr.common-API</groupId>
 	<artifactId>Common</artifactId>
 	<version>1.0.1</version>
@@ -83,13 +81,11 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
-		<!-- JSTL -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 		</dependency>
 
-		<!-- Need this to compile JSP -->
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-jasper</artifactId>
@@ -101,13 +97,11 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
@@ -161,7 +155,6 @@
 			<artifactId>springfox-swagger2</artifactId>
 			<!-- <version>2.6.1</version> -->
 			<version>2.8.0</version>
-			<!-- <scope>compile</scope> -->
 			<exclusions>
 				<exclusion>
 					<groupId>org.mapstruct</groupId>
@@ -269,11 +262,6 @@
 			<artifactId>byte-buddy</artifactId>
 			<version>1.7.9</version>
 		</dependency>
-
-		<!-- <dependency> <groupId>org.objenesis</groupId> <artifactId>objenesis</artifactId> 
-			<version>2.1</version> <scope>runtime</scope> </dependency> -->
-
-		<!-- Below dependencies are added for doing dbunit testing -->
 		<dependency>
 			<groupId>org.dbunit</groupId>
 			<artifactId>dbunit</artifactId>
@@ -292,8 +280,6 @@
 			<version>1.2.1</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- DB Unit testing comoponents end -->
-		<!-- Spring security components Start -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
@@ -304,33 +290,25 @@
 			<artifactId>spring-security-config</artifactId>
 			<version>5.0.0.RELEASE</version><!--$NO-MVN-MAN-VER$ -->
 		</dependency>
-		<!-- Spring security components End -->
-		<!-- Lobmok and mapper dependencies start -->
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<!-- <scope>provided</scope> <optional>true</optional> -->
 		</dependency>
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct-jdk8</artifactId>
 			<version>${org.mapstruct.version}</version>
-			<!-- <scope>provided</scope> -->
 		</dependency>
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct-processor</artifactId>
 			<version>${org.mapstruct.version}</version>
-			<!-- <scope>provided</scope> -->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
-			<!-- <scope>runtime</scope> -->
 		</dependency>
-		<!-- Excel -->
-		
 
 <dependency>
     <groupId>org.apache.poi</groupId>
@@ -344,10 +322,7 @@
     <version>5.0.0</version>
 </dependency>
 
-		<!-- lombok and mapper dependencies end -->
 	</dependencies>
-
-	
 
 	<build>
 		<finalName>commonapi-v1.0</finalName>
@@ -357,32 +332,7 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.0.2</version>
 			</plugin>
-		<!--	<plugin>
-				<groupId>pl.project13.maven</groupId>
-				<artifactId>git-commit-id-plugin</artifactId>
-				<version>2.2.4</version>
-				<executions>
-					<execution>
-						<id>get-the-git-infos</id>
-						<goals>
-							<goal>revision</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
-					<prefix>git</prefix>
-					<verbose>false</verbose>
-					<generateGitPropertiesFile>true</generateGitPropertiesFile>
-					<generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
-					<format>json</format>
-					<gitDescribe>
-						<skip>false</skip>
-						<always>false</always>
-						<dirty>-dirty</dirty>
-					</gitDescribe>
-				</configuration>
-			</plugin> -->
+		
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -437,52 +387,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- <plugin>
-				<groupId>org.wildfly.plugins</groupId>
-				<artifactId>wildfly-maven-plugin</artifactId>
-				<version>1.2.1.Final</version>
-				<configuration>
-					<echo>
-						${server-id}
-						$${server-hostname}
-						$${server-port}
-					</echo>
-					<id>${server-id}</id>
-					<hostname>$${server-hostname}</hostname>
-					<port>$${server-port}</port>
-					<username>piramaltest</username>
-					<password>buildrele@se@56</password>
-				</configuration>
-				<executions>
-					 <execution> <id>Undeploy-clean</id> <phase>clean</phase> <goals> 
-						<goal>undeploy</goal> </goals> </execution> 
-					 <execution> <id>Shutdown-clean</id> <phase>clean</phase> <goals> 
-						<goal>shutdown</goal> </goals> </execution> 
-					<execution>
-						<id>Undeploy</id>
-						<phase>install</phase>
-						<goals>
-							<goal>undeploy</goal>
-						</goals>
-					</execution>
-					 <execution> <id>Shutdown</id> <phase>install</phase> <goals> <goal>shutdown</goal> 
-						</goals> </execution> 
-					<execution>
-						<id>Install</id>
-						<phase>install</phase>
-						<goals>
-							<goal>deploy</goal>
-						</goals>
-					</execution>
-					< execution>
-						<id>Start</id>
-						<phase>install</phase>
-						<goals>
-							<goal>start</goal>
-						</goals>
-					</execution >
-				</executions>
-			</plugin> -->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -491,12 +395,6 @@
 					<testFailureIgnore>true</testFailureIgnore>
 				</configuration>
 			</plugin>
-
-<!-- 			<plugin> -->
-<!-- 				<groupId>com.github.ulisesbocchio</groupId> -->
-<!-- 				<artifactId>jasypt-maven-plugin</artifactId> -->
-<!-- 				<version>3.0.3</version> -->
-<!-- 			</plugin> -->
 
 		</plugins>
 	</build>
