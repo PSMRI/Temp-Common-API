@@ -17,16 +17,15 @@ public class ScheduleJobForNHMDashboardData implements Job {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	@Autowired
-	private NHM_DashboardService nhm_DashboardService;
+	private NHM_DashboardService nhmDashboardService;
 
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		logger.info("Started job for NHM dashboard data pull from cti " + arg0.getClass().getName());
 		try {
-			String s = nhm_DashboardService.pull_NHM_Data_CTI();
+			String s = nhmDashboardService.pull_NHM_Data_CTI();
 			logger.info(s);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getLocalizedMessage());
 		}
 		logger.info("Completed job for NHM dashboard data pull from cti " + arg0.getClass().getName());

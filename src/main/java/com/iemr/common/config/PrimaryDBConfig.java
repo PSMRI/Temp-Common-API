@@ -28,7 +28,7 @@ import com.iemr.common.utils.config.ConfigProperties;
 @EnableJpaRepositories(entityManagerFactoryRef = "entityManagerFactory", basePackages = { "com.iemr.common.repository",
 		"com.iemr.common.repo", "com.iemr.common.notification.agent", "com.iemr.common.covidVaccination" })
 public class PrimaryDBConfig {
-	
+
 	@Autowired
 	private CryptoUtil cryptoUtil;
 	Logger logger = LoggerFactory.getLogger(this.getClass().getName());
@@ -51,8 +51,6 @@ public class PrimaryDBConfig {
 		p.setValidationQuery("SELECT 1");
 		org.apache.tomcat.jdbc.pool.DataSource datasource = new org.apache.tomcat.jdbc.pool.DataSource();
 		datasource.setPoolProperties(p);
-
-		
 
 		datasource.setUsername(cryptoUtil.decrypt(ConfigProperties.getPropertyByName("encDbUserName")));
 		datasource.setPassword(cryptoUtil.decrypt(ConfigProperties.getPropertyByName("encDbPass")));
