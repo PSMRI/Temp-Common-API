@@ -35,6 +35,8 @@ import io.swagger.annotations.ApiParam;
 public class CallController {
 	InputMapper inputMapper = new InputMapper();
 	final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	private static final String XFORWARDEDFOR = "X-FORWARDED-FOR";
+	private static final String AUTHORIZATION = "authorization";
 	private CalltypeServiceImpl calltypeServiceImpl;
 
 	@Autowired
@@ -95,7 +97,7 @@ public class CallController {
 			HttpServletRequest fromRequest) {
 		OutputResponse response = new OutputResponse();
 		try {
-			String remoteAddress = fromRequest.getHeader("X-FORWARDED-FOR");
+			String remoteAddress = fromRequest.getHeader(XFORWARDEDFOR);
 			if (remoteAddress == null || remoteAddress.trim().length() == 0) {
 				remoteAddress = fromRequest.getRemoteAddr();
 			}
@@ -145,14 +147,13 @@ public class CallController {
 					+ "\"agentIPAddress\":\"Optional String - agent IP address\", "
 					+ "\"agentID\":\"Optional String - agentID\", \"isSelf\":\"Optional boolean\", "
 					+ "\"isFeedback\":\"optional Boolean true if IVRS feedback to be taken\", "
-					+ "\"isTransfered\":\"Boolean - transfer call or not\""
-					+ "}") @RequestBody String request,
+					+ "\"isTransfered\":\"Boolean - transfer call or not\"" + "}") @RequestBody String request,
 			HttpServletRequest serverRequest) {
 		OutputResponse response = new OutputResponse();
 		try {
 			logger.info("closeCallReqObj " + request);
 			JSONObject requestObject = new JSONObject(request);
-			String remoteAddress = serverRequest.getHeader("X-FORWARDED-FOR");
+			String remoteAddress = serverRequest.getHeader(XFORWARDEDFOR);
 			if (remoteAddress == null || remoteAddress.trim().length() == 0) {
 				remoteAddress = serverRequest.getRemoteAddr();
 			}
@@ -188,7 +189,7 @@ public class CallController {
 		OutputResponse response = new OutputResponse();
 		try {
 			JSONObject requestObject = new JSONObject(request);
-			String remoteAddress = serverRequest.getHeader("X-FORWARDED-FOR");
+			String remoteAddress = serverRequest.getHeader(XFORWARDEDFOR);
 			if (remoteAddress == null || remoteAddress.trim().length() == 0) {
 				remoteAddress = serverRequest.getRemoteAddr();
 			}
@@ -215,7 +216,7 @@ public class CallController {
 			+ "\"filterStartDate\":\"JSON date\", " + "\"filterEndDate\":\"JSON Date\"}") @RequestBody String request,
 			HttpServletRequest httpRequest) {
 		OutputResponse response = new OutputResponse();
-		String auth = httpRequest.getHeader("authorization");
+		String auth = httpRequest.getHeader(AUTHORIZATION);
 		try {
 			response.setResponse(beneficiaryCallService.outboundCallList(request, auth));
 		} catch (Exception e) {
@@ -254,7 +255,7 @@ public class CallController {
 					+ "\"is1097\" : \"boolean true for 1097\"}") @RequestBody String request,
 			HttpServletRequest httpRequest) {
 		OutputResponse response = new OutputResponse();
-		String auth = httpRequest.getHeader("authorization");
+		String auth = httpRequest.getHeader(AUTHORIZATION);
 		try {
 			response.setResponse(beneficiaryCallService.filterCallList(request, auth));
 		} catch (Exception e) {
@@ -274,7 +275,7 @@ public class CallController {
 			+ "\"is1097\" : \"boolean true for 1097\", \"pageNo\\\":\"optional page no\", , \"pageSize\":\"optional page size\" }") @RequestBody String request,
 			HttpServletRequest httpRequest) {
 		OutputResponse response = new OutputResponse();
-		String auth = httpRequest.getHeader("authorization");
+		String auth = httpRequest.getHeader(AUTHORIZATION);
 		try {
 			response.setResponse(beneficiaryCallService.filterCallListWithPagination(request, auth));
 		} catch (Exception e) {
@@ -469,14 +470,8 @@ public class CallController {
 			HttpServletRequest serverRequest) {
 		OutputResponse response = new OutputResponse();
 		try {
-			String remoteAddress = serverRequest.getHeader("X-FORWARDED-FOR");
-			if (remoteAddress == null || remoteAddress.trim().length() == 0) {
-				remoteAddress = serverRequest.getRemoteAddr();
-			}
-			String auth = serverRequest.getHeader("authorization");
+			String auth = serverRequest.getHeader(AUTHORIZATION);
 			response.setResponse(beneficiaryCallService.nueisanceCallHistory(request, auth).toString());
-			// response.setResponse(beneficiaryCallService.filterCallList(request,
-			// auth).toString());
 		} catch (Exception e) {
 			logger.error("outboundCallList failed with error " + e.getMessage(), e);
 			response.setError(e);
@@ -487,7 +482,8 @@ public class CallController {
 
 	@CrossOrigin()
 	@RequestMapping(value = "/beneficiaryByCallID", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
-	public String beneficiaryByCallID(@ApiParam("{\"callID\":\"String\"}") @RequestBody CallRequestByIDModel request, HttpServletRequest serverRequest) {
+	public String beneficiaryByCallID(@ApiParam("{\"callID\":\"String\"}") @RequestBody CallRequestByIDModel request,
+			HttpServletRequest serverRequest) {
 		OutputResponse response = new OutputResponse();
 		try {
 			BeneficiaryCallModel callData = beneficiaryCallService.beneficiaryByCallID(request,
@@ -585,10 +581,10 @@ public class CallController {
 
 	@CrossOrigin()
 	@RequestMapping(value = "/getFilePathCTI", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
-	public String getFilePathCTI(@ApiParam("{\"agentID\":\"String\",\"callID\":\"String\"}") @RequestBody String request) {
+	public String getFilePathCTI(
+			@ApiParam("{\"agentID\":\"String\",\"callID\":\"String\"}") @RequestBody String request) {
 		OutputResponse response = new OutputResponse();
 		try {
-//			response.setResponse(beneficiaryCallService.CTIFilePath(request));
 			String pathResponse = beneficiaryCallService.cTIFilePathNew(request);
 			if (pathResponse != null)
 				response.setResponse(pathResponse);

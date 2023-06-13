@@ -25,13 +25,11 @@ import io.swagger.annotations.ApiParam;
 @PropertySource("classpath:myapp.properties")
 @RestController
 @RequestMapping(value = "/carestream")
-public class CareStreamCreateOrderController
-{
+public class CareStreamCreateOrderController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	private static final char END_OF_BLOCK = '\u001c';
 	private static final char START_OF_BLOCK = '\u000b';
 	private static final char CARRIAGE_RETURN = 13;
-	private static final int MAX_BYTES = 1024;
 
 	@Value("${carestream_socket_ip}")
 	private String carestreamSocketIP;
@@ -40,33 +38,25 @@ public class CareStreamCreateOrderController
 	private int carestreamSocketPort;
 
 	@CrossOrigin()
-	@RequestMapping(value = "/createOrder", headers = "Authorization", method = { RequestMethod.POST },
-			produces =
-	{ "application/json" })
+	@RequestMapping(value = "/createOrder", headers = "Authorization", method = { RequestMethod.POST }, produces = {
+			"application/json" })
 	public String createOrder(@ApiParam("{\"firstName\":\"String\",\"middleName\":\"String\",\"LastName\":\"String\","
-			+ "\"gender\":\"String\",\"dob\":\"String\",\"patientID\":\"String\",\"acc\":\"String\"}") @RequestBody String createOrder) throws UnknownHostException, IOException
-	{
-		// JSONObject requestOBJ = new JSONObject(providerBlocking);
+			+ "\"gender\":\"String\",\"dob\":\"String\",\"patientID\":\"String\",\"acc\":\"String\"}") @RequestBody String createOrder)
+			throws UnknownHostException, IOException {
 		OutputResponse response = new OutputResponse();
 		Socket socket = null;
-		try
-		{
+		try {
 
 			CreateOrderData benificiaryDetails = InputMapper.gson().fromJson(createOrder, CreateOrderData.class);
 
-			// public static void main(String[] args) {
-
 			String firstName = benificiaryDetails.getFirstName();
-
 			String lastName = benificiaryDetails.getLastName();
 			String patientID = benificiaryDetails.getPatientID();
 			String dob = benificiaryDetails.getDob();
 			String gender = benificiaryDetails.getGender();
 			String acc = benificiaryDetails.getAcc();
 
-			// Socket socket = new Socket("192.168.1.101", 1235);
 			socket = new Socket(carestreamSocketIP, carestreamSocketPort);
-			// System.out.println("Connected to Server");
 
 			StringBuffer testHL7MassageToTransmit = new StringBuffer();
 			testHL7MassageToTransmit.append(START_OF_BLOCK)
@@ -83,97 +73,45 @@ public class CareStreamCreateOrderController
 
 			InputStream in = socket.getInputStream();
 			OutputStream out = socket.getOutputStream();
-			// Send the MLLP -wrapped HL7 message to the server
 			out.write(testHL7MassageToTransmit.toString().getBytes());
 
-			// byte[] byteBuffer = new byte[MAX_BYTES];
-			// StringBuilder resultCS = new StringBuilder();
-			// String responseFromCS = "";
-			// int numBytes = 0;
-			// do {
-			// numBytes = in.read(byteBuffer);
-			// resultCS.append(new String(byteBuffer).trim());
-			// } while (!(numBytes<MAX_BYTES));
-			//
-			// if (resultCS != null && resultCS.length() > 0) {
-			// response.setResponse("Order successfully created");
-			// } else {
-			// response.setResponse("Error in order creation");
-			// }
-			//
 			byte[] byteBuffer = new byte[50];
-			if(in.read(byteBuffer)>0){
-			//in.read(byteBuffer);
-			
-			String resultCS = new String(byteBuffer);
-			if (resultCS != null && resultCS.length() > 0)
-			{
-				response.setResponse("Order successfully created");
-			} else
-			{
-				response.setResponse("Error in order creation");
-			}
+			if (in.read(byteBuffer) > 0) {
+
+				String resultCS = new String(byteBuffer);
+				if (resultCS != null && resultCS.length() > 0) {
+					response.setResponse("Order successfully created");
+				} else {
+					response.setResponse("Error in order creation");
+				}
 			}
 
-			// String s = new Gson().toJson(byteBuffer);
-			// System.out.println("Receiver from server: "+ new
-			// String(byteBuffer));
-
-			// Close the socket and its streams
-
-			// socket.close();
-
-			// socket.getInputStream();
-
-			/*
-			 * String ip = "localhost"; int port = 8082;
-			 * 
-			 * String testMassage = "This is the test Massage that the client will transmit"; byte[] byteBuffer1 =
-			 * testMassage.getBytes(); Socket socket1 = new Socket(ip, port); System.out.println(
-			 * "connected to the Server"); InputStream in1 = socket.getInputStream(); OutputStream out1 =
-			 * socket.getOutputStream();
-			 * 
-			 * // Send the Massage to the server out1.write(byteBuffer); in1.read(byteBuffer); // Close the socket and
-			 * its Streams System.out.println("Massage received form Server11" + new String(byteBuffer));
-			 */
-
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 			response.setError(e);
 
-		} finally
-		{
+		} finally {
 			if (socket != null)
 				socket.close();
 		}
 
-		/**
-		 * sending the response...
-		 */
 		return response.toString();
 	}
 
 	@CrossOrigin()
-	@RequestMapping(value = "/UpdateOrder", headers = "Authorization", method = { RequestMethod.POST },
-			produces =
-	{ "application/json" })
+	@RequestMapping(value = "/UpdateOrder", headers = "Authorization", method = { RequestMethod.POST }, produces = {
+			"application/json" })
 	public String updateOrder(@ApiParam("{\"firstName\":\"String\",\"middleName\":\"String\",\"LastName\":\"String\","
-			+ "\"gender\":\"String\",\"dob\":\"String\",\"patientID\":\"String\",\"acc\":\"String\"}")  @RequestBody String UpdateOrder) throws UnknownHostException, IOException
-	{
-		// JSONObject requestOBJ = new JSONObject(providerBlocking);
+			+ "\"gender\":\"String\",\"dob\":\"String\",\"patientID\":\"String\",\"acc\":\"String\"}") @RequestBody String UpdateOrder)
+			throws UnknownHostException, IOException {
 		OutputResponse response = new OutputResponse();
 		Socket socket = null;
 
-		try
-		{
+		try {
 
 			CreateOrderData benificiaryDetails = InputMapper.gson().fromJson(UpdateOrder, CreateOrderData.class);
 
-			// public static void main(String[] args) {
-
 			String firstName = benificiaryDetails.getFirstName();
-			String middleName = benificiaryDetails.getMiddleName();
 			String lastName = benificiaryDetails.getLastName();
 			String patientID = benificiaryDetails.getPatientID();
 			String dob = benificiaryDetails.getDob();
@@ -181,7 +119,6 @@ public class CareStreamCreateOrderController
 			String acc = benificiaryDetails.getAcc();
 
 			socket = new Socket("192.168.1.101", 1235);
-//			System.out.println("Connected to Server");
 
 			StringBuffer testHL7MassageToTransmit = new StringBuffer();
 			testHL7MassageToTransmit.append(START_OF_BLOCK)
@@ -202,60 +139,46 @@ public class CareStreamCreateOrderController
 			out.write(testHL7MassageToTransmit.toString().getBytes());
 
 			byte[] byteBuffer = new byte[200];
-			if(in.read(byteBuffer)>0) {
-			//in.read(byteBuffer);
-			// System.out.println("Receiver from server: "+ new
-			// String(byteBuffer));
+			if (in.read(byteBuffer) > 0) {
 
-			response.setResponse("Receiver from server: " + new String(byteBuffer));
-			// Close the socket and its streams
+				response.setResponse("Receiver from server: " + new String(byteBuffer));
+				// Close the socket and its streams
 
-			socket.close();
+				socket.close();
 			}
 
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 			response.setError(e);
 
-		}finally {
-			if(socket!=null)
-			socket.close();
+		} finally {
+			if (socket != null)
+				socket.close();
 		}
 
-		/**
-		 * sending the response...
-		 */
 		return response.toString();
 	}
 
 	@CrossOrigin()
-	@RequestMapping(value = "/deleteOrder", headers = "Authorization", method = { RequestMethod.POST },
-			produces =
-	{ "application/json" })
+	@RequestMapping(value = "/deleteOrder", headers = "Authorization", method = { RequestMethod.POST }, produces = {
+			"application/json" })
 	public String deleteOrder(@ApiParam("{\"firstName\":\"String\",\"middleName\":\"String\",\"LastName\":\"String\","
-			+ "\"gender\":\"String\",\"dob\":\"String\",\"patientID\":\"String\",\"acc\":\"String\"}") @RequestBody String deleteOrder) throws UnknownHostException, IOException
-	{
-		// JSONObject requestOBJ = new JSONObject(providerBlocking);
+			+ "\"gender\":\"String\",\"dob\":\"String\",\"patientID\":\"String\",\"acc\":\"String\"}") @RequestBody String deleteOrder)
+			throws UnknownHostException, IOException {
 		OutputResponse response = new OutputResponse();
 		Socket socket = null;
-		try
-		{
+		try {
 
 			CreateOrderData benificiaryDetails = InputMapper.gson().fromJson(deleteOrder, CreateOrderData.class);
 
-			// public static void main(String[] args) {
-
 			String firstName = benificiaryDetails.getFirstName();
-			String middleName = benificiaryDetails.getMiddleName();
 			String lastName = benificiaryDetails.getLastName();
 			String patientID = benificiaryDetails.getPatientID();
 			String dob = benificiaryDetails.getDob();
 			String gender = benificiaryDetails.getGender();
 			String acc = benificiaryDetails.getAcc();
 
-		    socket = new Socket("192.168.1.101", 1235);
-//			System.out.println("Connected to Server");
+			socket = new Socket("192.168.1.101", 1235);
 
 			StringBuffer testHL7MassageToTransmit = new StringBuffer();
 			testHL7MassageToTransmit.append(START_OF_BLOCK)
@@ -276,30 +199,21 @@ public class CareStreamCreateOrderController
 			out.write(testHL7MassageToTransmit.toString().getBytes());
 
 			byte[] byteBuffer = new byte[200];
-			if(in.read(byteBuffer)>0) {
-			//in.read(byteBuffer);
-			// System.out.println("Receiver from server: "+ new
-			// String(byteBuffer));
+			if (in.read(byteBuffer) > 0) {
 
-			response.setResponse("Receiver from server: " + new String(byteBuffer));
-			// Close the socket and its streams
+				response.setResponse("Receiver from server: " + new String(byteBuffer));
 
-			//socket.close();
 			}
 
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 			response.setError(e);
 
-		}finally {
-			if(socket!=null)
-			socket.close();
+		} finally {
+			if (socket != null)
+				socket.close();
 		}
 
-		/**
-		 * sending the response...
-		 */
 		return response.toString();
 	}
 

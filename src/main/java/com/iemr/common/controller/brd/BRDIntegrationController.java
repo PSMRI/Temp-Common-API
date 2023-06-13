@@ -7,17 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.iemr.common.service.brd.BRDIntegrationService;
 import com.iemr.common.utils.response.OutputResponse;
-
 
 @RestController
 @RequestMapping("/brd")
@@ -44,7 +40,6 @@ public class BRDIntegrationController {
 			logger.error("Error while getching BRD Integration data :" + e);
 			response.setError(5000, "Unable to get BRD data");
 		}
-		System.out.println(response.toStringWithSerializeNulls());
 		return response.toStringWithSerializeNulls();
 	}
 

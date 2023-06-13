@@ -520,7 +520,7 @@ public class BeneficiaryRegistrationController {
 	public String getBeneficiaryIDs(
 			@ApiParam("{\"benIDRequired\":\"Integer\",\"vanID\":\"Integer\"}") @RequestBody String request,
 			HttpServletRequest httpRequest) {
-		logger.info("generateBeneficiaryIDs request " + request.toString());
+		logger.info("generateBeneficiaryIDs request " + request);
 		OutputResponse response = new OutputResponse();
 		try {
 
