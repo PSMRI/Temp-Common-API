@@ -47,10 +47,10 @@ public class SwaggerConfig
 	private ApiInfo metaData()
 	{
 		ApiInfoBuilder builder = new ApiInfoBuilder();
-		builder.contact(new Contact("Wipro HCIT", "https://www.wipro.com", "mywipro@wipro.com"));
-		builder.description("Common APIs for AMRIT");
+		builder.contact(new Contact("AMRIT", "https://psmri.github.io/PSMRI/", "amrit@piramalswasthya.org"));
+		builder.description("Common services that are used across various AMRIT modules are encapsulated in common-api. Integrations like DMS, call centre to AMRIT are through common-api service.");
 		builder.version("1.0");
-		builder.title("Common APIs for AMRIT");
+		builder.title("Common API");
 		return builder.build();
 	}
 }
