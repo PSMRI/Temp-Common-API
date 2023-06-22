@@ -295,6 +295,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 			if(feedback.getInstituteName() != null) {
                 feedback.setInstiName(feedback.getInstituteName());
             }
+			
 			if (feedback.getFeedbackStatusID() == null) {
 				getFeedbackStatusID();
 				feedback.setFeedbackStatusID(feedbackStatusID);
