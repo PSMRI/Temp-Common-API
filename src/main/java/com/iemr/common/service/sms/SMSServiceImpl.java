@@ -100,7 +100,6 @@ import com.iemr.common.repository.sms.SMSTemplateRepository;
 import com.iemr.common.repository.sms.SMSTypeRepository;
 import com.iemr.common.repository.users.IEMRUserRepositoryCustom;
 import com.iemr.common.service.beneficiary.IEMRSearchUserService;
-import com.iemr.common.utils.CryptoUtil;
 import com.iemr.common.utils.config.ConfigProperties;
 import com.iemr.common.utils.http.HttpUtils;
 import com.iemr.common.utils.mapper.OutputMapper;
@@ -113,10 +112,7 @@ public class SMSServiceImpl implements SMSService {
 	private String prescription;
 	@Autowired
 	SMSMapper smsMapper;
-	
-	@Autowired
-	private CryptoUtil cryptoUtil;
-	
+
 	@Autowired
 	SMSTemplateRepository smsTemplateRepository;
 
@@ -704,7 +700,7 @@ public class SMSServiceImpl implements SMSService {
 		if (request.getBenPhoneNo() != null) {
 			sms.setPhoneNo(request.getBenPhoneNo());
 		}
-		
+
 //		if(smsTemplate.getSmsTypeID() == 24)
 //		{
 //			if(TMsms!="" && TMsms!=null)
@@ -898,7 +894,6 @@ public class SMSServiceImpl implements SMSService {
 		return variableValue.trim();
 	}
 
-
 	@Async
 	@Override
 	public void publishSMS() {
@@ -939,16 +934,16 @@ public class SMSServiceImpl implements SMSService {
 							phoneNo = new StringBuffer(sms.getPhoneNo().substring(sms.getPhoneNo().length() - 10));
 						else
 							phoneNo = new StringBuffer(sms.getPhoneNo());
-						
-						//for fetching dltTemplateId
+
+						// for fetching dltTemplateId
 						String dltTemplateId = smsTemplateRepository.findDLTTemplateID(sms.getSmsTemplateID());
-						
+
 						SmsAPIRequestModel smsAPICredentials104 = new SmsAPIRequestModel(senderName, phoneNo,
-								sms.getSms(), sourceAddress, dltTemplateId, smsMessageType, smsEntityID );
-						
+								sms.getSms(), sourceAddress, dltTemplateId, smsMessageType, smsEntityID);
+
 						MultiValueMap<String, String> headersLogin = new LinkedMultiValueMap<String, String>();
 						headersLogin.add("Content-Type", "application/json");
-						headersLogin.add("AUTHORIZATION", senderName + ":" + senderPassword );
+						headersLogin.add("AUTHORIZATION", senderName + ":" + senderPassword);
 						// smsPublishURL = smsPublishURL.replace("SMS_TEXT",
 						// URLEncoder.encode(sms.getSms(), "UTF-8"))
 
@@ -956,10 +951,10 @@ public class SMSServiceImpl implements SMSService {
 
 						sms.setSmsStatus(SMSNotification.IN_PROGRESS);
 						sms = smsNotification.save(sms);
-						
+
 						HttpEntity<Object> requestLogin = new HttpEntity<Object>(smsAPICredentials104, headersLogin);
-						ResponseEntity<String> responseLogin = restTemplateLogin.exchange(sendSMSURL,
-								HttpMethod.POST, requestLogin, String.class);
+						ResponseEntity<String> responseLogin = restTemplateLogin.exchange(sendSMSURL, HttpMethod.POST,
+								requestLogin, String.class);
 						if (responseLogin.getStatusCodeValue() == 200 & responseLogin.hasBody()) {
 							String smsResponse = responseLogin.getBody();
 							JSONObject obj = new JSONObject(smsResponse);
@@ -972,19 +967,19 @@ public class SMSServiceImpl implements SMSService {
 							sms.setSmsStatus(SMSNotification.SENT);
 							sms = smsNotification.save(sms);
 						} else {
-						throw new Exception(responseLogin.getStatusCodeValue() + " and error "
-								+ responseLogin.getStatusCode().toString());
+							throw new Exception(responseLogin.getStatusCodeValue() + " and error "
+									+ responseLogin.getStatusCode().toString());
+						}
+					} catch (Exception e) {
+						logger.error("Failed to send sms on phone no/benRegID: " + sms.getPhoneNo() + "/"
+								+ sms.getBeneficiaryRegID() + " with error " + e.getMessage(), e);
+						sms.setTransactionError(e.getMessage());
+						sms.setIsTransactionError(true);
+						sms.setTransactionID(null);
+						sms.setSmsStatus(SMSNotification.NOT_SENT);
+						sms = smsNotification.save(sms);
 					}
-				} catch (Exception e) {
-					logger.error("Failed to send sms on phone no/benRegID: " + sms.getPhoneNo() + "/"
-							+ sms.getBeneficiaryRegID() + " with error " + e.getMessage(), e);
-					sms.setTransactionError(e.getMessage());
-					sms.setIsTransactionError(true);
-					sms.setTransactionID(null);
-					sms.setSmsStatus(SMSNotification.NOT_SENT);
-					sms = smsNotification.save(sms);
-				}
-						
+
 //						if (sms.getPhoneNo() != null && sms.getPhoneNo().length() > 10)
 //							phoneNo = new StringBuffer(sms.getPhoneNo().substring(sms.getPhoneNo().length() - 10));
 //						else
@@ -1059,11 +1054,9 @@ public class SMSServiceImpl implements SMSService {
 		return OutputMapper.gsonWithoutExposeRestriction().toJson(smsTemplateResponse);
 	}
 
-
-	private String getPrescriptionData(String className, String methodName, SMSRequest request, 
-			BeneficiaryModel beneficiary)
-			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException, ClassNotFoundException {
+	private String getPrescriptionData(String className, String methodName, SMSRequest request,
+			BeneficiaryModel beneficiary) throws NoSuchMethodException, SecurityException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, ClassNotFoundException {
 		PrescribedDrug prescribedDrug = prescribedDrugRepository.findOne(request.getPrescribedDrugID());
 		String variableValue = "";
 		switch (methodName.toLowerCase()) {
@@ -1074,8 +1067,7 @@ public class SMSServiceImpl implements SMSService {
 			variableValue = fname + mname + lname;
 			break;
 		case "callerid":
-			String beneficiaryID = beneficiary.getBeneficiaryID() != null
-			? beneficiary.getBeneficiaryID() + " " : "";
+			String beneficiaryID = beneficiary.getBeneficiaryID() != null ? beneficiary.getBeneficiaryID() + " " : "";
 			variableValue = beneficiaryID;
 			break;
 		case "prescriptionid":
@@ -1133,7 +1125,6 @@ public class SMSServiceImpl implements SMSService {
 		}
 		return variableValue;
 	}
-
 
 	private String getBloodOnCallData(String className, String methodName, SMSRequest request,
 			BeneficiaryModel beneficiary) throws NoSuchMethodException, SecurityException, IllegalAccessException,
@@ -1550,9 +1541,9 @@ public class SMSServiceImpl implements SMSService {
 		}
 		return variableValue;
 	}
-	
+
 	public String getUptsuData(String className, String methodName, SMSRequest request) throws NoSuchMethodException,
-	SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+			SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		String variableValue = null;
 		Method method = null;
 		switch (methodName) {
@@ -1601,6 +1592,5 @@ public class SMSServiceImpl implements SMSService {
 		}
 		return variableValue;
 	}
-	
-	
+
 }

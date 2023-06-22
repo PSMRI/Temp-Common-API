@@ -56,15 +56,12 @@ import com.iemr.common.model.user.LoginRequestModel;
 import com.iemr.common.repository.everwell.EverwellFetchAndSync;
 import com.iemr.common.repository.location.LocationDistrictRepository;
 import com.iemr.common.repository.location.LocationStateRepository;
-import com.iemr.common.utils.CryptoUtil;
 import com.iemr.common.utils.mapper.InputMapper;
 import com.iemr.common.utils.response.OutputResponse;
 
 @Service
 @PropertySource("classpath:application.properties")
 public class EverwellRegistrationServiceImpl implements EverwellRegistrationService {
-	@Autowired
-	private CryptoUtil cryptoUtil;
 
 	private InputMapper inputMapper = new InputMapper();
 
@@ -147,14 +144,14 @@ public class EverwellRegistrationServiceImpl implements EverwellRegistrationServ
 		try {
 
 			// 1097 user authentication
-		
-			String amritUser = cryptoUtil.decrypt(amritUserName);
-			String amritPass = cryptoUtil.decrypt(amritPassword);
+
+			String amritUser = amritUserName;
+			String amritPass = amritPassword;
 			LoginRequestModel loginCredentials1097 = new LoginRequestModel(amritUser, amritPass);
 
 			MultiValueMap<String, String> headersLogin = new LinkedMultiValueMap<String, String>();
 			headersLogin.add("Content-Type", "application/json");
-			//headersLogin.add("AUTHORIZATION", "");
+			// headersLogin.add("AUTHORIZATION", "");
 
 			logger.info("AMRIT login request OBj " + loginCredentials1097.toString());
 

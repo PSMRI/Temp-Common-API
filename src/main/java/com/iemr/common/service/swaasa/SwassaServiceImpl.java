@@ -52,7 +52,6 @@ import com.iemr.common.data.swaasa.SwaasaAssessmentResponseDTO;
 import com.iemr.common.data.swaasa.SwaasaAuthenticateResponse;
 import com.iemr.common.data.swaasa.SwaasaValidateCoughReponseDTO;
 import com.iemr.common.repo.swaasa.SwaasaRepository;
-import com.iemr.common.utils.CryptoUtil;
 import com.iemr.common.utils.http.HttpUtils;
 import com.iemr.common.utils.mapper.InputMapper;
 
@@ -64,9 +63,6 @@ public class SwassaServiceImpl implements SwaasaService {
 	private static long authCreatedAt;
 
 	private static HttpUtils httpUtils = new HttpUtils();
-	
-	@Autowired
-	private CryptoUtil cryptoUtil;
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
@@ -158,9 +154,9 @@ public class SwassaServiceImpl implements SwaasaService {
 				throw new Exception("file is missing,please pass a cough recording file");
 
 			long currTime = System.currentTimeMillis();
-			
-			String decryptswaasaEmail = cryptoUtil.decrypt(swassaEmail);
-			String decryptswaasaPassword = cryptoUtil.decrypt(swaasaPassword);
+
+			String decryptswaasaEmail = swassaEmail;
+			String decryptswaasaPassword = swaasaPassword;
 			if (swaasaToken == null || (((currTime - authCreatedAt) / (60 * 1000))) > 110)
 				swaasaToken = getSwaasaAdminLogin(decryptswaasaEmail, decryptswaasaPassword);
 
@@ -241,8 +237,8 @@ public class SwassaServiceImpl implements SwaasaService {
 
 			// check if swaasa session is active
 			long currTime = System.currentTimeMillis();
-			String decryptswaasaEmail = cryptoUtil.decrypt(swassaEmail);
-			String decryptswaasaPassword = cryptoUtil.decrypt(swaasaPassword);
+			String decryptswaasaEmail = swassaEmail;
+			String decryptswaasaPassword = swaasaPassword;
 			if (swaasaToken == null || (((currTime - authCreatedAt) / (60 * 1000))) > 110)
 				swaasaToken = getSwaasaAdminLogin(decryptswaasaEmail, decryptswaasaPassword);
 
@@ -341,9 +337,9 @@ public class SwassaServiceImpl implements SwaasaService {
 					return new Gson().toJson(swaasaEntity);
 				} else {
 					long currTime = System.currentTimeMillis();
-					
-					String decryptswaasaEmail = cryptoUtil.decrypt(swassaEmail);
-					String decryptswaasaPassword = cryptoUtil.decrypt(swaasaPassword);
+
+					String decryptswaasaEmail = swassaEmail;
+					String decryptswaasaPassword = swaasaPassword;
 					if (swaasaToken == null || (((currTime - authCreatedAt) / (60 * 1000))) > 110)
 						swaasaToken = getSwaasaAdminLogin(decryptswaasaEmail, decryptswaasaPassword);
 

@@ -22,13 +22,9 @@
 package com.iemr.common.service.door_to_door_app;
 
 import java.math.BigInteger;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,15 +47,11 @@ import com.iemr.common.data.door_to_door_app.RequestParser;
 import com.iemr.common.data.door_to_door_app.V_doortodooruserdetails;
 import com.iemr.common.model.user.LoginRequestModel;
 import com.iemr.common.repo.door_to_door_app.V_doortodooruserdetailsRepo;
-import com.iemr.common.utils.CryptoUtil;
 import com.iemr.common.utils.mapper.InputMapper;
 
 @Service
 @PropertySource("classpath:application.properties")
 public class DoorToDoorServiceImpl implements DoorToDoorService {
-	
-	@Autowired
-	private CryptoUtil cryptoUtil;
 
 	@Value("${avniRegistrationLimit}")
 	private String avniRegistrationLimit;
@@ -232,7 +224,7 @@ public class DoorToDoorServiceImpl implements DoorToDoorService {
 
 	@Override
 	public void scheduleJobForRegisterAvniBeneficiary() throws Exception {
-	
+
 		RestTemplate restTemplate = new RestTemplate();
 		Integer updateCount = 0;
 		Long id = null;
@@ -241,47 +233,44 @@ public class DoorToDoorServiceImpl implements DoorToDoorService {
 		Long benId = null;
 		Integer count = 0;
 		try {
-		ArrayList<Object[]> list = v_doortodooruserdetailsRepo
-				.getAvniBeneficiary(avniRegistrationLimit !=null ? Integer.parseInt(avniRegistrationLimit) : 10);
-		
-		if(list !=null && list.size()>0)
-		{
-		
-		for (Object[] obj : list) {
-			id = obj[0] != null ? ((BigInteger) obj[0]).longValue() : null;
-			json = obj[1] != null ? obj[1].toString() : null;
-			extId = obj[2] != null ? obj[2].toString() : null;
-			benId = obj[3] != null ? ((BigInteger) obj[3]).longValue() : null;
-			count = v_doortodooruserdetailsRepo.checkIfAvniIdExists(extId);
-			if (count > 0)
-				logger.info("Beneficiary with Avni Id " + extId + " already exists");
-			else {
-				MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-				headers.add("Content-Type", "application/json");
-				headers.add("AUTHORIZATION", amritUserAuthenticate());
-				HttpEntity<Object> requestReg = new HttpEntity<Object>(json, headers);
-				ResponseEntity<String> response = restTemplate.exchange(everwellRegisterBenficiary, HttpMethod.POST,
-						requestReg, String.class);
+			ArrayList<Object[]> list = v_doortodooruserdetailsRepo
+					.getAvniBeneficiary(avniRegistrationLimit != null ? Integer.parseInt(avniRegistrationLimit) : 10);
 
-				if (response.getStatusCodeValue() == 200 & response.hasBody()) {
-					logger.info("registration api response " + response.getBody());
-					String responseStr = response.getBody();
-					JsonObject jsnOBJ = new JsonObject();
-					JsonParser jsnParser = new JsonParser();
-					JsonElement jsnElmnt = jsnParser.parse(responseStr);
-					jsnOBJ = jsnElmnt.getAsJsonObject();
-					JsonObject jsonData = jsnOBJ.getAsJsonObject("data");
-					benId = Long.parseLong(jsonData.get("beneficiaryID").getAsString());
-					updateCount = v_doortodooruserdetailsRepo.updateAvniBenId(id, benId);
-                    logger.info("Beneficiary Id "+benId+" registered successfully");
+			if (list != null && list.size() > 0) {
+
+				for (Object[] obj : list) {
+					id = obj[0] != null ? ((BigInteger) obj[0]).longValue() : null;
+					json = obj[1] != null ? obj[1].toString() : null;
+					extId = obj[2] != null ? obj[2].toString() : null;
+					benId = obj[3] != null ? ((BigInteger) obj[3]).longValue() : null;
+					count = v_doortodooruserdetailsRepo.checkIfAvniIdExists(extId);
+					if (count > 0)
+						logger.info("Beneficiary with Avni Id " + extId + " already exists");
+					else {
+						MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+						headers.add("Content-Type", "application/json");
+						headers.add("AUTHORIZATION", amritUserAuthenticate());
+						HttpEntity<Object> requestReg = new HttpEntity<Object>(json, headers);
+						ResponseEntity<String> response = restTemplate.exchange(everwellRegisterBenficiary,
+								HttpMethod.POST, requestReg, String.class);
+
+						if (response.getStatusCodeValue() == 200 & response.hasBody()) {
+							logger.info("registration api response " + response.getBody());
+							String responseStr = response.getBody();
+							JsonObject jsnOBJ = new JsonObject();
+							JsonParser jsnParser = new JsonParser();
+							JsonElement jsnElmnt = jsnParser.parse(responseStr);
+							jsnOBJ = jsnElmnt.getAsJsonObject();
+							JsonObject jsonData = jsnOBJ.getAsJsonObject("data");
+							benId = Long.parseLong(jsonData.get("beneficiaryID").getAsString());
+							updateCount = v_doortodooruserdetailsRepo.updateAvniBenId(id, benId);
+							logger.info("Beneficiary Id " + benId + " registered successfully");
+						}
+					}
 				}
-			}
-		}
-		}
-		else
-			logger.info("No new records found");
-		}catch(Exception e)
-		{
+			} else
+				logger.info("No new records found");
+		} catch (Exception e) {
 			logger.error(e.getLocalizedMessage());
 		}
 
@@ -289,13 +278,8 @@ public class DoorToDoorServiceImpl implements DoorToDoorService {
 
 	public String amritUserAuthenticate() {
 		String authorization = "";
-		/*
-		 * StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-		 * encryptor.setAlgorithm("PBEWithMD5AndDES");
-		 * encryptor.setPassword("dev-env-secret");
-		 */
-		String amritUser = cryptoUtil.decrypt(amritUserName);
-		String amritPass = cryptoUtil.decrypt(amritPassword);
+		String amritUser = amritUserName;
+		String amritPass = amritPassword;
 		LoginRequestModel loginCredentials = new LoginRequestModel(amritUser, amritPass);
 		loginCredentials.setDoLogout(true);
 		MultiValueMap<String, String> headersLogin = new LinkedMultiValueMap<String, String>();
