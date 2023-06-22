@@ -86,23 +86,26 @@ public class IdentityBeneficiaryServiceImpl implements IdentityBeneficiaryServic
 		result = httpUtils.post(ConfigProperties.getPropertyByName("identity-api-url-getByBenRegIdList").replace(
 				IDENTITY_BASE_URL, (is1097 ? identity1097BaseURL : identityBaseURL)), benIdList.toString(), header);
 		OutputResponse identityResponse = inputMapper.gson().fromJson(result, OutputResponse.class);
-		if (identityResponse.getStatusCode() == OutputResponse.USERID_FAILURE) {
+		if (identityResponse != null && identityResponse.getStatusCode() == OutputResponse.USERID_FAILURE) {
 			throw new IEMRException(identityResponse.getErrorMessage());
 		}
-		JsonObject responseObj = (JsonObject) parser.parse(result);
-		// JsonArray data = (JsonArray) parser.parse(
-		JsonObject data1 = (JsonObject) responseObj.get("response");
-		String s = data1.get("data").getAsString();
-		JsonArray responseArray = parser.parse(s).getAsJsonArray();
+		if (null != result) {
+			JsonObject responseObj = (JsonObject) parser.parse(result);
+			// JsonArray data = (JsonArray) parser.parse(
+			JsonObject data1 = (JsonObject) responseObj.get("response");
+			String s = data1.get("data").getAsString();
+			JsonArray responseArray = parser.parse(s).getAsJsonArray();
 
-		// String data="s";
-		// JsonArray responseArray = (JsonArray) parser.parse(data);
+			// String data="s";
+			// JsonArray responseArray = (JsonArray) parser.parse(data);
 
-		for (JsonElement jsonElement : responseArray) {
+			for (JsonElement jsonElement : responseArray) {
 
-			BeneficiariesDTO callRequest = inputMapper.gson().fromJson(jsonElement.toString(), BeneficiariesDTO.class);
-			listBenDetailForOutboundDTO.add(callRequest);
+				BeneficiariesDTO callRequest = inputMapper.gson().fromJson(jsonElement.toString(),
+						BeneficiariesDTO.class);
+				listBenDetailForOutboundDTO.add(callRequest);
 
+			}
 		}
 		return listBenDetailForOutboundDTO;
 	}
