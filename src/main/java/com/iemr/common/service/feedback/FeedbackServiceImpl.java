@@ -292,6 +292,9 @@ public class FeedbackServiceImpl implements FeedbackService {
 	public String saveFeedback(String feedbackDetails) throws Exception {
 		FeedbackDetails[] feedbacks = inputMapper.gson().fromJson(feedbackDetails, FeedbackDetails[].class);
 		for (FeedbackDetails feedback : feedbacks) {
+			if(feedback.getInstituteName() != null) {
+                feedback.setInstiName(feedback.getInstituteName());
+            }
 			if (feedback.getFeedbackStatusID() == null) {
 				getFeedbackStatusID();
 				feedback.setFeedbackStatusID(feedbackStatusID);
