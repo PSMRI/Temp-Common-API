@@ -82,6 +82,7 @@ public abstract class CommonIdentityMapperDecorator implements CommonIdentityMap
 		commonIdentityDTO.setIfscCode(beneficiary.getIfscCode());
 		commonIdentityDTO.setBenImage(beneficiary.getBenImage());
 		commonIdentityDTO.setSpouseName(beneficiary.getSpouseName());
+		commonIdentityDTO.setCreatedDate(beneficiary.getCreatedDate());
 		commonIdentityDTO.setPreferredEmailId(beneficiary.getEmail());
 		commonIdentityDTO.setFatherName(beneficiary.getFatherName());
 		commonIdentityDTO.setAgeAtMarriage(beneficiary.getAgeAtMarriage());
