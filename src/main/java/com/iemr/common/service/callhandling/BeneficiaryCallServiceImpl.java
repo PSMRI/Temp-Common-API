@@ -403,7 +403,7 @@ public class BeneficiaryCallServiceImpl implements BeneficiaryCallService {
 			if (benificiaryCall.getIsTransfered() == null || benificiaryCall.getIsTransfered() == false) {
 				updateCallDisposition(benificiaryCall, benificiaryCall.getAgentIPAddress());
 
-				Thread.sleep(3000);
+				Thread.sleep(1000);
 				
 				disconnectCallInCTI(benificiaryCall);
 			}
