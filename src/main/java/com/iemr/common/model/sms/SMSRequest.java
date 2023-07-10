@@ -39,7 +39,7 @@ public class SMSRequest {
 	private Integer blockID;
 	private Boolean is1097 = false;
 	private Long userID;
-	private Integer InstituteID;
+	private Integer instituteID;
 	private Long feedbackID;
 	private String createdBy;
 	private String alternateNo;
