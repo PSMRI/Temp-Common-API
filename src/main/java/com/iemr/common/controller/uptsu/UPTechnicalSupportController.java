@@ -37,15 +37,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.iemr.common.service.uptsu.UptsuService;
 import com.iemr.common.utils.response.OutputResponse;
 
+import io.swagger.annotations.ApiOperation;
+
 @RequestMapping({ "/uptsu" })
 @RestController
-public class UptsuController {
+public class UPTechnicalSupportController {
 
 	@Autowired
 	private UptsuService uptsuService;
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	@CrossOrigin
+	@ApiOperation(value = "Get facility master")
 	@RequestMapping(value = "/get/facilityMaster/{providerServiceMapID}/{blockName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
 	public String getFacility(@PathVariable Integer providerServiceMapID, @PathVariable String blockName) {
 		OutputResponse response = new OutputResponse();
@@ -62,8 +65,10 @@ public class UptsuController {
 	}
 
 	@CrossOrigin
+	@ApiOperation(value = "Save appointment details")
 	@RequestMapping(value = "/save/appointment-details", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
-	public String saveAppointmentDetails(@RequestBody String request, @RequestHeader(value = "Authorization") String Authorization) {
+	public String saveAppointmentDetails(@RequestBody String request,
+			@RequestHeader(value = "Authorization") String Authorization) {
 		OutputResponse response = new OutputResponse();
 
 		try {

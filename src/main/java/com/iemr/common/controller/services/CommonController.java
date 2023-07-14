@@ -33,86 +33,74 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iemr.common.service.services.CommonService;
+import com.iemr.common.service.services.Services;
+import com.iemr.common.service.services.ServicesImpl;
 import com.iemr.common.utils.mapper.InputMapper;
 import com.iemr.common.utils.response.OutputResponse;
 
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping(value = "/service")
-public class CommonController
-{
+public class CommonController {
 	InputMapper inputMapper = new InputMapper();
 	final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	@CrossOrigin()
-	@RequestMapping(value = "/category", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON,
-			headers = "Authorization")
+	@ApiOperation(value = "Get category")
+	@RequestMapping(value = "/category", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
 	// public Iterable<CategoryDetails> getCategories(){
 	public String getCategories(@ApiParam("{\"providerServiceMapID\":\"Integer\", "
-			+ "\"subServiceID\":\"subServiceID\"}") @RequestBody String request)
-	{
+			+ "\"subServiceID\":\"subServiceID\"}") @RequestBody String request) {
 		OutputResponse response = new OutputResponse();
-		try
-		{
+		try {
 			response.setResponse(commonService.getCategories(request).toString());
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			response.setError(e);
 		}
 		return response.toString();
 	}
 
 	@CrossOrigin()
-	@RequestMapping(value = "/subcategory", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON,
-			headers = "Authorization")
-	public String getSubcategories(@ApiParam("{\"categoryID\":\"Integer\"}") @RequestBody String request)
-	{
+	@ApiOperation(value = "Get sub categories")
+	@RequestMapping(value = "/subcategory", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
+	public String getSubcategories(@ApiParam("{\"categoryID\":\"Integer\"}") @RequestBody String request) {
 		OutputResponse response = new OutputResponse();
-		try
-		{
+		try {
 			response.setResponse(commonService.getSubCategories(request).toString());
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			logger.error("", e);
 			response.setError(e);
 		}
 		return response.toString();
 	}
 
-	// getSubCategoryFiles
 	@CrossOrigin()
-	@RequestMapping(value = "/getSubCategoryFiles", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON,
-			headers = "Authorization")
+	@ApiOperation(value = "Get sub category files")
+	@RequestMapping(value = "/getSubCategoryFiles", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
 	public String getSubCategoryFiles(@ApiParam("{\"categoryID\":\"Integer\", \"providerServiceMapID\":\"Integer\", "
-			+ "\"subCategoryID\":\"Integer\"}") @RequestBody String request)
-	{
+			+ "\"subCategoryID\":\"Integer\"}") @RequestBody String request) {
 		OutputResponse response = new OutputResponse();
-		try
-		{
+		try {
 			response.setResponse(commonService.getSubCategoryFiles(request).toString());
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			logger.error("", e);
 			response.setError(e);
 		}
 		return response.toString();
 	}
 
-	// getSubCategoryFiles
 	@CrossOrigin()
-	@RequestMapping(value = "/getSubCategoryFilesWithURL", method = RequestMethod.POST,
-			produces = MediaType.APPLICATION_JSON, headers = "Authorization")
-	public String
-			getSubCategoryFilesWithURL(@ApiParam("{\"categoryID\":\"Integer\", \"providerServiceMapID\":\"Integer\", "
-					+ "\"subCategoryID\":\"Integer\"}") @RequestBody String request)
-	{
+	@ApiOperation(value = "Get sub category files with URL")
+	@RequestMapping(value = "/getSubCategoryFilesWithURL", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
+	public String getSubCategoryFilesWithURL(
+			@ApiParam("{\"categoryID\":\"Integer\", \"providerServiceMapID\":\"Integer\", "
+					+ "\"subCategoryID\":\"Integer\"}") @RequestBody String request) {
 		OutputResponse response = new OutputResponse();
-		try
-		{
+		try {
 			response.setResponse(commonService.getSubCategoryFilesWithURL(request).toString());
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			logger.error("", e);
 			response.setError(e);
 		}
@@ -120,20 +108,16 @@ public class CommonController
 	}
 
 	@CrossOrigin()
-	@RequestMapping(value = "/categoryByID", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON,
-			headers = "Authorization")
-	public String getcategoriesById(@ApiParam(value="\"{\\\"subServiceID\\\":\\\"String\\\",\\\"providerServiceMapID\\\":\\\"String\\\"}\"")
-	@RequestBody String request)
-	{
+	@ApiOperation(value = "Category by id")
+	@RequestMapping(value = "/categoryByID", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
+	public String getcategoriesById(
+			@ApiParam(value = "\"{\\\"subServiceID\\\":\\\"String\\\",\\\"providerServiceMapID\\\":\\\"String\\\"}\"") @RequestBody String request) {
 		OutputResponse response = new OutputResponse();
-		try
-		{
-			// SubService subService = inputMapper.gson().fromJson(request, SubService.class);
+		try {
 			response.setResponse(commonService.getCategories(request).toString());
 		} catch (
 
-		Exception e)
-		{
+		Exception e) {
 			logger.error("", e);
 			response.setError(e);
 		}
@@ -141,16 +125,13 @@ public class CommonController
 	}
 
 	@CrossOrigin()
-	@RequestMapping(value = "/servicetypes", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON,
-			headers = "Authorization")
-	public String getservicetypes(@ApiParam("{\"providerServiceMapID\":\"Integer\"}") @RequestBody String request)
-	{
+	@ApiOperation(value = "Service types")
+	@RequestMapping(value = "/servicetypes", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
+	public String getservicetypes(@ApiParam("{\"providerServiceMapID\":\"Integer\"}") @RequestBody String request) {
 		OutputResponse response = new OutputResponse();
-		try
-		{
+		try {
 			response.setResponse(commonService.getActiveServiceTypes(request).toString());
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			logger.error("", e);
 			response.setError(e);
 		}
@@ -161,10 +142,31 @@ public class CommonController
 	 * Designation Service
 	 */
 	private CommonService commonService;
+	private Services services;
 
 	@Autowired
-	public void setCommonService(CommonService commonService)
-	{
+	public void setCommonService(CommonService commonService) {
 		this.commonService = commonService;
+	}
+
+	@Autowired
+	public void setServices(ServicesImpl services) {
+		this.services = services;
+	}
+
+	@CrossOrigin()
+	@ApiOperation(value = "Service list")
+	@RequestMapping(value = "/serviceList", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
+	public String serviceList(@RequestBody String request) {
+		OutputResponse response = new OutputResponse();
+		logger.info("serviceList request: " + request);
+		try {
+			response.setResponse(services.servicesList().toString());
+		} catch (Exception e) {
+			logger.error("serviceList failed with error " + e.getMessage(), e);
+			response.setError(e);
+		}
+		logger.info("serviceList response: " + response.toString());
+		return response.toString();
 	}
 }

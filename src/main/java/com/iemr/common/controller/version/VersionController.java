@@ -35,40 +35,44 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.iemr.common.utils.response.OutputResponse;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 public class VersionController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
-	
+
 	@CrossOrigin()
+	@ApiOperation(value = "Get version")
 	@RequestMapping(value = "/version", method = { RequestMethod.GET })
 	public String versionInformation() {
 		OutputResponse output = new OutputResponse();
 		try {
 			logger.info("version Controller Start");
 			output.setResponse(readGitProperties());
-	    } catch (Exception e) {
-	    	output.setError(e);
-	    }
-		
+		} catch (Exception e) {
+			output.setError(e);
+		}
+
 		logger.info("version Controller End");
 		return output.toString();
 	}
+
 	private String readGitProperties() throws Exception {
-	    ClassLoader classLoader = getClass().getClassLoader();
-	    InputStream inputStream = classLoader.getResourceAsStream("git.properties");
-	    
-	        return readFromInputStream(inputStream);
+		ClassLoader classLoader = getClass().getClassLoader();
+		InputStream inputStream = classLoader.getResourceAsStream("git.properties");
+
+		return readFromInputStream(inputStream);
 	}
-	private String readFromInputStream(InputStream inputStream)
-	throws IOException {
-	    StringBuilder resultStringBuilder = new StringBuilder();
-	    try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
-	        String line;
-	        while ((line = br.readLine()) != null) {
-	            resultStringBuilder.append(line).append("\n");
-	        }
-	    }
-	    return resultStringBuilder.toString();
+
+	private String readFromInputStream(InputStream inputStream) throws IOException {
+		StringBuilder resultStringBuilder = new StringBuilder();
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				resultStringBuilder.append(line).append("\n");
+			}
+		}
+		return resultStringBuilder.toString();
 	}
 }

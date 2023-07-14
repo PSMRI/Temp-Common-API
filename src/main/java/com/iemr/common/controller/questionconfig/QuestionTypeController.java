@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.iemr.common.service.questionconfig.QuestionTypeService;
 import com.iemr.common.utils.response.OutputResponse;
 
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 @RestController
@@ -57,14 +58,11 @@ public class QuestionTypeController {
 		this.questionTypeService = questionTypeService;
 	}
 
-	/**
-	 * 
-	 * @param request
-	 * @return
-	 */
 	@CrossOrigin()
+	@ApiOperation(value = "Put question type")
 	@RequestMapping(value = "/put/questionType", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
-	public String createQuestionType(@ApiParam(value="{\\\"questionType\\\":\\\"String\\\",\\\"questionTypeDesc\\\":\\\"String\\\"}\"")@RequestBody String request) {
+	public String createQuestionType(
+			@ApiParam(value = "{\\\"questionType\\\":\\\"String\\\",\\\"questionTypeDesc\\\":\\\"String\\\"}\"") @RequestBody String request) {
 		OutputResponse response = new OutputResponse();
 		try {
 			response.setResponse(questionTypeService.createQuestionType(request));
@@ -76,12 +74,8 @@ public class QuestionTypeController {
 		return response.toString();
 	}
 
-	/**
-	 * 
-	 * @param request
-	 * @return
-	 */
 	@CrossOrigin()
+	@ApiOperation(value = "Get question type list")
 	@RequestMapping(value = "/get/questionTypeList", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON)
 	public String questionTypeList() {
 		OutputResponse response = new OutputResponse();

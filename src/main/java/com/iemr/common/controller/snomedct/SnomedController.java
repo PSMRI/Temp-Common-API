@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.iemr.common.data.snomedct.SCTDescription;
-
 import com.iemr.common.service.snomedct.SnomedService;
 import com.iemr.common.utils.mapper.InputMapper;
 import com.iemr.common.utils.response.OutputResponse;
@@ -53,7 +52,7 @@ public class SnomedController {
 	}
 
 	@CrossOrigin
-	@ApiOperation(value = "retrives SnomedCT Record (Entire term case insensitive)", consumes = "application/json", produces = "application/json")
+	@ApiOperation(value = "Retrives snomed CT record", consumes = "application/json", produces = "application/json")
 	@RequestMapping(value = "/getSnomedCTRecord", method = RequestMethod.POST, headers = "Authorization")
 	public String getSnomedCTRecord(@ApiParam(value = "{\"term\":\"String\"}") @RequestBody String request) {
 		OutputResponse output = new OutputResponse();
@@ -79,7 +78,7 @@ public class SnomedController {
 	}
 
 	@CrossOrigin
-	@ApiOperation(value = "retrives SnomedCT Record list (Entire term case insensitive)", consumes = "application/json", produces = "application/json")
+	@ApiOperation(value = "Retrives snomed CT record list", consumes = "application/json", produces = "application/json")
 	@RequestMapping(value = "/getSnomedCTRecordList", method = RequestMethod.POST, headers = "Authorization")
 	public String getSnomedCTRecordList(@ApiParam(value = "{\"term\":\"String\"}") @RequestBody String request) {
 		OutputResponse output = new OutputResponse();
@@ -89,7 +88,6 @@ public class SnomedController {
 
 			logger.info("getSnomedCTRecord request " + sctdescription.toString());
 
-			
 			String sctList = snomedService.findSnomedCTRecordList(sctdescription);
 
 			if (sctList != null)
@@ -106,4 +104,3 @@ public class SnomedController {
 	}
 
 }
-

@@ -34,10 +34,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.iemr.common.service.questionconfig.QuestionnaireService;
 import com.iemr.common.utils.response.OutputResponse;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/questionnaireController")
-public class QuestionnaireController
-{
+public class QuestionnaireController {
 
 	final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
@@ -49,27 +50,19 @@ public class QuestionnaireController
 	/**
 	 * Inject Question Type Repository
 	 */
-	public void setQuestionnaireService(QuestionnaireService questionnaireService)
-	{
+	public void setQuestionnaireService(QuestionnaireService questionnaireService) {
 
 		this.questionnaireService = questionnaireService;
 	}
 
-	/**
-	 * 
-	 * @param request
-	 * @return
-	 */
 	@CrossOrigin()
+	@ApiOperation(value = "Put questionnaire")
 	@RequestMapping(value = "/put/questionnaire", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
-	public String createQuestionnaire(@RequestBody String request)
-	{
+	public String createQuestionnaire(@RequestBody String request) {
 		OutputResponse response = new OutputResponse();
-		try
-		{
+		try {
 			response.setResponse(questionnaireService.createQuestionnaire(request));
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			logger.error("put-questionnaire failed with error " + e.getMessage(), e);
 			response.setError(e);
 		}
@@ -77,21 +70,14 @@ public class QuestionnaireController
 		return response.toString();
 	}
 
-	/**
-	 * 
-	 * @param request
-	 * @return
-	 */
 	@CrossOrigin()
+	@ApiOperation(value = "Get questionnaire list")
 	@RequestMapping(value = "/get/questionnaireList", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
-	public String questionTypeList()
-	{
+	public String questionTypeList() {
 		OutputResponse response = new OutputResponse();
-		try
-		{
+		try {
 			response.setResponse(questionnaireService.getQuestionnaireList());
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			logger.error("get-questionnaire failed with error " + e.getMessage(), e);
 			response.setError(e);
 		}

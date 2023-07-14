@@ -41,33 +41,32 @@ import com.iemr.common.service.category.CategoryService;
 import com.iemr.common.utils.mapper.InputMapper;
 import com.iemr.common.utils.response.OutputResponse;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping(value = "/category")
-public class CategoryController
-{
+public class CategoryController {
 	InputMapper inputMapper = new InputMapper();
 	final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	@CrossOrigin()
+	@ApiOperation(value = "Get all categries")
 	@RequestMapping(value = "/categories", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
 	public String getAllCategries(
-			@Param("{\"providerServiceMapID\":\"Integer\", " + "\"subServiceID\":\"subServiceID\", " + "\"feedbackNatureID\":\"feedbackNatureID\"}") @RequestBody String request)
-	{
+			@Param("{\"providerServiceMapID\":\"Integer\", " + "\"subServiceID\":\"subServiceID\", "
+					+ "\"feedbackNatureID\":\"feedbackNatureID\"}") @RequestBody String request) {
 
 		OutputResponse response = new OutputResponse();
-		try
-		{
+		try {
 			List<CategoryDetails> categoryList = new ArrayList<CategoryDetails>();
 			categoryList = categoryService.getAllCategories(request);
 			response.setResponse(categoryList.toString());
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			logger.error("", e);
 			response.setError(e);
 		}
 		return response.toString();
-	}	
-	
+	}
 
 	/**
 	 * Category srvice
@@ -78,8 +77,7 @@ public class CategoryController
 	 * Inject category service
 	 */
 	@Autowired
-	public void setCategoryService(CategoryService categoryService)
-	{
+	public void setCategoryService(CategoryService categoryService) {
 		this.categoryService = categoryService;
 	}
 }
