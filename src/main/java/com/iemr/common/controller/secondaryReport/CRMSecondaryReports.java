@@ -123,9 +123,8 @@ public class CRMSecondaryReports {
 		try {
 			file = new InputStreamResource(secondaryReportService.getCallSummaryReport(jsonRequest, filename));
 			return ResponseEntity.ok()
-					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))// add
-																											// generic
-																											// function
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))
+
 					.contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(file);
 		} catch (Exception e) {
 			logger.error("Report Name:" + filename + " Timestamp:" + System.currentTimeMillis() + " Error: "
@@ -150,9 +149,8 @@ public class CRMSecondaryReports {
 			file = new InputStreamResource(
 					secondaryReportService.getAllBySexualOrientationReport(jsonRequest, filename));
 			return ResponseEntity.ok()
-					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))// add
-																											// generic
-																											// function
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))
+
 					.contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(file);
 		} catch (Exception e) {
 			logger.error("Report Name:" + filename + " Timestamp:" + System.currentTimeMillis() + " Error: "
@@ -178,9 +176,8 @@ public class CRMSecondaryReports {
 		try {
 			file = new InputStreamResource(secondaryReportService.getDistrictWiseCallReport(jsonRequest, filename));
 			return ResponseEntity.ok()
-					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))// add
-																											// generic
-																											// function
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))
+
 					.contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(file);
 		} catch (Exception e) {
 			logger.error("Report Name:" + filename + " Timestamp:" + System.currentTimeMillis() + " Error: "
@@ -204,9 +201,8 @@ public class CRMSecondaryReports {
 		try {
 			file = new InputStreamResource(secondaryReportService.getUnblockedUserReport(jsonRequest, filename));
 			return ResponseEntity.ok()
-					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))// add
-																											// generic
-																											// function
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))
+
 					.contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(file);
 		} catch (Exception e) {
 			logger.error("Report Name:" + filename + " Timestamp:" + System.currentTimeMillis() + " Error: "
@@ -233,9 +229,8 @@ public class CRMSecondaryReports {
 			filename = getFileName(jsonRequest, callQualityReport.getFileName());
 			file = new InputStreamResource(secondaryReportService.getCallQualityReport(callQualityReport, filename));
 			return ResponseEntity.ok()
-					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))// add
-																											// generic
-																											// function
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))
+
 					.contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(file);
 		} catch (Exception e) {
 			logger.error("Report Name:" + filename + " Timestamp:" + System.currentTimeMillis() + " Error: "
@@ -262,9 +257,8 @@ public class CRMSecondaryReports {
 			filename = getFileName(jsonRequest, "Language_Distribution_Report");
 			file = new InputStreamResource(secondaryReportService.getCountsByPrefferedLanguage(jsonRequest, filename));
 			return ResponseEntity.ok()
-					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))// add
-																											// generic
-																											// function
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))
+
 					.contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(file);
 		} catch (Exception e) {
 			logger.error("Report Name:" + filename + " Timestamp:" + System.currentTimeMillis() + " Error: "
@@ -277,7 +271,7 @@ public class CRMSecondaryReports {
 	}
 
 	@CrossOrigin
-	@ApiOperation(value = "Get all by age group")
+	@ApiOperation(value = "Get caller by age group")
 	@RequestMapping(value = "/getAllByAgeGroup", method = RequestMethod.POST, headers = "Authorization")
 	public ResponseEntity<Object> getAllByAgeGroup(
 			@ApiParam(value = "\"{\\\"providerServiceMapID\\\":\\\"Integer\\\",\\\"maxAge\\\":\\\"Integer\\\",\\\"minAge\\\":\\\"Integer\\\",\\\"startTimestamp\\\":\\\"Timestamp\\\","
@@ -289,9 +283,8 @@ public class CRMSecondaryReports {
 		try {
 			file = new InputStreamResource(secondaryReportService.getAllByAgeGroup(jsonRequest, filename));
 			return ResponseEntity.ok()
-					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))// add
-																											// generic
-																											// function
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))
+
 					.contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(file);
 		} catch (Exception e) {
 			logger.error("Report Name:" + filename + " Timestamp:" + System.currentTimeMillis() + " Error: "
@@ -318,9 +311,8 @@ public class CRMSecondaryReports {
 		try {
 			file = new InputStreamResource(secondaryReportService.getAllReportsByDate(jsonRequest, filename));
 			return ResponseEntity.ok()
-					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))// add
-																											// generic
-																											// function
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))
+
 					.contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(file);
 		} catch (Exception e) {
 			logger.error("Report Name:" + filename + " Timestamp:" + System.currentTimeMillis() + " Error: "
@@ -345,9 +337,8 @@ public class CRMSecondaryReports {
 		try {
 			file = new InputStreamResource(secondaryReportService.getAllByGender(jsonRequest, filename));
 			return ResponseEntity.ok()
-					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))// add
-																											// generic
-																											// function
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + (filename + ".xlsx"))
+
 					.contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(file);
 
 		} catch (Exception e)

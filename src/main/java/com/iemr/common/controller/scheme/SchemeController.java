@@ -53,7 +53,7 @@ public class SchemeController {
 	InputMapper mapper = new InputMapper();
 
 	@CrossOrigin
-	@ApiOperation(value = "Stores scheme data", consumes = "application/json", produces = "application/json")
+	@ApiOperation(value = "Save scheme details", consumes = "application/json", produces = "application/json")
 	@RequestMapping(value = "/save/schemeDetails", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Authorization")
 	public String saveSchemeDetails(@ApiParam(value = "{\"providerServiceMapID\": \"integer-provider service map id\", "
 			+ "\"schemeName\": \"Name of Scheme\", " + "\"schemeDesc\": \"Description of Scheme\", "

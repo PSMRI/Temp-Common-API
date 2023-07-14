@@ -59,7 +59,7 @@ public class QuestionTypeController {
 	}
 
 	@CrossOrigin()
-	@ApiOperation(value = "Put question type")
+	@ApiOperation(value = "Create question type")
 	@RequestMapping(value = "/put/questionType", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
 	public String createQuestionType(
 			@ApiParam(value = "{\\\"questionType\\\":\\\"String\\\",\\\"questionTypeDesc\\\":\\\"String\\\"}\"") @RequestBody String request) {

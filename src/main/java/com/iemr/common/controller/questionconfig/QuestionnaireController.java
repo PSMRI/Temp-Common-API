@@ -56,7 +56,7 @@ public class QuestionnaireController {
 	}
 
 	@CrossOrigin()
-	@ApiOperation(value = "Put questionnaire")
+	@ApiOperation(value = "Create questionnaire")
 	@RequestMapping(value = "/put/questionnaire", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
 	public String createQuestionnaire(@RequestBody String request) {
 		OutputResponse response = new OutputResponse();
