@@ -43,7 +43,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RequestMapping(value = "/nhm_dashboard")
 @RestController
-public class NHMDashboardController {
+public class NationalHealthMissionDashboardController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	@Autowired

@@ -35,7 +35,7 @@ import org.mockito.InjectMocks;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.iemr.common.controller.cti.CTIController;
+import com.iemr.common.controller.cti.ComputerTelephonyIntegrationController;
 import com.iemr.common.service.cti.CTIService;
 import com.iemr.common.service.cti.CTIServiceImpl;
 import com.iemr.common.utils.mapper.InputMapper;
@@ -45,7 +45,7 @@ import com.iemr.common.utils.response.OutputResponse;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CTIControllerTest {
 	@InjectMocks
-	private CTIController controllerMock = spy(CTIController.class);
+	private ComputerTelephonyIntegrationController controllerMock = spy(ComputerTelephonyIntegrationController.class);
 
 	private CTIService ctiServiceSpy = spy(new CTIServiceImpl());
 
