@@ -21,7 +21,7 @@
 */
 package com.iemr.common.service.ctiCall;
 
-public interface CzentrixDataSync {
+public interface CallCentreDataSync {
 	public void ctiDataSync();
 	String callUrl(String urlRequest);
 

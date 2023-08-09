@@ -51,7 +51,7 @@ import com.iemr.common.utils.response.OutputResponse;
 
 @Service
 @PropertySource("classpath:application.properties")
-public class CzentrixDataSyncImpl implements CzentrixDataSync {
+public class CallCentreDataSyncImpl implements CallCentreDataSync {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
@@ -70,7 +70,7 @@ public class CzentrixDataSyncImpl implements CzentrixDataSync {
 	private CTIService ctiService;
 	private static String ctiLoggerURL = ConfigProperties.getPropertyByName("cti-logger_base_url");
 
-	public CzentrixDataSyncImpl() {
+	public CallCentreDataSyncImpl() {
 		if (httpUtils == null) {
 			httpUtils = new HttpUtils();
 		}

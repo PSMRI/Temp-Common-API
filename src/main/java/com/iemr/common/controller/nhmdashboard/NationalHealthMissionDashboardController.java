@@ -50,7 +50,7 @@ public class NationalHealthMissionDashboardController {
 	private NHM_DashboardService nHM_DashboardService;
 
 	@CrossOrigin()
-	@ApiOperation(value = "Push abandoned calls from czentrix")
+	@ApiOperation(value = "Push abandoned calls from call centre")
 	@RequestMapping(value = "/push/abandon_calls", method = RequestMethod.POST, headers = "Authorization")
 	public String pushAbandonCallsFromC_Zentrix(@RequestBody AbandonCallSummary abandonCallSummary) {
 		OutputResponse output = new OutputResponse();

@@ -229,7 +229,7 @@ public class QuartzConfig {
 	public JobDetailFactoryBean processMQJobForCtiDataSync() {
 		JobDetailFactoryBean jobDetailFactory;
 		jobDetailFactory = new JobDetailFactoryBean();
-		jobDetailFactory.setJobClass(ScheduleForCzentrixCall.class);
+		jobDetailFactory.setJobClass(ScheduleForCallCentre.class);
 		jobDetailFactory.setGroup(quartzJobGroup);
 		return jobDetailFactory;
 	}

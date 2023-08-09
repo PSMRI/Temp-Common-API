@@ -30,22 +30,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.iemr.common.service.ctiCall.CzentrixDataSync;
+import com.iemr.common.service.ctiCall.CallCentreDataSync;
 
 
 @Service
 @Transactional
-public class ScheduleForCzentrixCall implements Job {
+public class ScheduleForCallCentre implements Job {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	@Autowired
-	private CzentrixDataSync czentrixDataSync;
+	private CallCentreDataSync callCentreDataSync;
 
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException
 	{
 		logger.info("Started job for sync " + arg0.getClass().getName());
-		czentrixDataSync.ctiDataSync();
+		callCentreDataSync.ctiDataSync();
 		logger.info("Completed job for sync " + arg0.getClass().getName());
 	}
 }
