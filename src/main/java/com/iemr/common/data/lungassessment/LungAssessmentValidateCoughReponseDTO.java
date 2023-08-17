@@ -19,18 +19,17 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see https://www.gnu.org/licenses/.
 */
-package com.iemr.common.data.swaasa;
+package com.iemr.common.data.lungassessment;
+
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import lombok.ToString;
-
 @Component
-@ToString
-public class SwaasaAuthenticateResponse {
+public class LungAssessmentValidateCoughReponseDTO {
 
 	private String status;
-	private String accessToken;
+	private Map<String, Object> data;
 
 	public String getStatus() {
 		return status;
@@ -40,12 +39,12 @@ public class SwaasaAuthenticateResponse {
 		this.status = status;
 	}
 
-	public String getAccessToken() {
-		return accessToken;
+	public Map<String, Object> getData() {
+		return data;
 	}
 
-	public void setAccessToken(String accessToken) {
-		this.accessToken = accessToken;
+	public void setData(Map<String, Object> data) {
+		this.data = data;
 	}
 
 }

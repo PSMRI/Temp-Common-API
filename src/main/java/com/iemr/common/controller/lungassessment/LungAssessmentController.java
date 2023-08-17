@@ -19,7 +19,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see https://www.gnu.org/licenses/.
 */
-package com.iemr.common.controller.swaasa;
+package com.iemr.common.controller.lungassessment;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,17 +32,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.iemr.common.service.swaasa.SwaasaService;
+import com.iemr.common.service.lungassessment.LungAssessmentService;
 import com.iemr.common.utils.response.OutputResponse;
 
 import io.swagger.annotations.ApiOperation;
 
 @RequestMapping(value = "/swaasa")
 @RestController
-public class SwaasaController {
+public class LungAssessmentController {
 
 	@Autowired
-	private SwaasaService swaasaService;
+	private LungAssessmentService lungAssessmentService;
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
@@ -53,12 +53,12 @@ public class SwaasaController {
 		OutputResponse output = new OutputResponse();
 		try {
 
-			String res = swaasaService.initiateAssesment(request, file);
+			String res = lungAssessmentService.initiateAssesment(request, file);
 			output.setResponse(res);
 
 			logger.info("start assessment cough response: " + output);
 		} catch (Exception e) {
-			logger.error("sawassa failed with error " + e.getMessage(), e);
+			logger.error("Lung assessment failed with error " + e.getMessage(), e);
 			output.setError(e);
 		}
 		return output.toString();
@@ -71,12 +71,12 @@ public class SwaasaController {
 		OutputResponse output = new OutputResponse();
 		try {
 
-			String res = swaasaService.getAssesment(assessmentId);
+			String res = lungAssessmentService.getAssesment(assessmentId);
 			output.setResponse(res);
 
 			logger.info("get assessment cough response: " + output);
 		} catch (Exception e) {
-			logger.error("sawassa failed with error " + e.getMessage());
+			logger.error("Lung assessment failed with error " + e.getMessage());
 			output.setError(e);
 		}
 		return output.toString();
@@ -89,7 +89,7 @@ public class SwaasaController {
 		OutputResponse output = new OutputResponse();
 		try {
 
-			String res = swaasaService.getAssessmentDetails(patientId);
+			String res = lungAssessmentService.getAssessmentDetails(patientId);
 			output.setResponse(res);
 
 			logger.info("get assessment details response: " + output);

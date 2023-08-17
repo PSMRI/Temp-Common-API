@@ -19,39 +19,20 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see https://www.gnu.org/licenses/.
 */
-package com.iemr.common.data.swaasa;
+package com.iemr.common.repo.lungassessment;
 
-import org.springframework.stereotype.Component;
+import java.util.List;
 
-@Component
-public class SwaasaAssessmentResponseDTO {
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.rest.core.annotation.RestResource;
+import org.springframework.stereotype.Repository;
 
-	private String status;
-	private Swaasa data;
-	private String assessmentId;
+import com.iemr.common.data.lungassessment.LungAssessment;
 
-	public String getStatus() {
-		return status;
-	}
+@Repository
+@RestResource(exported = false)
+public interface LungAssessmentRepository extends CrudRepository<LungAssessment, Long> {
+	public List<LungAssessment> findByAssessmentId(String assessmentId);
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public Swaasa getData() {
-		return data;
-	}
-
-	public void setData(Swaasa data) {
-		this.data = data;
-	}
-
-	public String getAssessmentId() {
-		return assessmentId;
-	}
-
-	public void setAssessmentId(String assessmentId) {
-		this.assessmentId = assessmentId;
-	}
-
+	public List<LungAssessment> findByPatientId(Long patientId);
 }

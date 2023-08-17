@@ -19,13 +19,13 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see https://www.gnu.org/licenses/.
 */
-package com.iemr.common.service.swaasa;
+package com.iemr.common.service.lungassessment;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public interface SwaasaService {
+public interface LungAssessmentService {
 
-	public String getSwaasaAdminLogin(String email, String password) throws Exception;
+	public String getLungAssessmentAdminLogin(String email, String password) throws Exception;
 
 	public Boolean verifyCough(MultipartFile file, String authToken, Long patientId) throws Exception;
 

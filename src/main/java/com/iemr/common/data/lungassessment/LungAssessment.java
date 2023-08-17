@@ -19,7 +19,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see https://www.gnu.org/licenses/.
 */
-package com.iemr.common.data.swaasa;
+package com.iemr.common.data.lungassessment;
 
 import java.sql.Timestamp;
 
@@ -34,14 +34,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Table(name = "t_swaasa")
-public class Swaasa {
+public class LungAssessment {
 
 	@Id
 	@GeneratedValue
 	@Column(name = "Id", insertable = false)
 	private Long id;
 
-	// request
 	@Column(name = "Beneficiaryregid")
 	private Long patientId;
 	@Column(name = "AssessmentId")
@@ -51,8 +50,6 @@ public class Swaasa {
 	@Column(name = "Gender")
 	private String gender;
 
-//	@Column(name = "Time_stamp")
-//	private Timestamp timestamp;
 	@Column(name = "frequent_cough")
 	private Integer frequent_cough;
 	@Column(name = "sputum")
@@ -66,7 +63,6 @@ public class Swaasa {
 	@Column(name = "shortness_of_breath")
 	private Integer shortness_of_breath;
 
-	// response
 	@Column(name = "record_duration")
 	private Double record_duration;
 	@Column(name = "status")
@@ -84,7 +80,6 @@ public class Swaasa {
 	@Column(name = "severity")
 	private String severity;
 
-	// others
 	@Column(name = "ProviderServiceMapID")
 	private Integer providerServiceMapID;
 	@Column(name = "Deleted", insertable = false, updatable = false)
