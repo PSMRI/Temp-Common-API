@@ -49,7 +49,7 @@ import io.swagger.annotations.ApiParam;
 @CrossOrigin
 @RequestMapping({ "/crmReports" })
 @RestController
-public class CustomerRelationshipManagementSecondaryReports {
+public class CustomerRelationshipSecondaryReports {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	@Autowired
 	private SecondaryReportService secondaryReportService;
