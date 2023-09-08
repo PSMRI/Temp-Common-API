@@ -1,6 +1,8 @@
 package com.iemr.common.service.esanjeevani;
 
 import java.math.BigInteger;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDate;
@@ -13,6 +15,7 @@ import java.util.Map;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.servlet.http.HttpUtils;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.json.JSONObject;
@@ -23,6 +26,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -30,6 +35,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.iemr.common.model.esanjeevani.ESanjeevaniPatientAddress;
 import com.iemr.common.model.esanjeevani.ESanjeevaniPatientContactDetail;
@@ -43,7 +49,7 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 
 	@Autowired
 	RestTemplate restTemplate;
-	
+
 	private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	@Autowired
@@ -89,11 +95,13 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 			logger.info("E-Sangeevani auth api response - " + response);
 			if (response != null && !StringUtils.isEmpty(response)) {
 				JSONObject obj = new JSONObject(response);
-				String modelResponse = obj.getString("model");
-				JSONObject tokenResponse = new JSONObject(modelResponse);
-				token = tokenResponse.getString("access_token");
-				if (token != null && !StringUtils.isEmpty(token)) {
-					return token;
+				if (obj.has("model") && !obj.isNull("model")) {
+					String modelResponse = obj.get("model").toString();
+					JSONObject tokenResponse = new JSONObject(modelResponse);
+					token = tokenResponse.getString("access_token");
+					if (token != null && !StringUtils.isEmpty(token)) {
+						return token;
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -106,7 +114,6 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 	@Override
 	public String registerPatient(Long benRegId) throws Exception {
 		try {
-			// String accessToken = getProviderLogin();
 			ESanjeevaniPatientRegistration reqObj = new ESanjeevaniPatientRegistration();
 			ArrayList<ESanjeevaniPatientAddress> addressObj = new ArrayList<>();
 			ArrayList<ESanjeevaniPatientContactDetail> contactObj = new ArrayList<>();
@@ -116,7 +123,7 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 				logger.info("Beneficiary mapping details - " + benMappingResponse);
 				List<Object[]> benAbhaDetailsResponse = eSanjeevaniRepo.getBeneficiaryHealthIdDeatils(benRegId);
 				logger.info("Beneficiary HealthId details - " + benAbhaDetailsResponse);
-				
+
 				if (!benAbhaDetailsResponse.isEmpty()) {
 					Object[] benAbhaDetails = benAbhaDetailsResponse.get(0);
 					reqObj.setAbhaAddress(benAbhaDetails[0].toString());
@@ -132,14 +139,14 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 					setBeneficiaryDetails(benDetailsId, reqObj);
 					setBeneficiaryAddressDetails(benAddressId, addressObj);
 					setBeneficiaryContactDetails(benContactsId, contactObj);
-					
+
 					if (!ObjectUtils.isEmpty(addressObj))
 						reqObj.setLstPatientAddress(addressObj);
 					if (!ObjectUtils.isEmpty(contactObj))
 						reqObj.setLstPatientContactDetail(contactObj);
 
 				} else {
-					return("No beneficiary Details found for benRegId : " + benRegId);
+					return ("No beneficiary Details found for benRegId : " + benRegId);
 				}
 			} catch (Exception e) {
 				return ("Issue while fetching mapping details : " + e.getMessage());
@@ -149,31 +156,39 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 			if (accessToken != null && !StringUtils.isEmpty(accessToken)) {
 				MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
 				String registryReqObj = new Gson().toJson(reqObj);
-//				JSONObject registryReqObj = new JSONObject(reqObj);
-				headers.add("Authorization", "Bearer " + accessToken );
+				headers.add("Authorization", "Bearer " + accessToken);
 				headers.add("Content-Type", "application/json");
 				HttpEntity<Object> requestOBJ = new HttpEntity<Object>(registryReqObj, headers);
+
 				logger.info("E-Sangeevani patient registery api request - " + requestOBJ);
-				ResponseEntity<String> response = restTemplate.exchange(eSanjeevaniRegisterPatient, HttpMethod.POST,
-						requestOBJ, String.class);
+				ResponseEntity<Object> response = restTemplate.exchange(eSanjeevaniRegisterPatient, HttpMethod.POST,
+						requestOBJ, Object.class);
+
 				logger.info("E-Sangeevani patient registery api response - " + response);
-				if (response != null && response.getBody() != null) {
-					String res = response.getBody();
-					JSONObject obj = new JSONObject(res);
-					logger.info("E-Sangeevani patient  api response object - " + response);
-					if (obj.getBoolean("success")) {
-						if(obj.get("message") != null && ((String) obj.get("message")).equalsIgnoreCase("success") )
-						return eSanjeevaniRouteUrl;
-						else {
-							return ("Unable to register patient in e-sanjeevani " + obj.get("message"));
+				if (response != null && response.getStatusCode().is2xxSuccessful()) {
+					Object responseBody = response.getBody();
+
+					if (responseBody != null && responseBody instanceof Map) {
+						Map<String, Object> responseObject = (Map<String, Object>) responseBody;
+						if (responseObject.containsKey("success") && (Boolean) responseObject.get("success")) {
+							if (responseObject.containsKey("msgCode") && responseObject.get("msgCode").equals(1)
+									&& responseObject.containsKey("message")
+									&& responseObject.get("message").toString().equalsIgnoreCase("success")) {
+								return eSanjeevaniRouteUrl;
+							} else if (responseObject.containsKey("msgCode")
+									&& responseObject.get("msgCode").equals(43)) {
+								return eSanjeevaniRouteUrl;
+							} else {
+								return ("Unable to register patient in e-sanjeevani " + responseObject.get("message"));
+							}
+						} else {
+							return ("Unable to register patient for routing to E-Sanjeevani due to : "
+									+ response.getBody());
 						}
-					} else {
-						return ("Unable to register patient for routing to E-Sanjeevani due to : "
-								+ response.getBody());
 					}
+				} else {
+					return ("Empty response from E-sanjeevani Authorization API");
 				}
-			} else {
-				return ("Empty response from E-sanjeevani Authorization API");
 			}
 		} catch (Exception e) {
 			throw new Exception("Error while E-Sanjeevani registering patient : " + e.getMessage());
@@ -197,9 +212,8 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 		if (beneficaryDetails != null) {
 			Object[] beneficaryObj = beneficaryDetails.get(0);
 			logger.info("Beneficiary details - " + beneficaryObj.toString());
-			// JSONObject beneficaryObj = new JSONObject(beneficaryDetails);
 			if (beneficaryObj[0] != null)
-			reqObj.setFirstName(beneficaryObj[0].toString());
+				reqObj.setFirstName(beneficaryObj[0].toString());
 			if (beneficaryObj[1] != null)
 				reqObj.setLastName(beneficaryObj[1].toString());
 			if (beneficaryObj[2] != null)
@@ -237,14 +251,13 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 				Integer blockId = 0;
 				Object[] addressDetails = beneficiaryAddDetails.get(0);
 				logger.info("address details fetch for beneficiary - " + addressDetails);
-//				JSONObject addressDetails = new JSONObject(beneficiaryAddDetails);
 				if (addressDetails[0] != null)
 					countryId = (int) addressDetails[0];
-				else 
+				else
 					countryId = 91;
 				if (addressDetails[1] != null)
 					addressObj.setCountryDisplay(addressDetails[1].toString());
-				else 
+				else
 					addressObj.setCountryDisplay("India");
 				if (addressDetails[2] != null)
 					stateId = (int) addressDetails[2];
@@ -263,9 +276,9 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 				if (addressDetails[9] != null)
 					addressObj.setPostalCode(addressDetails[9].toString());
 				addressObj.setAddressType("Physical");
-				addressObj.setPostalCode("123456");
-				addressObj.setCityCode(233);
-				addressObj.setCityDisplay("kareemnagar");
+//				addressObj.setPostalCode("123456");
+//				addressObj.setCityCode(233);
+//				addressObj.setCityDisplay("kareemnagar");
 
 				String govCountryCode = eSanjeevaniRepo.getGovCountyId(countryId);
 				Integer govtStateCode = eSanjeevaniRepo.getGovStateId(stateId);
@@ -293,8 +306,6 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 			String beneficiaryContactDetails = eSanjeevaniRepo.getBeneficiaryContactDetails(benContactId);
 			logger.info("contact details fetch for beneficiary - " + beneficiaryContactDetails);
 			if (null != beneficiaryContactDetails) {
-//				JSONObject contactDetails = new JSONObject(beneficiaryContactDetails);
-//				Object[] contactDetails = beneficiaryContactDetails.get(0);
 				contactObj.setContactPointStatus(true);
 				contactObj.setContactPointType("phone");
 				contactObj.setContactPointValue(beneficiaryContactDetails);
