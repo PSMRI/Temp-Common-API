@@ -37,7 +37,7 @@ import com.iemr.common.utils.response.OutputResponse;
 
 import io.swagger.annotations.ApiOperation;
 
-@RequestMapping(value = "/swaasa")
+@RequestMapping(value = "/lungAssessment")
 @RestController
 public class LungAssessmentController {
 
