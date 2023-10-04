@@ -1,6 +1,7 @@
 package com.iemr.common.service.esanjeevani;
 
 import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDate;
@@ -74,13 +75,17 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 		String token = null;
 
 		try {
-			String encryptedPassword = DigestUtils.sha512Hex(eSanjeevaniPassword).toLowerCase()
-					+ DigestUtils.sha512Hex(eSanjeevaniSalt).toLowerCase();
-			String encryptedPaasword = DigestUtils.sha512Hex(encryptedPassword);
+			String encryptedPaasword = encryptSHA512(encryptSHA512(eSanjeevaniPassword)+encryptSHA512(eSanjeevaniSalt));
+			/*
+			 * String encryptedPassword =
+			 * DigestUtils.sha512Hex(eSanjeevaniPassword).toLowerCase() +
+			 * DigestUtils.sha512Hex(eSanjeevaniSalt).toLowerCase(); String
+			 * encryptedPaasword = DigestUtils.sha512Hex(encryptedPassword);
+			 */
 
 			ESanjeevaniProviderAuth reqObj = new ESanjeevaniProviderAuth();
 			reqObj.setUserName(eSanjeevaniUserName);
-			reqObj.setPassword(eSanjeevaniPassword);
+			reqObj.setPassword(encryptedPaasword);
 			reqObj.setSalt(eSanjeevaniSalt);
 			reqObj.setSource(eSanjeevaniSource);
 
@@ -102,6 +107,25 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 		return token;
 
 	}
+	private String encryptSHA512(String string) {
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA-512");
+			byte[] hashbytes = digest.digest(string.getBytes());
+			StringBuilder hexString = new StringBuilder();
+			for (byte b : hashbytes) {
+				String hex = Integer.toHexString(0xff & b);
+				if(hex.length()==1) {
+					hexString.append('0');
+				}
+				hexString.append(hex);
+			}
+			return hexString.toString();
+		}catch (Exception e) {
+			return null;
+		}
+		
+	}
+
 
 	@Override
 	public String registerPatient(Long benRegId) throws Exception {
@@ -146,6 +170,7 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 			}
 
 			String accessToken = getProviderLogin();
+			logger.info("getProviderLogin response - " + accessToken);
 			if (accessToken != null && !StringUtils.isEmpty(accessToken)) {
 				MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
 				String registryReqObj = new Gson().toJson(reqObj);
@@ -262,16 +287,23 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 					addressObj.setAddressLine1(addressDetails[8].toString());
 				if (addressDetails[9] != null)
 					addressObj.setPostalCode(addressDetails[9].toString());
-				addressObj.setAddressType("Physical");
-				addressObj.setPostalCode("123456");
-				addressObj.setCityCode(233);
-				addressObj.setCityDisplay("kareemnagar");
-
+				//addressObj.setAddressType("Physical");
+				//addressObj.setPostalCode("123456");
+				
 				String govCountryCode = eSanjeevaniRepo.getGovCountyId(countryId);
 				Integer govtStateCode = eSanjeevaniRepo.getGovStateId(stateId);
 				Integer govtDistrictCode = eSanjeevaniRepo.getGovDistrictId(districtId);
-				Integer govBlockCode = eSanjeevaniRepo.getGovSubDistrictId(blockId);
-
+				List<Object[]> govBlockCodeObj = eSanjeevaniRepo.getGovSubDistrictId(blockId);
+				
+				Object[] objects = govBlockCodeObj.get(0);
+				Integer govBlockCode = (Integer)objects[0];
+				Integer govVillageID = (Integer)objects[1];
+				String govVillageName = objects[2].toString();
+				
+				if (govVillageID != null)
+					addressObj.setCityCode(govVillageID);
+				if (govVillageName != null)
+					addressObj.setCityDisplay(govVillageName);
 				if (null != govCountryCode)
 					addressObj.setCountryCode(govCountryCode);
 				if (null != govtStateCode)
@@ -298,7 +330,6 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 				contactObj.setContactPointStatus(true);
 				contactObj.setContactPointType("phone");
 				contactObj.setContactPointValue(beneficiaryContactDetails);
-
 				contactObjList.add(contactObj);
 			}
 		}

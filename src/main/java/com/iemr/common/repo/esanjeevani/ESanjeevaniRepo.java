@@ -39,8 +39,8 @@ public interface ESanjeevaniRepo extends CrudRepository<V_doortodooruserdetails,
 	@Query(nativeQuery = true, value = "SELECT GovtDistrictID FROM db_iemr.m_district WHERE DistrictID = :districtId ")
 	public Integer getGovDistrictId(@Param("districtId") Integer districtId);
 	
-	@Query(nativeQuery = true, value = "SELECT GovSubDistrictID FROM db_iemr.m_districtbranchmapping WHERE DistrictBranchID = :subDistrictId ")
-	public Integer getGovSubDistrictId(@Param("subDistrictId") Integer subDistrictId);
+	@Query(nativeQuery = true, value = "SELECT GovSubDistrictID,GovVillageID,VillageName FROM db_iemr.m_districtbranchmapping WHERE DistrictBranchID = :subDistrictId ")
+	public List<Object[]> getGovSubDistrictId(@Param("subDistrictId") Integer subDistrictId);
 	
 	@Query(nativeQuery = true, value = "SELECT CountryCode FROM db_iemr.m_country WHERE CountryID = :countryID ")
 	public String getGovCountyId(@Param("countryID") Integer countryID);
