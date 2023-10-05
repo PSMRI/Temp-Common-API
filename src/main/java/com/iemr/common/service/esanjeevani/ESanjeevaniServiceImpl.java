@@ -76,13 +76,7 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 
 		try {
 			String encryptedPaasword = encryptSHA512(encryptSHA512(eSanjeevaniPassword)+encryptSHA512(eSanjeevaniSalt));
-			/*
-			 * String encryptedPassword =
-			 * DigestUtils.sha512Hex(eSanjeevaniPassword).toLowerCase() +
-			 * DigestUtils.sha512Hex(eSanjeevaniSalt).toLowerCase(); String
-			 * encryptedPaasword = DigestUtils.sha512Hex(encryptedPassword);
-			 */
-
+	
 			ESanjeevaniProviderAuth reqObj = new ESanjeevaniProviderAuth();
 			reqObj.setUserName(eSanjeevaniUserName);
 			reqObj.setPassword(encryptedPaasword);
@@ -130,7 +124,6 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 	@Override
 	public String registerPatient(Long benRegId) throws Exception {
 		try {
-			// String accessToken = getProviderLogin();
 			ESanjeevaniPatientRegistration reqObj = new ESanjeevaniPatientRegistration();
 			ArrayList<ESanjeevaniPatientAddress> addressObj = new ArrayList<>();
 			ArrayList<ESanjeevaniPatientContactDetail> contactObj = new ArrayList<>();
@@ -262,7 +255,6 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 				Integer blockId = 0;
 				Object[] addressDetails = beneficiaryAddDetails.get(0);
 				logger.info("address details fetch for beneficiary - " + addressDetails);
-//				JSONObject addressDetails = new JSONObject(beneficiaryAddDetails);
 				if (addressDetails[0] != null)
 					countryId = (int) addressDetails[0];
 				else 
@@ -287,9 +279,6 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 					addressObj.setAddressLine1(addressDetails[8].toString());
 				if (addressDetails[9] != null)
 					addressObj.setPostalCode(addressDetails[9].toString());
-				//addressObj.setAddressType("Physical");
-				//addressObj.setPostalCode("123456");
-				
 				String govCountryCode = eSanjeevaniRepo.getGovCountyId(countryId);
 				Integer govtStateCode = eSanjeevaniRepo.getGovStateId(stateId);
 				Integer govtDistrictCode = eSanjeevaniRepo.getGovDistrictId(districtId);
@@ -325,8 +314,6 @@ public class ESanjeevaniServiceImpl implements ESanjeevaniService {
 			String beneficiaryContactDetails = eSanjeevaniRepo.getBeneficiaryContactDetails(benContactId);
 			logger.info("contact details fetch for beneficiary - " + beneficiaryContactDetails);
 			if (null != beneficiaryContactDetails) {
-//				JSONObject contactDetails = new JSONObject(beneficiaryContactDetails);
-//				Object[] contactDetails = beneficiaryContactDetails.get(0);
 				contactObj.setContactPointStatus(true);
 				contactObj.setContactPointType("phone");
 				contactObj.setContactPointValue(beneficiaryContactDetails);
