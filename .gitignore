@@ -31,9 +31,4 @@ replay_pid89928.log
 hs_err_pid89928.log
 
 # Properties
-<<<<<<< HEAD
 src/main/environment/common_local.properties
-
-=======
-src/main/environment/common_example.properties
->>>>>>> 77dd46b (Add CI build properties, add pom.xml plugins to tweak build process)
