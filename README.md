@@ -39,6 +39,12 @@ This service has been tested on Wildfly as the application server.
 * Redis
 * MySQL Database
 
+## Environment and setup
+
+1. Install dependencies `mvn clean install`
+2. You can copy `common_example.properties` to `common_local.properties` and edit the file accordingly. The file is under `src/main/environment` folder.
+3. Run the spring server with local configuration `mvn spring-boot:run -DENV_VAR=local`
+
 ## Integrations
 * C_Zentrix
 * Everwell
