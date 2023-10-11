@@ -5,19 +5,19 @@ import lombok.Data;
 @Data
 public class ESanjeevaniPatientAddress {
 	
-    public String addressLine1;
-    public String addressType;
-    public String addressUse;
-    public int blockCode;
-    public String blockDisplay;
-    public int cityCode;
-    public String cityDisplay;
-    public String countryCode;
-    public String countryDisplay;
-    public int districtCode;
-    public String districtDisplay;
-    public String postalCode;
-    public int stateCode;
-    public String stateDisplay;
+    private String addressLine1;
+    private String addressType;
+    private String addressUse;
+    private int blockCode;
+    private String blockDisplay;
+    private int cityCode;
+    private String cityDisplay;
+    private String countryCode;
+    private String countryDisplay;
+    private int districtCode;
+    private String districtDisplay;
+    private String postalCode;
+    private int stateCode;
+    private String stateDisplay;
 
 }

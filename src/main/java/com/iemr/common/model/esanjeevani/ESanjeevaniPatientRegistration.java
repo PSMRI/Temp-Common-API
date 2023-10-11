@@ -10,20 +10,20 @@ import lombok.Data;
 @Data
 public class ESanjeevaniPatientRegistration {
 
-    public String abhaAddress;
-    public String abhaNumber;
-    public int age;
-    public String birthdate;
-    public String displayName;
-    public String firstName;
-    public String middleName;
-    public String lastName;
-    public int genderCode;
-    public String genderDisplay;
-    public boolean isBlock;
-    public String source;
+	private String abhaAddress;
+	private String abhaNumber;
+	private int age;
+	private String birthdate;
+	private String displayName;
+	private String firstName;
+	private String middleName;
+	private String lastName;
+	private int genderCode;
+	private String genderDisplay;
+	private boolean isBlock;
+	private String source;
     
-    public ArrayList<ESanjeevaniPatientAddress> lstPatientAddress;
-    public ArrayList<ESanjeevaniPatientContactDetail> lstPatientContactDetail;
+	private ArrayList<ESanjeevaniPatientAddress> lstPatientAddress;
+	private ArrayList<ESanjeevaniPatientContactDetail> lstPatientContactDetail;
 
 }
