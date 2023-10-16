@@ -85,4 +85,5 @@ public class SecondaryDBConfig {
 			@Qualifier("secondaryEntityManagerFactory") EntityManagerFactory secondaryEntityManagerFactory) {
 		return new JpaTransactionManager(secondaryEntityManagerFactory);
 	}
+	
 }

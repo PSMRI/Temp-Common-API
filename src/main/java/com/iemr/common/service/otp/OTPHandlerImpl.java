@@ -39,6 +39,7 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.primitives.Ints;
 import com.iemr.common.data.otp.OTPRequestParsor;
 import com.iemr.common.service.users.IEMRAdminUserServiceImpl;
+import com.iemr.common.utils.CryptoUtil;
 import com.iemr.common.utils.config.ConfigProperties;
 import com.iemr.common.utils.http.HttpUtils;
 
@@ -52,7 +53,10 @@ import com.iemr.common.utils.http.HttpUtils;
 
 @Service
 public class OTPHandlerImpl implements OTPHandler {
-
+	
+	@Autowired
+	private CryptoUtil cryptoUtil;
+	
 	@Autowired
 	HttpUtils httpUtils;
 	@Autowired

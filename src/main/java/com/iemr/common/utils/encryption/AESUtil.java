@@ -19,6 +19,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see https://www.gnu.org/licenses/.
 */
+
 package com.iemr.common.utils.encryption;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
@@ -52,7 +53,6 @@ public class AESUtil {
     }
 
     private static final Logger logger = LoggerFactory.getLogger(AESUtil.class);
-
 
     private static final String CIPHER_ALGORITHM = "AES/CBC/ISO10126Padding";
     private static final String SECRET_KEY_ALGORITHM = "PBKDF2WithHmacSHA512";
