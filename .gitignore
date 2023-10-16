@@ -26,11 +26,8 @@ logs/
 # Ignore specific files
 swaasaPathcoughSoundAssessment1234567890121678177840715.wav
 replay_pid89928.log
-<<<<<<< HEAD
 hs_err_pid89928.log
 
 # Properties
 src/main/environment/common_local.properties
-=======
-hs_err_pid89928.log
->>>>>>> 2c9c4f37f670158e36f1413a3817860f795b13db
+
