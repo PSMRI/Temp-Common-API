@@ -28,6 +28,7 @@ import org.apache.tomcat.jdbc.pool.PoolConfiguration;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -47,6 +48,7 @@ import com.iemr.common.utils.config.ConfigProperties;
 @EnableJpaRepositories(entityManagerFactoryRef = "entityManagerFactory", basePackages = { "com.iemr.common.repository",
 		"com.iemr.common.repo", "com.iemr.common.notification.agent", "com.iemr.common.covidVaccination" })
 public class PrimaryDBConfig {
+
 
 	Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 

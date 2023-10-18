@@ -62,7 +62,8 @@ import com.iemr.common.utils.mapper.InputMapper;
 
 @Service
 public class EmailServiceImpl implements EmailService {
-
+	
+	
 	private InputMapper inputMapper = new InputMapper();
 	@Autowired
 	private JavaMailSender javaMailSender;

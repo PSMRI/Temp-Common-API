@@ -144,7 +144,6 @@ public class EverwellRegistrationServiceImpl implements EverwellRegistrationServ
 		try {
 
 			// 1097 user authentication
-
 			String amritUser = amritUserName;
 			String amritPass = amritPassword;
 			LoginRequestModel loginCredentials1097 = new LoginRequestModel(amritUser, amritPass);

@@ -52,7 +52,8 @@ import com.iemr.common.utils.http.HttpUtils;
 
 @Service
 public class OTPHandlerImpl implements OTPHandler {
-
+	
+	
 	@Autowired
 	HttpUtils httpUtils;
 	@Autowired
