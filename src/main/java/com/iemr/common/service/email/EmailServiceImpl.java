@@ -56,7 +56,6 @@ import com.iemr.common.repository.email.MDSR_CDREmailRepository;
 import com.iemr.common.repository.email.StockAlertDataRepo;
 import com.iemr.common.repository.feedback.FeedbackRepository;
 import com.iemr.common.service.beneficiary.IEMRSearchUserService;
-import com.iemr.common.utils.CryptoUtil;
 import com.iemr.common.utils.config.ConfigProperties;
 import com.iemr.common.utils.http.HttpUtils;
 import com.iemr.common.utils.mapper.InputMapper;
@@ -64,8 +63,6 @@ import com.iemr.common.utils.mapper.InputMapper;
 @Service
 public class EmailServiceImpl implements EmailService {
 	
-	@Autowired
-	private CryptoUtil cryptoUtil;
 	
 	private InputMapper inputMapper = new InputMapper();
 	@Autowired

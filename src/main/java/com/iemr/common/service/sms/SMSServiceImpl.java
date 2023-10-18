@@ -101,7 +101,6 @@ import com.iemr.common.repository.sms.SMSTemplateRepository;
 import com.iemr.common.repository.sms.SMSTypeRepository;
 import com.iemr.common.repository.users.IEMRUserRepositoryCustom;
 import com.iemr.common.service.beneficiary.IEMRSearchUserService;
-import com.iemr.common.utils.CryptoUtil;
 import com.iemr.common.utils.config.ConfigProperties;
 import com.iemr.common.utils.http.HttpUtils;
 import com.iemr.common.utils.mapper.OutputMapper;
@@ -114,9 +113,6 @@ public class SMSServiceImpl implements SMSService {
 	private String prescription;
 	@Autowired
 	SMSMapper smsMapper;
-	
-	@Autowired
-	private CryptoUtil cryptoUtil;
 	
 	@Autowired
 	SMSTemplateRepository smsTemplateRepository;

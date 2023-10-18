@@ -41,7 +41,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.iemr.common.utils.CryptoUtil;
 import com.iemr.common.utils.config.ConfigProperties;
 
 @Configuration
@@ -50,9 +49,6 @@ import com.iemr.common.utils.config.ConfigProperties;
 		"com.iemr.common.repo", "com.iemr.common.notification.agent", "com.iemr.common.covidVaccination" })
 public class PrimaryDBConfig {
 
-	
-	@Autowired
-	private CryptoUtil cryptoUtil;
 
 	Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 

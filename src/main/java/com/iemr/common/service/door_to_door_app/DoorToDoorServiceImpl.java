@@ -46,15 +46,12 @@ import com.iemr.common.data.door_to_door_app.RequestParser;
 import com.iemr.common.data.door_to_door_app.V_doortodooruserdetails;
 import com.iemr.common.model.user.LoginRequestModel;
 import com.iemr.common.repo.door_to_door_app.V_doortodooruserdetailsRepo;
-import com.iemr.common.utils.CryptoUtil;
 import com.iemr.common.utils.mapper.InputMapper;
 
 @Service
 @PropertySource("classpath:application.properties")
 public class DoorToDoorServiceImpl implements DoorToDoorService {
 	
-	@Autowired
-	private CryptoUtil cryptoUtil;
 
 	@Value("${avniRegistrationLimit}")
 	private String avniRegistrationLimit;
