@@ -81,10 +81,6 @@ public class EmailServiceImpl implements EmailService {
 
 	Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-	private static Boolean publishingEmail = false;
-
-	private static final String EMAIL_GATEWAY_URL = ConfigProperties.getPropertyByName("email-gateway-url");
-
 	private EmailRepository emailRepository;
 
 	@Autowired
@@ -336,89 +332,6 @@ public class EmailServiceImpl implements EmailService {
 		return emaiList.toString();
 	}
 
-//	@Async
-//	@Override
-//	public void publishEmail() {
-//
-//		if (!EmailServiceImpl.publishingEmail) {
-//			try {
-//				EmailServiceImpl.publishingEmail = true;
-//				Boolean doSendEmail = ConfigProperties.getBoolean("send-email");
-//				String sendEmailURL = ConfigProperties.getPropertyByName("send-email-url");
-//				String sendEmailAPI = EmailServiceImpl.EMAIL_GATEWAY_URL + "/" + sendEmailURL;
-//				String senderName = ConfigProperties.getPropertyByName("email-username");
-//				String senderPassword = ConfigProperties.getPropertyByName("email-password");
-//				String senderNumber = ConfigProperties.getPropertyByName("email-sender-number");
-//				sendEmailAPI = sendEmailAPI.replace("USERNAME", senderName).replace("PASSWORD", senderPassword)
-//						.replace("SENDER_NUMBER", senderNumber);
-//				List<EmailNotification> emailNotificationToSend = emailRepository
-//						.findPendingEmailNotifications(EmailNotification.NOT_SENT);
-//
-//				for (EmailNotification email : emailNotificationToSend) {
-//					String emailPublishURL = sendEmailAPI;
-//
-//					try {
-//
-//						emailPublishURL = emailPublishURL
-//								.replace("EMAIL_TEXT", URLEncoder.encode(email.getEmail(), "UTF-8"))
-//								.replace("RECEIVER_ID", email.getEmailID());
-//						email.setEmailStatus(EmailNotification.IN_PROGRESS);
-//						email = emailRepository.save(email);
-//						logger.info("Calling API to send Email " + emailPublishURL);
-//						ResponseEntity<String> response = httpUtils.getV1(emailPublishURL);
-//						if (response.getStatusCodeValue() == 200) {
-//							String emailResponse = response.getBody();
-//							switch (emailResponse) {
-//							case "0x200 - Invalid Username or Password":
-//							case "0x201 - Account suspended due to one of several defined reasons":
-//							case "0x202 - Invalid Source Address/Sender ID. As per GSM standard, the sender ID should "
-//									+ "be within 11 characters":
-//							case "0x203 - Message length exceeded (more than 160 characters) if concat is set to 0":
-//							case "0x204 - Message length exceeded (more than 459 characters) in concat is set to 1":
-//							case "0x205 - DRL URL is not set":
-//							case "0x206 - Only the subscribed service type can be accessed – "
-//									+ "make sure of the service type you are trying to connect with":
-//							case "0x207 - Invalid Source IP – kindly check if the IP is responding":
-//							case "0x208 - Account deactivated/expired":
-//							case "0x209 - Invalid message length (less than 160 characters) if concat is set to 1":
-//							case "0x210 - Invalid Parameter values":
-//							case "0x211 - Invalid Message Length (more than 280 characters)":
-//							case "0x212 - Invalid Message Length":
-//							case "0x213 - Invalid Destination Number":
-//								throw new Exception(emailResponse);
-//							default:
-////								logger.info("Email Sent successfully by calling API " + emailPublishURL);
-//								email.setTransactionError(null);
-//								email.setTransactionID(emailResponse);
-//								email.setIsTransactionError(false);
-//								email.setEmailSentDate(new Timestamp(Calendar.getInstance().getTime().getTime()));
-//								email.setEmailStatus(EmailNotification.SENT);
-//								email = emailRepository.save(email);
-//								break;
-//							}
-//						} else {
-//							throw new Exception(response.getStatusCodeValue() + " and error "
-//									+ response.getStatusCode().toString());
-//						}
-//					} catch (Exception e) {
-//						logger.error("Failed to send Email: " + email.toString() + " with error " + e.getMessage(), e);
-//						email.setTransactionError(e.getMessage());
-//						email.setIsTransactionError(true);
-//						email.setTransactionID(null);
-//						email.setEmailStatus(EmailNotification.NOT_SENT);
-//						email = emailRepository.save(email);
-//					}
-//
-//				}
-//			} catch (Exception e) {
-//				logger.error("publishEmail failed with error " + e.getMessage());
-//			} finally {
-//				EmailServiceImpl.publishingEmail = false;
-//			}
-//		}
-//
-//	}
-
 	@Async
 	@Override
 	public void publishEmail() {
@@ -469,35 +382,6 @@ public class EmailServiceImpl implements EmailService {
 		}
 
 	}
-
-//			for (EmailNotification email : emailNotificationToSend) {
-//				try {
-//					email.setEmailStatus(EmailNotification.IN_PROGRESS);
-//					email = emailRepository.save(email);
-//					logger.info("Sending inventory stock email to " + email.getEmailID());
-//					if (sendEmail(email.getEmailID(), email.getEmail()) == 1) {
-//						logger.info("Inventory stock Email sent successfully to " + email.getEmailID());
-//						email.setEmailStatus(EmailNotification.SENT);
-//						email.setTransactionError(null);
-//						email.setIsTransactionError(false);
-//						email.setEmailSentDate(new Timestamp(Calendar.getInstance().getTime().getTime()));
-//						email = emailRepository.save(email);
-//					}
-//				} catch (Exception e) {
-//					email.setTransactionError(e.getLocalizedMessage());
-//					email.setEmailStatus(EmailNotification.NOT_SENT);
-//					email.setIsTransactionError(true);
-//					email.setTransactionID(null);
-//					email = emailRepository.save(email);
-//					logger.error("publishEmail failed with error " + e.getMessage());
-//				}
-//			}
-//
-//		} catch (Exception e) {
-//			logger.error("publishEmail failed with error " + e.getMessage());
-//		}
-//
-//	}
 
 	int sendEmailWithAttachment(String recipient, ByteArrayDataSource attachment) throws Exception {
 		try {
