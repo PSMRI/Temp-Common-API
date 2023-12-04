@@ -573,7 +573,9 @@ public class CTIServiceImpl implements CTIService {
 			disposition.setResponse(ctiResponse);
 			output.setResponse(disposition.toString());
 		} else {
-			output.setError(OutputResponse.GENERIC_FAILURE, ctiResponse.getReason(), ctiResponse.getStatus());
+			output.setResponse("path not found");
+			logger.info("URL " + ctiURI + " returned response " + response + " and saved response - path not found");;
+//			output.setError(OutputResponse.GENERIC_FAILURE, ctiResponse.getReason(), ctiResponse.getStatus());
 		}
 		return output;
 	}
@@ -603,8 +605,11 @@ public class CTIServiceImpl implements CTIService {
 //		}
 		if (response != null)
 			output.setResponse(response);
-		else
-			output.setError(OutputResponse.GENERIC_FAILURE, "path is null");
+		else {
+			output.setResponse("path is null");
+			logger.info("URL " + ctiURI + " returned response " + response + " and saved response - path is null");
+//			output.setError(OutputResponse.GENERIC_FAILURE, "path is null");
+		}
 		return output;
 	}
 

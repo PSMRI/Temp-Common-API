@@ -132,7 +132,7 @@ public class CallReport implements Serializable
 
 	@Expose
 	@Column(name = "IsOutbound")
-	private Boolean isOutbound;
+	private boolean isOutbound;
 
 	@Expose
 	@Column(name = "IsCalledEarlier")

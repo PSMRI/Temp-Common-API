@@ -147,7 +147,7 @@ public class CallCentreDataSyncImpl implements CallCentreDataSync {
 
 						logger.info("calling CTI API url: " + URL);
 						ctiResponse = this.callUrl(URL);
-//						logger.info("calling CTI API returned " + ctiResponse);
+						logger.info("calling CTI_CDR_CALL_INFO API returned " + ctiResponse);
 
 						CTIData data = InputMapper.gson().fromJson(ctiResponse, CTIData.class);
 						CTIResponse model = data.getResponse();
@@ -156,8 +156,11 @@ public class CallCentreDataSyncImpl implements CallCentreDataSync {
 							callDuartion = model.getCall_duration();
 							callEndTime = model.getCall_end_date_time();
 							callStartTime = model.getCall_start_date_time();
+						} else {
+							callDuartion = "00:00:00";
+							callEndTime = "00:00:00";
+							callStartTime = "00:00:00";
 						}
-
 						// call.setCallDuration(Integer.toString(getTimeInSeconds(callDuartion)));
 						if (callDuartion != null)
 							call.setCZcallDuration(Integer.parseInt(callDuartion));
@@ -165,6 +168,8 @@ public class CallCentreDataSyncImpl implements CallCentreDataSync {
 						call.setCZcallEndTime(callEndTime);
 						call.setCZcallStartTime(callStartTime);
 						callReportRepo.save(call);
+						
+						logger.info("calling CTI_CDR_CALL_INFO after API call save response " + call);
 					} catch (Exception e) {
 						logger.error("VoiceFile failed with error " + e.getMessage(), e);
 					}
