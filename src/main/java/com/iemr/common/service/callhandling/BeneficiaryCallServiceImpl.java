@@ -924,7 +924,7 @@ public class BeneficiaryCallServiceImpl implements BeneficiaryCallService {
 				(callRequest.getPhoneNo() == null) ? "%%" : callRequest.getPhoneNo()));
 
 		if (callRequest.getInboundOutbound() != null) {
-			callRequest.setOutbound(callRequest.getInboundOutbound().equalsIgnoreCase("outbound") ? true : false);
+			callRequest.setIsOutbound(callRequest.getInboundOutbound().equalsIgnoreCase("outbound") ? true : false);
 			predicates.add(criteriaBuilder.equal(root.get("isOutbound"),
 					(callRequest.getInboundOutbound().equalsIgnoreCase("outbound") ? true : false)));
 		}
@@ -1067,7 +1067,7 @@ public class BeneficiaryCallServiceImpl implements BeneficiaryCallService {
 				(callRequest.getPhoneNo() == null) ? "%%" : callRequest.getPhoneNo()));
 
 		if (callRequest.getInboundOutbound() != null) {
-			callRequest.setOutbound(callRequest.getInboundOutbound().equalsIgnoreCase("outbound") ? true : false);
+			callRequest.setIsOutbound(callRequest.getInboundOutbound().equalsIgnoreCase("outbound") ? true : false);
 			predicates.add(criteriaBuilder.equal(entityRoot.get("isOutbound"),
 					(callRequest.getInboundOutbound().equalsIgnoreCase("outbound") ? true : false)));
 		}
@@ -1136,7 +1136,7 @@ public class BeneficiaryCallServiceImpl implements BeneficiaryCallService {
 				(callRequest.getPhoneNo() == null) ? "%%" : callRequest.getPhoneNo()));
 
 		if (callRequest.getInboundOutbound() != null) {
-			callRequest.setOutbound(callRequest.getInboundOutbound().equalsIgnoreCase("outbound") ? true : false);
+			callRequest.setIsOutbound(callRequest.getInboundOutbound().equalsIgnoreCase("outbound") ? true : false);
 			predicates.add(criteriaBuilder.equal(entityRoot.get("isOutbound"),
 					(callRequest.getInboundOutbound().equalsIgnoreCase("outbound") ? true : false)));
 		}
@@ -1208,7 +1208,7 @@ public class BeneficiaryCallServiceImpl implements BeneficiaryCallService {
 				(callRequest.getPhoneNo() == null) ? "%%" : callRequest.getPhoneNo()));
 
 		if (callRequest.getInboundOutbound() != null) {
-			callRequest.setOutbound(callRequest.getInboundOutbound().equalsIgnoreCase("outbound") ? true : false);
+			callRequest.setIsOutbound(callRequest.getInboundOutbound().equalsIgnoreCase("outbound") ? true : false);
 			predicates.add(criteriaBuilder.equal(root.get("isOutbound"),
 					(callRequest.getInboundOutbound().equalsIgnoreCase("outbound") ? true : false)));
 		}
