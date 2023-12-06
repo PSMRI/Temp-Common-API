@@ -35,15 +35,15 @@ public class InterceptorConfig extends WebMvcConfigurerAdapter
 	@Autowired
 	HTTPRequestInterceptor requestInterceptor;
 
-	@Override
-	public void addInterceptors(InterceptorRegistry registry)
-	{
-		registry.addInterceptor(requestInterceptor);
-	}
-	
 //	@Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new BlockingHttpMethodInterceptor())
-//                .addPathPatterns("/**"); 
-//    }
+//	public void addInterceptors(InterceptorRegistry registry)
+//	{
+//		registry.addInterceptor(requestInterceptor);
+//	}
+	
+	@Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new BlockingHttpMethodInterceptor())
+                .addPathPatterns("/**"); 
+    }
 }
