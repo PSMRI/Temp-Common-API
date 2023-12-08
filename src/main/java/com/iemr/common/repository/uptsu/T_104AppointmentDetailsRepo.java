@@ -26,11 +26,13 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.stereotype.Repository;
 
 import com.iemr.common.data.uptsu.T_104AppointmentDetails;
 
 @Repository
+@RestResource(exported = false)
 public interface T_104AppointmentDetailsRepo extends CrudRepository<T_104AppointmentDetails, Integer>{
 	
 	@Query(value = " SELECT SMSTypeID FROM db_iemr.m_smstype " + " WHERE SMSType = :choSms ", nativeQuery = true)

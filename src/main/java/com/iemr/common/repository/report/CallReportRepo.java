@@ -38,7 +38,6 @@ import com.iemr.common.data.report.CallReport;
 
 @Repository
 @RestResource(exported = false)
-
 public interface CallReportRepo extends CrudRepository<BeneficiaryCall, Integer> {
 	@Query("select report from BeneficiaryCall report "
 			+ "where (report.cZcallDuration is null or report.recordingPath is null) and report.agentID is not null and report.phoneNo!='undefined' and report.phoneNo is not null "

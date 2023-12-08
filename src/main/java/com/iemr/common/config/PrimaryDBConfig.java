@@ -49,8 +49,8 @@ import com.iemr.common.utils.config.ConfigProperties;
 		"com.iemr.common.repo", "com.iemr.common.notification.agent", "com.iemr.common.covidVaccination" })
 public class PrimaryDBConfig {
 
-//	@Autowired
-//	private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+
 
 	@Primary
 	@Bean(name = "dataSource")
