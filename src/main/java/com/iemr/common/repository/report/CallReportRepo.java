@@ -24,11 +24,13 @@ package com.iemr.common.repository.report;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.iemr.common.data.callhandling.BeneficiaryCall;
 import com.iemr.common.data.report.CallDetailsReport;
@@ -46,8 +48,9 @@ public interface CallReportRepo extends CrudRepository<BeneficiaryCall, Integer>
 	@Query("SELECT COUNT(*) FROM BeneficiaryCall call WHERE call.callID = :sessionID and call.phoneNo = :phoneNo")
 	public int getBenCallDetailsBySessionIDAndPhone(@Param("sessionID") String sessionID,@Param("phoneNo") String phoneNo);
 	
-	
-	@Query("update BeneficiaryCall set  isOutbound= :isOutbound where callId = :callID and PhoneNo= :phoneNo")
+	@Transactional
+	@Modifying
+	@Query("update BeneficiaryCall set isOutbound= :isOutbound where callID = :callID and phoneNo= :phoneNo")
 	public int updateIsOutboundForCall(@Param("isOutbound") boolean isOutbound, @Param("callID") String callID, @Param("phoneNo") String phoneNo );
 }
 
