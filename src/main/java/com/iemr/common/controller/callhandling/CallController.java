@@ -126,6 +126,7 @@ public class CallController {
 			if (remoteAddress == null || remoteAddress.trim().length() == 0) {
 				remoteAddress = fromRequest.getRemoteAddr();
 			}
+			logger.info("Start Call req Obj - " + request);
 			BeneficiaryCall startedCall = beneficiaryCallService.createCall(request, remoteAddress);
 			response.setResponse(startedCall.toString());
 		} catch (Exception e) {

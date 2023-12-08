@@ -156,12 +156,7 @@ public class CallCentreDataSyncImpl implements CallCentreDataSync {
 							callDuartion = model.getCall_duration();
 							callEndTime = model.getCall_end_date_time();
 							callStartTime = model.getCall_start_date_time();
-						} else {
-							callDuartion = "00:00:00";
-							callEndTime = "00:00:00";
-							callStartTime = "00:00:00";
 						}
-						// call.setCallDuration(Integer.toString(getTimeInSeconds(callDuartion)));
 						if (callDuartion != null)
 							call.setCZcallDuration(Integer.parseInt(callDuartion));
 						call.setRecordingPath(recordingPath);
