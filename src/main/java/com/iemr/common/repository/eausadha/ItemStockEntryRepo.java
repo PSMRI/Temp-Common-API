@@ -15,7 +15,8 @@ import com.iemr.common.data.eausadha.ItemStockEntry;
 @RestResource(exported = false)
 public interface ItemStockEntryRepo extends CrudRepository<ItemStockEntry, Integer> {
 	
-	@Query("Select t from ItemStockEntry t Where t.itemID = :itemId And t.batchNo = :batchNo")
+	@Query(nativeQuery = true, value = " SELECT * FROM db_iemr.t_itemstockentry "
+			+ " WHERE ItemID =:itemId and BatchNo =:batchNo LIMIT 1" )
 	ItemStockEntry getItemStocks(@Param("itemId")Integer itemId, @Param("batchNo")String batchNo);
 	
 	@Transactional
