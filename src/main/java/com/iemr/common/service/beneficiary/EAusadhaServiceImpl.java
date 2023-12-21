@@ -51,9 +51,13 @@ public class EAusadhaServiceImpl implements EAusadhaService {
 	@Value("${eAusadhaUrl}")
 	private String eAusadhaUrl;
 
-	@Value("${authorization}")
+
+	@Value("${eausadhaAuthorization}")
 	private String authorization;
+
+
 	
+
 	private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	@Override
@@ -63,18 +67,22 @@ public class EAusadhaServiceImpl implements EAusadhaService {
 		String batchNumber = null;
 		String drugName = null;
 		Integer lengthOfArray = null;
-		String inwardDate=null;
+
+		String inwardDate = null;
+
 
 		Map<String, String> resMap = new HashMap<>();
 		Map<String, String> resultMap = new HashMap<>();
 		Map<String, Object> responseMap = new HashMap<>();
 
 		String institutionId = facilityRepo.fetchInstitutionId(eAusadhaDTO.getFacilityId());
-		if(eAusadhaDTO.getInwardDate() != null) {
+
+		if (eAusadhaDTO.getInwardDate() != null) {
 			LocalDateTime localDateTime = eAusadhaDTO.getInwardDate().toLocalDateTime();
 			SimpleDateFormat inwardDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			inwardDate = inwardDateFormat.format(eAusadhaDTO.getInwardDate());
-			
+
+
 		}
 
 		RestTemplate restTemplate = new RestTemplate();
@@ -87,7 +95,7 @@ public class EAusadhaServiceImpl implements EAusadhaService {
 		request.put("InstituteId", institutionId);
 
 		HttpEntity<Map<String, Object>> requestObj = new HttpEntity<>(request, headers);
-		
+
 		logger.info("calling eausadha api:" + request);
 
 		ResponseEntity<String> response = restTemplate.exchange(eAusadhaUrl, HttpMethod.POST, requestObj, String.class);
@@ -98,22 +106,31 @@ public class EAusadhaServiceImpl implements EAusadhaService {
 			JSONArray responseArray = new JSONArray(responseStr);
 			lengthOfArray = responseArray.length();
 			Integer successCount = 0;
-			
 
-			for (int i = 0; i<lengthOfArray; i++) {
-			  JSONObject obj = responseArray.getJSONObject(i);
+
+			for (int i = 0; i < lengthOfArray; i++) {
+				JSONObject obj = responseArray.getJSONObject(i);
+
 				drugId = obj.getString("Drug_id");
 				batchNumber = obj.getString("Batch_number");
 				drugName = obj.getString("Drug_name");
 
-				ItemMaster itemCode = itemMasterRepo.findByItemCode(drugId);
+
+				List<ItemMaster> itemCodeList = itemMasterRepo.findByItemCode(drugId);
+				ItemMaster itemCode=null;
+				if (!itemCodeList.isEmpty()) {
+					 itemCode = itemCodeList.get(0);
+				}
+
 				Integer facilityId = eAusadhaDTO.getFacilityId();
 				if (itemCode != null && null != itemCode.getItemID()) {
 					Integer itemId = itemCode.getItemID();
 					ItemStockEntry itemStock = itemStockEntryRepo.getItemStocks(itemId, batchNumber);
 					if (itemStock == null && ObjectUtils.isEmpty(itemStock)) {
 						ItemStockEntry itemStockEntry = saveItemStockEntry(obj, facilityId, itemId);
-						if(itemStockEntry != null && itemStockEntry.getItemStockEntryID() != null) {
+
+						if (itemStockEntry != null && itemStockEntry.getItemStockEntryID() != null) {
+
 							itemStockEntryRepo.updateVanSerialNo(itemStockEntry.getItemStockEntryID());
 						}
 						successCount++;
