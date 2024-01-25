@@ -59,13 +59,13 @@ public interface BeneficiaryCallRepository extends CrudRepository<BeneficiaryCal
 	@Query("update BeneficiaryCall set callEndTime = :callEndTime, remarks = :remarks, "
 			+ "callClosureType = :callClosureType, " + "dispositionStatusID = :dispositionStatusID, "
 			+ "callTypeID = :callTypeID, emergencyType = :emergencyType,"
-			+ " externalReferral=:externalReferral,instTypeId=:instTypeId,instName=:instName"
+			+ " externalReferral=:externalReferral,instTypeId=:instTypeId,instName=:instName,isOutbound = :isOutbound"
 			+ "   where benCallID = :benCallID")
 	public int closeCall(@Param("benCallID") Long benCallID, @Param("remarks") String remarks,
 			@Param("callEndTime") Timestamp callEndTime, @Param("callClosureType") String callClosureType,
 			@Param("callTypeID") Integer callTypeID, @Param("dispositionStatusID") Integer dispositionStatusID,
 			@Param("emergencyType") Short emergencyType, @Param("externalReferral") String externalReferral,
-			@Param("instTypeId") Integer instTypeId, @Param("instName") String instName);
+			@Param("instTypeId") Integer instTypeId, @Param("instName") String instName, @Param("isOutbound") Boolean isOutbound);
 
 	// @Transactional(propagation = Propagation.REQUIRES_NEW)
 	@Transactional
