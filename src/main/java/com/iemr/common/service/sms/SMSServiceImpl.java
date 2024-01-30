@@ -878,7 +878,7 @@ public class SMSServiceImpl implements SMSService {
 		case "address2":
 			String truncatedAdress2 = institute.getAddress() != null ? institute.getAddress() + " " : "";
 			if(!truncatedAdress2.isEmpty()) {
-				variableValue = getSubstringInRange(institute.getAddress(), 30, 59);
+				variableValue = getSubstringInRange(institute.getAddress(), 29, 59);
 			}else {
 				variableValue = "";
 			}
@@ -886,7 +886,7 @@ public class SMSServiceImpl implements SMSService {
 		case "address3":
 			String truncatedAdress3 = institute.getAddress() != null ? institute.getAddress() + " " : "";
 			if(!truncatedAdress3.isEmpty()) {
-				variableValue = getSubstringInRange(institute.getAddress(), 60, 89);
+				variableValue = getSubstringInRange(institute.getAddress(), 59, 89);
 			}else {
 				variableValue = "";
 			}
@@ -920,7 +920,7 @@ public class SMSServiceImpl implements SMSService {
 		default:
 			break;
 		}
-		return variableValue.trim();
+		return variableValue;
 	}
 	
 	private static String getSubstringInRange(String input, int startIndex, int endIndex) {
