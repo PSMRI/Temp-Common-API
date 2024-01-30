@@ -867,6 +867,30 @@ public class SMSServiceImpl implements SMSService {
 			String address = institute.getAddress() != null ? institute.getAddress() + " " : "";
 			variableValue = address;
 			break;
+		case "address1":
+			String truncatedAdress1 = institute.getAddress() != null ? institute.getAddress() + " " : "";
+			if(!truncatedAdress1.isEmpty()) {
+				variableValue = getSubstringInRange(institute.getAddress(), 0, 29);
+			}else {
+				variableValue = "";
+			}
+			break;
+		case "address2":
+			String truncatedAdress2 = institute.getAddress() != null ? institute.getAddress() + " " : "";
+			if(!truncatedAdress2.isEmpty()) {
+				variableValue = getSubstringInRange(institute.getAddress(), 30, 59);
+			}else {
+				variableValue = "";
+			}
+			break;
+		case "address3":
+			String truncatedAdress3 = institute.getAddress() != null ? institute.getAddress() + " " : "";
+			if(!truncatedAdress3.isEmpty()) {
+				variableValue = getSubstringInRange(institute.getAddress(), 60, 89);
+			}else {
+				variableValue = "";
+			}
+			break;
 		case "contactperson1":
 			String contactPerson1 = institute.getContactPerson1() != null ? institute.getContactPerson1() + " " : "";
 			variableValue = contactPerson1;
@@ -897,6 +921,15 @@ public class SMSServiceImpl implements SMSService {
 			break;
 		}
 		return variableValue.trim();
+	}
+	
+	private static String getSubstringInRange(String input, int startIndex, int endIndex) {
+		if(input != null && startIndex>=0 && startIndex<input.length()) {
+			int truncatedEnd = Math.min(endIndex, input.length());
+			return input.substring(startIndex, truncatedEnd);
+			}else {
+				return " ";
+			}
 	}
 
 	@Async
