@@ -868,25 +868,31 @@ public class SMSServiceImpl implements SMSService {
 			variableValue = address;
 			break;
 		case "address1":
-			String truncatedAdress1 = institute.getAddress() != null ? institute.getAddress() + " " : "";
+			String hospitalName1 = institute.getInstitutionName() != null ? institute.getInstitutionName() + " " : "";
+			String addressValue1 = institute.getAddress() != null ? institute.getAddress() + " " : "";
+			String truncatedAdress1 = hospitalName1.concat(" ").concat(addressValue1);
 			if(!truncatedAdress1.isEmpty()) {
-				variableValue = getSubstringInRange(institute.getAddress(), 0, 29);
+				variableValue = getSubstringInRange(truncatedAdress1, 0, 29);
 			}else {
 				variableValue = "";
 			}
 			break;
 		case "address2":
-			String truncatedAdress2 = institute.getAddress() != null ? institute.getAddress() + " " : "";
+			String hospitalName2 = institute.getInstitutionName() != null ? institute.getInstitutionName() + " " : "";
+			String addressValue2 = institute.getAddress() != null ? institute.getAddress() + " " : "";
+			String truncatedAdress2 = hospitalName2.concat(" ").concat(addressValue2);
 			if(!truncatedAdress2.isEmpty()) {
-				variableValue = getSubstringInRange(institute.getAddress(), 29, 59);
+				variableValue = getSubstringInRange(truncatedAdress2, 29, 59);
 			}else {
 				variableValue = "";
 			}
 			break;
 		case "address3":
-			String truncatedAdress3 = institute.getAddress() != null ? institute.getAddress() + " " : "";
+			String hospitalName3 = institute.getInstitutionName() != null ? institute.getInstitutionName() + " " : "";
+			String addressValue3= institute.getAddress() != null ? institute.getAddress() + " " : "";
+			String truncatedAdress3 = hospitalName3.concat(" ").concat(addressValue3);
 			if(!truncatedAdress3.isEmpty()) {
-				variableValue = getSubstringInRange(institute.getAddress(), 59, 89);
+				variableValue = getSubstringInRange(truncatedAdress3, 59, 89);
 			}else {
 				variableValue = "";
 			}
