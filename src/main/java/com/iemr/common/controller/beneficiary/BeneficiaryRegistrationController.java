@@ -452,7 +452,10 @@ public class BeneficiaryRegistrationController {
 								.toJson(iemrSearchUserService.userExitsCheckWithId(
 										benificiaryDetails.getBeneficiaryRegID(), auth,
 										benificiaryDetails.getIs1097())));
-				JSONObject responseObj = new JSONObject(updatedUserData.getJSONObject(0).toString());
+				JSONObject responseObj = new JSONObject();
+				if(updatedUserData != null && updatedUserData.length()>0) {
+					updatedUserData.getJSONObject(0).toString();
+					}
 				responseObj.put("updateCount", updateCount);
 				response.setResponse(responseObj.toString());
 			}
