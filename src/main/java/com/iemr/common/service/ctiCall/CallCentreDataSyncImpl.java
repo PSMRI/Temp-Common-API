@@ -101,9 +101,9 @@ public class CallCentreDataSyncImpl implements CallCentreDataSync {
 		
 		 // Get the current date
 	       LocalDate currentDate = LocalDate.now();
-	       // Calculate two days before the current date
+	       // Calculate three days before the current date
 	       LocalDate startDate = currentDate.minusDays(3);
-	       // Calculate yesterday's date
+	       // Calculate two days before the current date
 	       LocalDate endDate = currentDate.minusDays(2);
 	       // Convert LocalDate to LocalDateTime to set time as 00:00:00
 	       LocalDateTime startDateTime = startDate.atTime(0, 0, 0);
