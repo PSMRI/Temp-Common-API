@@ -31,8 +31,7 @@ import com.iemr.common.dto.identity.BeneficiariesDTO;
 import com.iemr.common.model.beneficiary.BeneficiaryDemographicsModel;
 import com.iemr.common.model.userbeneficiary.LanguageModel;
 
-public abstract class BenCompleteDetailMapperDecorator implements BenCompleteDetailMapper
-{
+public abstract class BenCompleteDetailMapperDecorator implements BenCompleteDetailMapper {
 	@Autowired
 	StateMapper stateMapper;
 	@Autowired
@@ -67,60 +66,52 @@ public abstract class BenCompleteDetailMapperDecorator implements BenCompleteDet
 	MaritalStatusMapper maritalStatusMapper;
 
 	@Override
-	public BeneficiaryDemographicsModel createBenDemographicsModel(BeneficiariesDTO beneficiariesDTO)
-	{
+	public BeneficiaryDemographicsModel createBenDemographicsModel(BeneficiariesDTO beneficiariesDTO) {
 		Address address = beneficiariesDTO.getCurrentAddress();
 		BigInteger benRegID = beneficiariesDTO.getBenRegId();
 		String createdBy = beneficiariesDTO.getCreatedBy();
 		BenDetailDTO benDetails = beneficiariesDTO.getBeneficiaryDetails();
 
 		BeneficiaryDemographicsModel demographicsModel = new BeneficiaryDemographicsModel();
-		demographicsModel.setBeneficiaryRegID(Long.parseLong(benRegID.toString()));
-		
-		
-		if (address != null && address.getStateId() != null)
-		{
+		if (benRegID != null)
+			demographicsModel.setBeneficiaryRegID(Long.parseLong(benRegID.toString()));
+
+		if (address != null && address.getStateId() != null) {
 			demographicsModel.setStateID(address.getStateId());
 			demographicsModel.setM_state(stateMapper.StateToModelByID(address.getStateId()));
 			demographicsModel.setStateName(demographicsModel.getM_state().getStateName());
 		}
-		
-		if (address != null && address.getDistrictId() != null)
-		{
+
+		if (address != null && address.getDistrictId() != null) {
 			demographicsModel.setDistrictID(address.getDistrictId());
 			demographicsModel.setM_district(districtMapper.districtToModelByID(address.getDistrictId()));
 			demographicsModel.setDistrictName(demographicsModel.getM_district().getDistrictName());
 		}
-		
-		if (address != null && address.getSubDistrictId() != null)
-		{
+
+		if (address != null && address.getSubDistrictId() != null) {
 			demographicsModel.setBlockID(address.getSubDistrictId());
 			demographicsModel.setM_districtblock(blockMapper.districtBlockToModelByID(address.getSubDistrictId()));
 			demographicsModel.setBlockName(demographicsModel.getM_districtblock().getBlockName());
 		}
-		
-		if (address != null && address.getVillageId() != null)
-		{
+
+		if (address != null && address.getVillageId() != null) {
 			demographicsModel.setDistrictBranchID(address.getVillageId());
 			demographicsModel
 					.setM_districtbranchmapping(branchMapper.districtBranchToModelByID(address.getVillageId()));
 			demographicsModel.setDistrictBranchName(demographicsModel.getM_districtbranchmapping().getVillageName());
 		}
 		demographicsModel.setEducationID(benDetails.getEducationId());
-		if (benDetails.getEducationId() != null)
-		{
+		if (benDetails.getEducationId() != null) {
 			demographicsModel.setI_beneficiaryeducation(
 					educationMapper.educationToModelByID(Long.parseLong(benDetails.getEducationId().toString())));
 			demographicsModel.setEducationName(demographicsModel.getI_beneficiaryeducation().getEducationType());
 		}
 		demographicsModel.setCommunityID(benDetails.getCommunityId());
-		if (benDetails.getCommunityId() != null)
-		{
+		if (benDetails.getCommunityId() != null) {
 			demographicsModel.setM_community(communityMapper.communityToLoginResponseByID(benDetails.getCommunityId()));
 			demographicsModel.setCommunityName(demographicsModel.getM_community().getCommunityType());
 		}
-		if (benDetails.getOccupationId() != null)
-		{
+		if (benDetails.getOccupationId() != null) {
 			demographicsModel.setOccupationID(benDetails.getOccupationId());
 			demographicsModel.setOccupationName(benDetails.getOccupation());
 		}
@@ -129,13 +120,11 @@ public abstract class BenCompleteDetailMapperDecorator implements BenCompleteDet
 		demographicsModel.setIncomeStatus(benDetails.getIncomeStatus());
 		demographicsModel.setIncomeStatusName(benDetails.getIncomeStatus());
 		// }
-		if (benDetails.getReligionId() != null)
-		{
+		if (benDetails.getReligionId() != null) {
 			demographicsModel.setReligionID(benDetails.getReligionId());
 			demographicsModel.setReligionName(benDetails.getReligion());
 		}
-		if (benDetails.getIncomeStatusId() != null)
-		{
+		if (benDetails.getIncomeStatusId() != null) {
 			demographicsModel.setIncomeStatusID(benDetails.getIncomeStatusId());
 			demographicsModel.setIncomeStatusName(benDetails.getIncomeStatus());
 			demographicsModel.setIncomeStatus(benDetails.getIncomeStatus());
@@ -144,33 +133,32 @@ public abstract class BenCompleteDetailMapperDecorator implements BenCompleteDet
 			demographicsModel.setMonthlyFamilyIncome(benDetails.getMonthlyFamilyIncome());
 		}
 		demographicsModel.setCreatedBy(createdBy);
-		demographicsModel.setPinCode(address.getPinCode());
-		demographicsModel.setAddressLine1(address.getAddrLine1());
-		demographicsModel.setAddressLine2(address.getAddrLine2());
-		demographicsModel.setAddressLine3(address.getAddrLine3());
-		demographicsModel.setHealthCareWorkerID(benDetails.getHealthCareWorkerId());
-		demographicsModel.setZoneID(address.getZoneID());
-		demographicsModel.setZoneName(address.getZoneName());
-		demographicsModel.setParkingPlaceID(address.getParkingPlaceID());
-		demographicsModel.setParkingPlaceName(address.getParkingPlaceName());
-		demographicsModel.setServicePointID(address.getServicePointID());
-		demographicsModel.setServicePointName(address.getServicePointName());
-		demographicsModel.setHabitation(address.getHabitation());
+		if (address != null) {
+			demographicsModel.setPinCode(address.getPinCode());
+			demographicsModel.setAddressLine1(address.getAddrLine1());
+			demographicsModel.setAddressLine2(address.getAddrLine2());
+			demographicsModel.setAddressLine3(address.getAddrLine3());
+			demographicsModel.setHealthCareWorkerID(benDetails.getHealthCareWorkerId());
+			demographicsModel.setZoneID(address.getZoneID());
+			demographicsModel.setZoneName(address.getZoneName());
+			demographicsModel.setParkingPlaceID(address.getParkingPlaceID());
+			demographicsModel.setParkingPlaceName(address.getParkingPlaceName());
+			demographicsModel.setServicePointID(address.getServicePointID());
+			demographicsModel.setServicePointName(address.getServicePointName());
+			demographicsModel.setHabitation(address.getHabitation());
+		}
 		demographicsModel.setPreferredLangID(beneficiariesDTO.getBeneficiaryDetails().getPreferredLanguageId());
-		LanguageModel lang =
-				languageMapper.languageToModelByID(beneficiariesDTO.getBeneficiaryDetails().getPreferredLanguageId());
+		LanguageModel lang = languageMapper
+				.languageToModelByID(beneficiariesDTO.getBeneficiaryDetails().getPreferredLanguageId());
 		demographicsModel.setM_language(lang);
-		if (lang != null)
-		{
+		if (lang != null) {
 			demographicsModel.setPreferredLangName(lang.getLanguageName());
 		}
 		return demographicsModel;
 	}
 
-	protected Address beneficiaryDemographicsModelToAddress(BeneficiaryDemographicsModel beneficiaryDemographicsModel)
-	{
-		if (beneficiaryDemographicsModel == null)
-		{
+	protected Address beneficiaryDemographicsModelToAddress(BeneficiaryDemographicsModel beneficiaryDemographicsModel) {
+		if (beneficiaryDemographicsModel == null) {
 			return null;
 		}
 
@@ -181,15 +169,13 @@ public abstract class BenCompleteDetailMapperDecorator implements BenCompleteDet
 		address.setParkingPlaceName(beneficiaryDemographicsModel.getParkingPlaceName());
 		address.setStateId(beneficiaryDemographicsModel.getStateID());
 		address.setDistrictId(beneficiaryDemographicsModel.getDistrictID());
-		if (beneficiaryDemographicsModel.getDistrictID() != null)
-		{
+		if (beneficiaryDemographicsModel.getDistrictID() != null) {
 			address.setDistrict(
 					districtMapper.districtToModelByID(beneficiaryDemographicsModel.getDistrictID()).getDistrictName());
 		}
 		address.setServicePointName(beneficiaryDemographicsModel.getServicePointName());
 		address.setCountry(beneficiaryDemographicsModel.getCountryName());
-		if (beneficiaryDemographicsModel.getStateID() != null)
-		{
+		if (beneficiaryDemographicsModel.getStateID() != null) {
 			address.setState(stateMapper.StateToModelByID(beneficiaryDemographicsModel.getStateID()).getStateName());
 		}
 		address.setZoneName(beneficiaryDemographicsModel.getZoneName());
@@ -200,15 +186,13 @@ public abstract class BenCompleteDetailMapperDecorator implements BenCompleteDet
 		address.setPinCode(beneficiaryDemographicsModel.getPinCode());
 		address.setParkingPlaceID(beneficiaryDemographicsModel.getParkingPlaceID());
 		address.setServicePointID(beneficiaryDemographicsModel.getServicePointID());
-		if (beneficiaryDemographicsModel.getDistrictBranchID() != null)
-		{
+		if (beneficiaryDemographicsModel.getDistrictBranchID() != null) {
 			address.setVillage(branchMapper
 					.districtBranchToModelByID(beneficiaryDemographicsModel.getDistrictBranchID()).getVillageName());
 		}
 		address.setSubDistrictId(beneficiaryDemographicsModel.getBlockID());
 		address.setCountryId(beneficiaryDemographicsModel.getCountryID());
-		if (beneficiaryDemographicsModel.getBlockID() != null)
-		{
+		if (beneficiaryDemographicsModel.getBlockID() != null) {
 			address.setSubDistrict(
 					blockMapper.districtBlockToModelByID(beneficiaryDemographicsModel.getBlockID()).getBlockName());
 		}
