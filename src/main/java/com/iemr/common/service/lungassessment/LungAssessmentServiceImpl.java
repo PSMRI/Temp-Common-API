@@ -26,7 +26,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 
-import javax.xml.ws.http.HTTPException;
+//import javax.xml.ws.http.HTTPException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,10 +126,11 @@ public class LungAssessmentServiceImpl implements LungAssessmentService {
 
 			logger.info("Lung assessment authentication response: " + lungAssessmentToken);
 
-		} catch (HTTPException e) {
-			logger.error("Lung assessment authentication error : " + e.getMessage(), e);
-			throw new RuntimeException("get authentication failed with error", e);
-		} catch (Exception e) {
+		} /*
+			 * catch (HTTPException e) {
+			 * logger.error("Lung assessment authentication error : " + e.getMessage(), e);
+			 * throw new RuntimeException("get authentication failed with error", e); }
+			 */catch (Exception e) {
 			logger.error("Lung assessment authentication error : " + e.getMessage(), e);
 			throw new RuntimeException("get authentication failed with error", e);
 		}
@@ -137,7 +138,7 @@ public class LungAssessmentServiceImpl implements LungAssessmentService {
 	}
 
 	@Override
-	public Boolean verifyCough(MultipartFile file, String authToken, Long patientId) throws Exception {
+	public Boolean verifyCough(MultipartFile file, String authToken, Long patientId, String tempFileName) throws Exception {
 
 		try {
 
@@ -157,7 +158,6 @@ public class LungAssessmentServiceImpl implements LungAssessmentService {
 			headers.add("accessToken", authToken);
 
 			byte[] bytes = file.getBytes();
-			String tempFileName = "coughSoundVerify" + patientId + System.currentTimeMillis() + ".wav";
 			BufferedOutputStream stream = new BufferedOutputStream(
 					new FileOutputStream(new File(lungAssessmentPath + tempFileName)));
 			stream.write(bytes);
@@ -228,7 +228,9 @@ public class LungAssessmentServiceImpl implements LungAssessmentService {
 			if (lungAssessmentToken == null || (((currTime - authCreatedAt) / (60 * 1000))) > 110)
 				lungAssessmentToken = getLungAssessmentAdminLogin(decryptlungAssessmentEmail, decryptlungAssessmentPassword);
 
-			Boolean isCoughValidateSuccess = verifyCough(file, lungAssessmentToken, lungAssessmentAssessmentRequestObj.getPatientId());
+			String tempFileName = "coughSoundAssessment" + lungAssessmentAssessmentRequestObj.getPatientId()
+			+ System.currentTimeMillis() + ".wav";
+			Boolean isCoughValidateSuccess = verifyCough(file, lungAssessmentToken, lungAssessmentAssessmentRequestObj.getPatientId(), tempFileName);
 
 			if (isCoughValidateSuccess) {
 				RestTemplate restTemplate = new RestTemplate();
@@ -241,8 +243,6 @@ public class LungAssessmentServiceImpl implements LungAssessmentService {
 				resultSet = lungAssessmentRepository.save(lungAssessmentAssessmentRequestObj);
 
 				byte[] bytes = file.getBytes();
-				String tempFileName = "coughSoundAssessment" + lungAssessmentAssessmentRequestObj.getPatientId()
-						+ System.currentTimeMillis() + ".wav";
 				BufferedOutputStream stream = new BufferedOutputStream(
 						new FileOutputStream(new File("lungAssessmentPath" + tempFileName)));
 				stream.write(bytes);
@@ -255,7 +255,7 @@ public class LungAssessmentServiceImpl implements LungAssessmentService {
 				bodyMap.add("gender", lungAssessmentAssessmentRequestObj.getGender());
 				bodyMap.add("assessmentId", lungAssessmentAssessmentRequestObj.getAssessmentId());
 				bodyMap.add("patientId", lungAssessmentAssessmentRequestObj.getPatientId());
-				bodyMap.add("coughsoundfile", new FileSystemResource("swaasaPath" + tempFileName));
+				bodyMap.add("coughsoundfile", new FileSystemResource(lungAssessmentPath + tempFileName));
 
 				HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(bodyMap, headers);
 
