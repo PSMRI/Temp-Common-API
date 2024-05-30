@@ -4,9 +4,13 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import org.apache.xml.security.stax.config.ConfigurationProperties;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import com.iemr.common.data.callhandling.BeneficiaryCall;
 import com.iemr.common.data.nhm_dashboard.DetailedCallReport;
+import com.iemr.common.repository.callhandling.IEMRCalltypeRepositoryImplCustom;
 import com.iemr.common.repository.nhm_dashboard.DetailedCallReportRepo;
 import com.iemr.common.repository.report.CallReportRepo;
 import com.iemr.common.utils.config.ConfigProperties;
@@ -31,11 +36,13 @@ public class NHMDetailCallReportScheduler {
 	@Autowired
 	private CallReportRepo callReportRepo;
 
+	@Autowired
+	private IEMRCalltypeRepositoryImplCustom iEMRCalltypeRepositoryImplCustom;
+
 	Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	@Value("${start-ctidatacheck-scheduler}")
 	private boolean startCtiDataCheckFlag;
-
 
 	@Scheduled(cron = "${cron-scheduler-ctidatacheck}")
 	public void detailedCallReport() {
@@ -48,7 +55,7 @@ public class NHMDetailCallReportScheduler {
 				String[] dateArr = date.toString().split("T");
 				endDate = dateArr[0].concat(" 23:59:59");
 				fromDate = dateArr[0].concat(" 00:00:01");
-
+                
 				Timestamp fromTime = Timestamp.valueOf(fromDate);
 				Timestamp endTime = Timestamp.valueOf(endDate);
 				logger.info("Call detailed report check request - FromTime -" + fromTime + "Endtime - " + endTime);
@@ -57,19 +64,52 @@ public class NHMDetailCallReportScheduler {
 				for (DetailedCallReport detailedCallReport : findByCallStartTimeBetween) {
 					String phoneNo = detailedCallReport.getPHONE();
 					String sessionID = detailedCallReport.getSession_ID();
-					int existRecord = callReportRepo.getBenCallDetailsBySessionIDAndPhone(sessionID, phoneNo);
-					if (existRecord != 0) {
+					BeneficiaryCall existRecord = callReportRepo.getBenCallDetailsBySessionIDAndPhone(sessionID,phoneNo);
+					if (existRecord != null) {
 						logger.info("Record already present in t_bencall table with sessionID : " + sessionID
 								+ " phoneNo : " + phoneNo);
+						logger.info("Existing record from t_bencall: " + existRecord);
 						if (null != detailedCallReport.getOrientation_Type()
 								&& detailedCallReport.getOrientation_Type().equalsIgnoreCase("OUTBOUND")) {
-							callReportRepo.updateIsOutboundForCall(true, sessionID, phoneNo );
+							
+							if(existRecord.getCallTypeID() == null) {
+								logger.info("Called Service Id: " + existRecord.getCalledServiceID());
+							// Fetching callTypeId
+							Integer callTypeId = getCallTypeId(true, existRecord.getCalledServiceID(),
+									detailedCallReport);
+							
+							logger.info("CallTypeId after comparison: " + callTypeId);
+							if (callTypeId != null) {
+								callReportRepo.updateIsOutboundForCallWithCallType(true, sessionID, phoneNo,callTypeId);
+							} else {
+								callReportRepo.updateIsOutboundForCall(true, sessionID, phoneNo);
+							}
+							}
+							else {
+								callReportRepo.updateIsOutboundForCall(true, sessionID, phoneNo);
+							}
 						} else {
-							callReportRepo.updateIsOutboundForCall(false, sessionID, phoneNo );
+							if(existRecord.getCallTypeID() == null) {
+								
+								logger.info("Called Service Id: " + existRecord.getCalledServiceID());
+							// Fetching callTypeId
+							Integer callTypeId = getCallTypeId(false, existRecord.getCalledServiceID(),
+									detailedCallReport);
+
+							logger.info("CallTypeId after comparison: " + callTypeId);
+							if (callTypeId != null) {
+								callReportRepo.updateIsOutboundForCallWithCallType(false, sessionID, phoneNo, callTypeId);
+							} else {
+								callReportRepo.updateIsOutboundForCall(false, sessionID, phoneNo);
+							}
+							
+						}
+							else {
+								callReportRepo.updateIsOutboundForCall(false, sessionID, phoneNo);
+							}
 						}
 					} else {
-						logger.info("Record missed in t_bencall table with sessionID : " + sessionID + " phoneNo : "
-								+ phoneNo);
+						logger.info("Record missed in t_bencall table with sessionID : " + sessionID + " phoneNo : " + phoneNo);
 						BeneficiaryCall callDetail = getCallDetail(detailedCallReport);
 						callReportRepo.save(callDetail);
 					}
@@ -79,6 +119,36 @@ public class NHMDetailCallReportScheduler {
 			}
 
 		}
+
+	}
+
+	private Integer getCallTypeId(Boolean isOutbound, Integer calledServiceId, DetailedCallReport detailedCallReport) {
+		Set<Objects[]> callTypesArray = new HashSet<Objects[]>();
+
+		if (detailedCallReport.getAgent_Disposition_Category() != null
+				&& detailedCallReport.getAgent_Disposition() != null) {
+			if (isOutbound == true) {
+				callTypesArray = iEMRCalltypeRepositoryImplCustom.getOutboundCallTypes(calledServiceId, true);
+			} else {
+				callTypesArray = iEMRCalltypeRepositoryImplCustom.getInboundCallTypes(calledServiceId, true);
+			}
+
+			for (Object[] object : callTypesArray) {
+				String callGroupType = (String) object[3];
+				String callType = (String) object[0];
+				String detailedCallGroupType = detailedCallReport.getAgent_Disposition_Category().replace("_", " ");
+				String detailedCallType = detailedCallReport.getAgent_Disposition().replace("_", " ");
+				logger.info("Detailed Call - CallGroupType: " + detailedCallGroupType);
+				logger.info("Detailed Call - CallType: " + detailedCallType);
+				
+				if (callGroupType.equalsIgnoreCase(detailedCallGroupType)
+						&& callType.equalsIgnoreCase(detailedCallType)) {
+					return (Integer) object[1];
+				}
+			}
+		}
+
+		return null;
 
 	}
 
@@ -104,7 +174,8 @@ public class NHMDetailCallReportScheduler {
 		beneficiaryCall.setCreatedBy("Admin");
 
 		beneficiaryCall.setCallDuration(String.valueOf(detailedCallReport.getCall_Duration()));
-
+		
+		
 		return beneficiaryCall;
 
 	}
