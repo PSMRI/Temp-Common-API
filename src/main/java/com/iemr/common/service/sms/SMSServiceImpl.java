@@ -867,6 +867,36 @@ public class SMSServiceImpl implements SMSService {
 			String address = institute.getAddress() != null ? institute.getAddress() + " " : "";
 			variableValue = address;
 			break;
+		case "address1":
+			String hospitalName1 = institute.getInstitutionName() != null ? institute.getInstitutionName() + " " : "";
+			String addressValue1 = institute.getAddress() != null ? institute.getAddress() + " " : "";
+			String truncatedAdress1 = hospitalName1.concat(" ").concat(addressValue1);
+			if(!truncatedAdress1.isEmpty()) {
+				variableValue = getSubstringInRange(truncatedAdress1, 0, 29);
+			}else {
+				variableValue = "";
+			}
+			break;
+		case "address2":
+			String hospitalName2 = institute.getInstitutionName() != null ? institute.getInstitutionName() + " " : "";
+			String addressValue2 = institute.getAddress() != null ? institute.getAddress() + " " : "";
+			String truncatedAdress2 = hospitalName2.concat(" ").concat(addressValue2);
+			if(!truncatedAdress2.isEmpty()) {
+				variableValue = getSubstringInRange(truncatedAdress2, 29, 59);
+			}else {
+				variableValue = "";
+			}
+			break;
+		case "address3":
+			String hospitalName3 = institute.getInstitutionName() != null ? institute.getInstitutionName() + " " : "";
+			String addressValue3= institute.getAddress() != null ? institute.getAddress() + " " : "";
+			String truncatedAdress3 = hospitalName3.concat(" ").concat(addressValue3);
+			if(!truncatedAdress3.isEmpty()) {
+				variableValue = getSubstringInRange(truncatedAdress3, 59, 89);
+			}else {
+				variableValue = "";
+			}
+			break;
 		case "contactperson1":
 			String contactPerson1 = institute.getContactPerson1() != null ? institute.getContactPerson1() + " " : "";
 			variableValue = contactPerson1;
@@ -896,7 +926,16 @@ public class SMSServiceImpl implements SMSService {
 		default:
 			break;
 		}
-		return variableValue.trim();
+		return variableValue;
+	}
+	
+	private static String getSubstringInRange(String input, int startIndex, int endIndex) {
+		if(input != null && startIndex>=0 && startIndex<input.length()) {
+			int truncatedEnd = Math.min(endIndex, input.length());
+			return input.substring(startIndex, truncatedEnd);
+			}else {
+				return " ";
+			}
 	}
 
 	@Async

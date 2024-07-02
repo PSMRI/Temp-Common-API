@@ -22,6 +22,8 @@
 package com.iemr.common.service.ctiCall;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -86,24 +88,29 @@ public class CallCentreDataSyncImpl implements CallCentreDataSync {
 	@Override
 	public void ctiDataSync() {
 		List<Objects[]> resultSet = null;
-		Date date = new Date();
-		java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-		String text = sqlDate.toString();
-		Timestamp endDate = new Timestamp(sqlDate.getTime());
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(sqlDate);
-		logger.info("CZduration: " + CZduration);
-		calendar.add(Calendar.DATE, -(Integer.parseInt(CZduration)));
-		Date beforeDate = calendar.getTime();
-		Timestamp startDate = new Timestamp(beforeDate.getTime());
+
+		
+		 // Get the current date
+	       LocalDate currentDate = LocalDate.now();
+	       // Calculate three days before the current date
+	       LocalDate startDate = currentDate.minusDays(3);
+	       // Calculate two days before the current date
+	       LocalDate endDate = currentDate.minusDays(2);
+	       // Convert LocalDate to LocalDateTime to set time as 00:00:00
+	       LocalDateTime startDateTime = startDate.atTime(0, 0, 0);
+	       LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+	       // Convert LocalDateTime to Timestamp
+	       Timestamp startTimeStamp = Timestamp.valueOf(startDateTime);
+	       Timestamp endTimeStamp = Timestamp.valueOf(endDateTime);
+		
 		// application properties will have a config date variable.
-		logger.info("startDate: " + startDate);
-		logger.info("endDate: " + endDate);
-		List<BeneficiaryCall> list = callReportRepo.getAllBenCallIDetails(startDate, endDate);
+		logger.info("startDate: " + startTimeStamp);
+		logger.info("endDate: " + endTimeStamp);
+		List<BeneficiaryCall> list = callReportRepo.getAllBenCallIDetails(startTimeStamp, endTimeStamp);
 
 		if (!list.isEmpty()) {
 			
-			// List<Long> benList = new ArrayList<>();
+		
 			String callDuartion = null;
 			String filePath = null;
 			String URL = null;
@@ -119,22 +126,14 @@ public class CallCentreDataSyncImpl implements CallCentreDataSync {
 						JSONObject requestFile = new JSONObject();
 						requestFile.put("agent_id", call.getAgentID());
 						requestFile.put("session_id", call.getCallID());
-//						OutputResponse response1 = ctiService.getVoiceFile(requestFile.toString(), "extra parameter");
-//						if (response1.getStatusCode() == OutputResponse.SUCCESS) {
-//							CTIVoiceFile getVoiceFile = InputMapper.gson().fromJson(response1.getData(),
-//									CTIVoiceFile.class);
-//							String recordingFilePath = getVoiceFile.getPath() + "/" + getVoiceFile.getFilename();
-////						beneficiaryCallRepository.updateVoiceFilePathNew(benificiaryCall.getAgentID(),
-////								benificiaryCall.getCallID(), recordingFilePath, null);
-//							recordingPath = ctiLoggerURL + "/" + recordingFilePath;
+
 						OutputResponse response1 = ctiService.getVoiceFileNew(requestFile.toString(), "extra parameter");
 						if(response1 != null && response1.getStatusCode() == 200) {
 							
 							CTIResponse ctiResponsePath = InputMapper.gson().fromJson(response1.getData(),
 									CTIResponse.class);
 							String recordingFilePath = ctiResponsePath.getResponse().toString();
-//							beneficiaryCallRepository.updateVoiceFilePathNew(call.getAgentID(),
-//									call.getCallID(), recordingFilePath.substring(20), null);
+
 							if(recordingFilePath.length() > 20)
 								recordingPath = recordingFilePath.substring(20);
 							logger.info("recordingPath: " + recordingPath);
