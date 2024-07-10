@@ -24,6 +24,8 @@ package com.iemr.common.service.beneficiary;
 import java.util.HashSet;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.iemr.common.dto.identity.BeneficiariesDTO;
 import com.iemr.common.dto.identity.BeneficiariesPartialDTO;
 import com.iemr.common.dto.identity.IdentityEditDTO;
@@ -39,7 +41,7 @@ public interface IdentityBeneficiaryService {
 	List<BeneficiariesPartialDTO> getPartialBeneficiaryListByIDs(HashSet benIdList, String auth, Boolean is1097)
 			throws IEMRException;
 
-	List<BeneficiariesDTO> getBeneficiaryListByPhone(String phoneNo, String auth, Boolean is1097) throws IEMRException;
+	List<BeneficiariesDTO> getBeneficiaryListByPhone(String phoneNo, String auth, Boolean is1097) throws IEMRException,JsonProcessingException;
 
 	List<BeneficiariesDTO> getBeneficiaryListByBenID(String benId, String auth, Boolean is1097) throws IEMRException;
 

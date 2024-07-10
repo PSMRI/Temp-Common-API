@@ -13,47 +13,15 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "t_projectservicelinemapping")
+@Table(name = "t_MapSectionProjects")
 @Data
-public class ServicelineCustomization {
+public class SectionProjectMapping {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	@Expose
 	private Integer id;
-	
-	@Column(name = "ServiceLineId")
-	@Expose
-	private Integer serviceLineId;
-	
-	@Column(name = "ServiceLine")
-	@Expose
-	private String serviceLine;
-	
-	@Column(name = "StateId")
-	@Expose
-	private Integer stateId;
-	
-	@Column(name = "StateName")
-	@Expose
-	private String stateName;
-	
-	@Column(name = "DistrictID")
-	@Expose
-	private Integer districtId;
-	
-	@Column(name = "DistrictName")
-	@Expose
-	private String districtName;
-	
-	@Column(name = "BlockID")
-	@Expose
-    private Integer blockId;
-	
-	@Column(name = "BlockName")
-	@Expose
-	private String blockName;
 	
 	@Column(name = "ProjectID")
 	@Expose
@@ -63,7 +31,15 @@ public class ServicelineCustomization {
 	@Expose
 	private String projectName;
 	
-	@Column(name = "ServiceProviderID")
+	@Column(name = "SectionID")
+	@Expose
+	private Integer sectionId;
+	
+	@Column(name = "SectionName")
+	@Expose
+	private String sectionName;
+	
+	@Column(name = "serviceProviderId")
 	@Expose
 	private Integer serviceProviderId;
 	
@@ -82,6 +58,5 @@ public class ServicelineCustomization {
 	
 	@Column(name = "LastModDate", insertable = false, updatable = false)
 	private Timestamp lastModDate;
-
 
 }

@@ -31,8 +31,11 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.iemr.common.model.user.TitleModel;
 import com.iemr.common.model.userbeneficiary.BeneficiaryIdentityModel;
@@ -162,6 +165,7 @@ public class BeneficiaryModel implements Comparable<BeneficiaryModel> {
 	@Expose
 	private String createdBy;
 	@Expose
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
 	private Timestamp createdDate;
 	@Expose
 	private String modifiedBy;
@@ -274,6 +278,9 @@ public class BeneficiaryModel implements Comparable<BeneficiaryModel> {
 	
 	@Expose
 	private Boolean passToNurse = false;
+	private String otherFields;
+	
+//	private Object otherFields;
 
 	public static Timestamp getTimestampData(Timestamp timestamp) {
 		return timestamp;

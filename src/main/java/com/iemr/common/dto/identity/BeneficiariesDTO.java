@@ -75,6 +75,9 @@ public class BeneficiariesDTO {
 	private BigInteger religionId;
 	private String religion;
 	private String monthlyFamilyIncome;
+	private String otherFields;
+	private String genderName;
+	private String maritalStatusName;
 
 	// End Outreach
 

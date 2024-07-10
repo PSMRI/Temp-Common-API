@@ -23,9 +23,12 @@ package com.iemr.common.model.userbeneficiary;
 
 import com.google.gson.annotations.Expose;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-public @Data class MaritalStatusModel
+@Data
+@AllArgsConstructor
+public class MaritalStatusModel
 {
 	@Expose
 	private Integer maritalStatusID;

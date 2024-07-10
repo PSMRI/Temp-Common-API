@@ -86,4 +86,5 @@ public class BenDetailDTO implements Serializable {
 	private String familyId;
 	private String other;
 	private String headOfFamily_Relation;
+	private String otherFields;
 }

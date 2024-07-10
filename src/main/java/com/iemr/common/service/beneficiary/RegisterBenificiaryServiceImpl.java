@@ -121,6 +121,7 @@ public class RegisterBenificiaryServiceImpl implements RegisterBenificiaryServic
 					benificiaryDetails.getCreatedBy()));
 		}
 		identityEditDTO.setDob(benificiaryDetails.getDOB());
+	//	identityEditDTO.setOtherFields(benificiaryDetails.getOtherFields());
 		// String jsoninput=new Gson().toJson(identityEditDTO);
 		updatedRows = identityBeneficiaryService.editIdentityEditDTO(identityEditDTO, auth,
 				benificiaryDetails.getIs1097());
@@ -141,6 +142,7 @@ public class RegisterBenificiaryServiceImpl implements RegisterBenificiaryServic
 //		logger.info("benificiaryDetails: " + beneficiaryModel);
 
 		CommonIdentityDTO identityDTO = identityMapper.beneficiaryModelCommonIdentityDTO(beneficiaryModel);
+	//	identityDTO.setOtherFields(beneficiaryModel.getOtherFields());
 		identityDTO.setEmergencyRegistration(beneficiaryModel.isEmergencyRegistration());
 		identityDTO
 				.setBenFamilyDTOs(identityMapper.benPhoneMapListToBenFamilyDTOList(beneficiaryModel.getBenPhoneMaps()));
@@ -168,6 +170,7 @@ public class RegisterBenificiaryServiceImpl implements RegisterBenificiaryServic
 		}
 		return OutputMapper.gson().toJson(beneficiary);	
 	}
+	
 
 	@Override
 	public Integer updateCommunityorEducation(BeneficiaryModel benificiaryDetails, String auth) throws IEMRException {

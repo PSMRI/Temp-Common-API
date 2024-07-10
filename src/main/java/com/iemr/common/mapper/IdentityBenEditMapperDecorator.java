@@ -30,6 +30,7 @@ import com.iemr.common.dto.identity.BenFamilyDTO;
 import com.iemr.common.dto.identity.Contact;
 import com.iemr.common.dto.identity.Identity;
 import com.iemr.common.dto.identity.IdentityEditDTO;
+import com.iemr.common.model.beneficiary.BenPhoneMapModel;
 import com.iemr.common.model.beneficiary.BeneficiaryDemographicsModel;
 import com.iemr.common.model.beneficiary.BeneficiaryModel;
 
@@ -238,9 +239,11 @@ public abstract class IdentityBenEditMapperDecorator implements IdentityBenEditM
 			identityEditDTO.setVanID(beneficiary.getVanID());
 		if (beneficiary.getParkingPlaceID() != null)
 			identityEditDTO.setParkingPlaceId(beneficiary.getParkingPlaceID());
-		if (beneficiary.getI_bendemographics() != null && beneficiary.getI_bendemographics().getMonthlyFamilyIncome() != null)
+		if (beneficiary.getI_bendemographics() != null
+				&& beneficiary.getI_bendemographics().getMonthlyFamilyIncome() != null)
 			identityEditDTO.setMonthlyFamilyIncome(beneficiary.getI_bendemographics().getMonthlyFamilyIncome());
-
+		if(beneficiary.getOtherFields() != null)
+			identityEditDTO.setOtherFields(beneficiary.getOtherFields());
 		return identityEditDTO;
 	}
 

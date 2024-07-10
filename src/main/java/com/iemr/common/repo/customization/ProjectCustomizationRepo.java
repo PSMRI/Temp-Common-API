@@ -12,14 +12,15 @@ import com.iemr.common.data.customization.ProjectCustomization;
 
 @Repository
 public interface ProjectCustomizationRepo extends CrudRepository<ProjectCustomization, Integer> {
-	
-	@Query("SELECT p FROM ProjectCustomization p WHERE p.projectName = :projectName and p.deleted=false")
-    Set<ProjectCustomization> findByProjectName(@Param("projectName") String projectName);
-    
-    @Query("SELECT p FROM ProjectCustomization p WHERE p.serviceProviderId = :serviceProviderId")
-    ArrayList<ProjectCustomization> findByServiceProviderId(@Param("serviceProviderId") Integer serviceProviderId);
-    
-    @Query("SELECT p.serviceProviderId FROM ProjectCustomization p WHERE p.serviceProviderId = :serviceProviderId")
-    public Integer findServiceProviderId(@Param("serviceProviderId") Integer serviceProviderId);
+
+	@Query("SELECT p FROM ProjectCustomization p WHERE p.projectName = :projectName and p.serviceProviderId= :serviceProviderId and p.deleted=false")
+	Set<ProjectCustomization> findByProjectName(@Param("projectName") String projectName,
+			@Param("serviceProviderId") Integer serviceProviderId);
+
+	@Query("SELECT p FROM ProjectCustomization p WHERE p.serviceProviderId = :serviceProviderId")
+	ArrayList<ProjectCustomization> findByServiceProviderId(@Param("serviceProviderId") Integer serviceProviderId);
+
+	@Query("SELECT p.serviceProviderId FROM ProjectCustomization p WHERE p.serviceProviderId = :serviceProviderId")
+	public Integer findServiceProviderId(@Param("serviceProviderId") Integer serviceProviderId);
 
 }

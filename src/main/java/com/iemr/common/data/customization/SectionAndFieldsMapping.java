@@ -10,12 +10,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Entity
-@Table(name = "t_projectservicelinemapping")
+@Table(name = "t_registrationfields")
 @Data
-public class ServicelineCustomization {
+public class SectionAndFieldsMapping {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,49 +24,53 @@ public class ServicelineCustomization {
 	@Expose
 	private Integer id;
 	
-	@Column(name = "ServiceLineId")
+	@Column(name = "SectionID")
 	@Expose
-	private Integer serviceLineId;
+	private Integer sectionId;
 	
-	@Column(name = "ServiceLine")
+	@Column(name = "FieldName")
 	@Expose
-	private String serviceLine;
+	private String fieldName;
 	
-	@Column(name = "StateId")
+	@Column(name = "Placeholder")
 	@Expose
-	private Integer stateId;
+	private String placeholder;
 	
-	@Column(name = "StateName")
+	@Column(name = "FieldTypeID")
 	@Expose
-	private String stateName;
+	private Integer fieldTypeId;
 	
-	@Column(name = "DistrictID")
+	@Column(name = "FieldType")
 	@Expose
-	private Integer districtId;
+	private String fieldType;
 	
-	@Column(name = "DistrictName")
+	@Column(name = "AllowMin")
 	@Expose
-	private String districtName;
+    private Integer allowMin;
 	
-	@Column(name = "BlockID")
+	@Column(name = "AllowMax")
 	@Expose
-    private Integer blockId;
+	private Integer allowMax;
 	
-	@Column(name = "BlockName")
+	@Column(name = "`Rank`")
 	@Expose
-	private String blockName;
+	private Integer rank;
 	
-	@Column(name = "ProjectID")
+	@Column(name = "AllowText")
 	@Expose
-	private Integer projectId;
+	private String allowText;
 	
-	@Column(name = "ProjectName")
+	@Column(name = "IsRequired")
 	@Expose
-	private String projectName;
+	private Boolean isRequired;
 	
-	@Column(name = "ServiceProviderID")
+	@Column(name = "Options")
 	@Expose
-	private Integer serviceProviderId;
+	private String option;
+	
+	@Column(name = "IsEditable")
+	@Expose
+	private Boolean isEditable;
 	
 	@Column(name = "Deleted")
 	private Boolean deleted;
@@ -82,6 +87,16 @@ public class ServicelineCustomization {
 	
 	@Column(name = "LastModDate", insertable = false, updatable = false)
 	private Timestamp lastModDate;
-
+	
+	@Column(name = "ServiceProviderID")
+	@Expose
+	private Integer serviceProviderId;
+	
+	@Expose
+	@Column(name = "FieldTitle")
+	private String fieldTitle;
+	
+	@Transient
+	private String[] options;
 
 }

@@ -1,5 +1,7 @@
 package com.iemr.common.controller.customization;
 
+
+
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iemr.common.data.customization.SectionFieldsMappingDTO;
+import com.iemr.common.data.customization.SectionProjectMappingDTO;
 import com.iemr.common.service.customization.CustomizationService;
 import com.iemr.common.utils.response.OutputResponse;
 
@@ -61,15 +65,15 @@ public class CustomizationController {
 	}
 	
 	@CrossOrigin()
-	@Operation(summary = "Validate project")
-	@RequestMapping(value = "/validateProject", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
-	public String validateProject(@RequestBody String request,
+	@Operation(summary = "Update project")
+	@RequestMapping(value = "/updateProject", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
+	public String updateProject(@RequestBody String request,
 			@RequestHeader(value = "Authorization") String Authorization) {
 
 		OutputResponse response = new OutputResponse();
 		try {
 
-			response.setResponse(customizationService.validateProject(request, Authorization));
+			response.setResponse(customizationService.updateProject(request, Authorization));
 		} catch (Exception e) {
 
 			response.setError(5000, e.getLocalizedMessage());
@@ -91,6 +95,172 @@ public class CustomizationController {
 
 			response.setError(5000, e.getLocalizedMessage());
 		}
+		return response.toString();
+	}
+	
+	@CrossOrigin()
+	@Operation(summary = "Fetch project serviceline")
+	@RequestMapping(value = "/fetchProjectServiceline", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
+	public String fetchProjectServiceline(@RequestBody String request,
+			@RequestHeader(value = "Authorization") String Authorization) {
+
+		OutputResponse response = new OutputResponse();
+		try {
+
+			response.setResponse(customizationService.fetchProjectServiceline(request, Authorization));
+		} catch (Exception e) {
+
+			response.setError(5000, e.getLocalizedMessage());
+		}
+		return response.toString();
+	}
+	
+	@CrossOrigin()
+	@Operation(summary = "Update project to serviceline")
+	@RequestMapping(value = "/updateProjectToServiceline", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
+	public String updateProjectToServiceline(@RequestBody String request,
+			@RequestHeader(value = "Authorization") String Authorization) {
+
+		OutputResponse response = new OutputResponse();
+		try {
+
+			response.setResponse(customizationService.updateProjectToServiceline(request, Authorization));
+		} catch (Exception e) {
+
+			response.setError(5000, e.getLocalizedMessage());
+		}
+		return response.toString();
+	}
+	
+	@CrossOrigin
+	@Operation(summary = "Fetch section masters")
+	@RequestMapping(value = "/get/sections", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
+	public String getSections() {
+		OutputResponse response = new OutputResponse();
+		try {
+
+			response.setResponse(customizationService.getSections());
+		} catch (Exception e) {
+			logger.info("getFacility failed with error " + e.getMessage(), e);
+			response.setError(e);
+		}
+
+		return response.toString();
+	}
+	
+	@CrossOrigin()
+	@Operation(summary = "Update section and fields")
+	@RequestMapping(value = "/updateSectionAndFields", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
+	public String updateSectionAndFields(@RequestBody String request,
+			@RequestHeader(value = "Authorization") String Authorization) {
+
+		OutputResponse response = new OutputResponse();
+		try {
+
+			response.setResponse(customizationService.updateSectionAndFields(request, Authorization));
+		} catch (Exception e) {
+			response.setError(5000, e.getLocalizedMessage());
+		}
+		return response.toString();
+	}
+	
+	@CrossOrigin()
+	@Operation(summary = "Save section and fields")
+	@RequestMapping(value = "/saveSectionAndFields", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
+	public String saveSectionAndFields(@RequestBody SectionFieldsMappingDTO sectionFieldsMappingDTO,
+			@RequestHeader(value = "Authorization") String Authorization) {
+
+		OutputResponse response = new OutputResponse();
+		try {
+
+			response.setResponse(customizationService.saveSectionAndFields(sectionFieldsMappingDTO, Authorization));
+		} catch (Exception e) {
+			response.setError(5000, e.getLocalizedMessage());
+		}
+		return response.toString();
+	}
+	
+	@CrossOrigin()
+	@Operation(summary = "Section and project mapping")
+	@RequestMapping(value = "/mapSectionToProject", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
+	public String mapSectionToProject(@RequestBody SectionProjectMappingDTO sectionProjectMappingDTO,
+			@RequestHeader(value = "Authorization") String Authorization) {
+
+		OutputResponse response = new OutputResponse();
+		try {
+
+			response.setResponse(customizationService.mapSectionToProject(sectionProjectMappingDTO, Authorization));
+		} catch (Exception e) {
+
+			response.setError(5000, e.getLocalizedMessage());
+		}
+		return response.toString();
+	}
+	
+	@CrossOrigin()
+	@Operation(summary = "Fetch mapped sections in project")
+	@RequestMapping(value = "/fetchMappedSectionsInProject", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
+	public String fetchMappedSectionsInProject(@RequestBody String request,
+			@RequestHeader(value = "Authorization") String Authorization) {
+
+		OutputResponse response = new OutputResponse();
+		try {
+
+			response.setResponse(customizationService.fetchMappedSectionsInProject(request, Authorization));
+		} catch (Exception e) {
+
+			response.setError(5000, e.getLocalizedMessage());
+		}
+		return response.toString();
+	}
+	
+	@CrossOrigin()
+	@Operation(summary = "Fetch mapped fields")
+	@RequestMapping(value = "/fetchMappedFields", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
+	public String fetchMappedFields(@RequestBody String request,
+			@RequestHeader(value = "Authorization") String Authorization) {
+
+		OutputResponse response = new OutputResponse();
+		try {
+
+			response.setResponse(customizationService.fetchMappedFields(request, Authorization));
+		} catch (Exception e) {
+
+			response.setError(5000, e.getLocalizedMessage());
+		}
+		return response.toString();
+	}
+	
+	@CrossOrigin()
+	@Operation(summary = "Fetch all data")
+	@RequestMapping(value = "/fetchAllData", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
+	public String fetchAllData(@RequestBody String request,
+			@RequestHeader(value = "Authorization") String Authorization) {
+
+		OutputResponse response = new OutputResponse();
+		try {
+
+			response.setResponse(customizationService.fetchAllData(request, Authorization));
+		} catch (Exception e) {
+
+			response.setError(5000, e.getLocalizedMessage());
+		}
+		return response.toString();
+	}
+	
+	@CrossOrigin
+	@Operation(summary = "Fetch field masters")
+	@RequestMapping(value = "/get/fileldType", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
+	public String getfileldType() {
+		OutputResponse response = new OutputResponse();
+		try {
+
+			response.setResponse(customizationService.getfileldType());
+		} catch (Exception e) {
+			logger.info("getFacility failed with error " + e.getMessage(), e);
+			response.setError(e);
+		}
+
 		return response.toString();
 	}
 }

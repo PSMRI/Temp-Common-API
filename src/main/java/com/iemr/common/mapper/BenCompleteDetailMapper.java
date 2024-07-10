@@ -97,6 +97,9 @@ public interface BenCompleteDetailMapper {
 			@Mapping(source = "beneficiariesDTO.beneficiaryDetails.headOfFamily_RelationID", target = "headOfFamily_RelationID"),
 			@Mapping(source = "beneficiariesDTO.beneficiaryDetails.headOfFamily_Relation", target = "headOfFamily_Relation"),
 			@Mapping(source = "beneficiariesDTO.beneficiaryDetails.other", target = "other"),
+			@Mapping(source = "beneficiariesDTO.beneficiaryDetails.otherFields", target = "otherFields"),
+			@Mapping(source = "beneficiariesDTO.beneficiaryDetails.gender", target = "genderName"),
+			@Mapping(source = "beneficiariesDTO.beneficiaryDetails.maritalStatus", target = "maritalStatusName"),
 
 
 	})

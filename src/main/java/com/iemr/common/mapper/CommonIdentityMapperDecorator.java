@@ -171,6 +171,8 @@ public abstract class CommonIdentityMapperDecorator implements CommonIdentityMap
 			commonIdentityDTO.setMaritalStatus(
 					maritalStatusMapper.maritalStatusByIDToResponse(maritalStatusID.intValue()).getStatus());
 		}
+		commonIdentityDTO.setMaritalStatus(beneficiary.getMaritalStatusName());
+		commonIdentityDTO.setGender(beneficiary.getGenderName());
 		Integer preferredLangID = beneficiary.getI_bendemographics().getPreferredLangID();
 		if (preferredLangID != null) {
 			commonIdentityDTO.setPreferredLanguageId(preferredLangID);
@@ -185,10 +187,13 @@ public abstract class CommonIdentityMapperDecorator implements CommonIdentityMap
 		commonIdentityDTO.setParkingPlaceId(beneficiary.getParkingPlaceID());
 
 		commonIdentityDTO.setBeneficiaryConsent(beneficiary.getBeneficiaryConsent());
-		if(beneficiary.getI_bendemographics() != null && beneficiary.getI_bendemographics().getMonthlyFamilyIncome() != null) {
+		if (beneficiary.getI_bendemographics() != null
+				&& beneficiary.getI_bendemographics().getMonthlyFamilyIncome() != null) {
 			commonIdentityDTO.setMonthlyFamilyIncome(beneficiary.getI_bendemographics().getMonthlyFamilyIncome());
 		}
-		
+		if (beneficiary.getOtherFields() != null) {
+			commonIdentityDTO.setOtherFields(beneficiary.getOtherFields());
+		}
 		// End
 		return commonIdentityDTO;
 	}

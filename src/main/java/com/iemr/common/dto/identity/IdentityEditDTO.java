@@ -166,4 +166,6 @@ public class IdentityEditDTO {
 
 	// END OF new column added for data sync
 	private boolean emergencyRegistration;
+	private String otherFields;
+//	private Object otherFields;
 }

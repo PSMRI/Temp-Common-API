@@ -1,7 +1,5 @@
 package com.iemr.common.data.customization;
 
-import java.sql.Timestamp;
-
 import com.google.gson.annotations.Expose;
 
 import jakarta.persistence.Column;
@@ -10,18 +8,18 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Entity
-@Table(name = "t_projectservicelinemapping")
+@Table(name = "v_customizationdatafields")
 @Data
-public class ServicelineCustomization {
+public class V_CustomizationDataFields {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID")
-	@Expose
-	private Integer id;
+	@Column(name = "uuid", insertable = false)
+	private String uuId;
 	
 	@Column(name = "ServiceLineId")
 	@Expose
@@ -31,7 +29,7 @@ public class ServicelineCustomization {
 	@Expose
 	private String serviceLine;
 	
-	@Column(name = "StateId")
+	@Column(name = "stateid")
 	@Expose
 	private Integer stateId;
 	
@@ -67,21 +65,59 @@ public class ServicelineCustomization {
 	@Expose
 	private Integer serviceProviderId;
 	
-	@Column(name = "Deleted")
-	private Boolean deleted;
-	
-	@Column(name = "CreatedBy")
+	@Column(name = "SectionID")
 	@Expose
-	private String createdBy;
+	private Integer sectionId;
 	
-	@Column(name = "CreatedDate", insertable = false, updatable = false)
-	private Timestamp createdDate;
+	@Column(name = "SectionName")
+	@Expose
+	private String sectionName;
 	
-	@Column(name = "ModifiedBy")
-	private String modifiedBy;
+	@Column(name = "FieldName")
+	@Expose
+	private String fieldName;
 	
-	@Column(name = "LastModDate", insertable = false, updatable = false)
-	private Timestamp lastModDate;
-
+	@Column(name = "Placeholder")
+	@Expose
+	private String placeholder;
+	
+	@Column(name = "FieldTypeID")
+	@Expose
+	private Integer fieldTypeId;
+	
+	@Column(name = "FieldType")
+	@Expose
+	private String fieldType;
+	
+	@Column(name = "Options")
+	@Expose
+	private String option;
+	
+	@Column(name = "AllowMin")
+	@Expose
+	private String allowMin;
+	
+	@Column(name = "AllowMax")
+	@Expose
+	private String allowMax;
+	
+	@Column(name = "IsRequired")
+	@Expose
+	private Boolean isRequired;
+	
+	@Column(name = "Rank")
+	@Expose
+	private Integer rank;
+	
+	@Column(name = "AllowText")
+	@Expose
+	private String allowText;
+	
+	@Column
+	@Expose
+	private String fieldTitle;
+	
+	@Transient
+	private String[] options;
 
 }

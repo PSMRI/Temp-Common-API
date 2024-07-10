@@ -28,13 +28,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.iemr.common.data.beneficiary.BenDemographics;
 import com.iemr.common.data.beneficiary.BenPhoneMap;
 import com.iemr.common.data.beneficiary.Beneficiary;
@@ -177,7 +181,7 @@ public class IEMRSearchUserServiceImpl implements IEMRSearchUserService {
 		// search patient by ben id, call Identity API
 		List<BeneficiariesDTO> listBen = identityBeneficiaryService.getBeneficiaryListByBenID(beneficiaryID, auth,
 				is1097);
-
+		
 		beneficiaryList = getBeneficiaryListFromMapper(listBen);
 		return beneficiaryList;
 	}
@@ -247,9 +251,20 @@ public class IEMRSearchUserServiceImpl implements IEMRSearchUserService {
 				auth, benPhoneMap.getIs1097());
 
 		beneficiaryList = getBeneficiaryListFromMapper(listBen);
+		setBeneficiaryGender(beneficiaryList);
 		logger.info("Serach user by phone no response size "
 				+ (beneficiaryList != null ? beneficiaryList.size() : "No Beneficiary Found"));
-		return OutputMapper.gson().toJson(beneficiaryList);
+		ObjectMapper mapper = new ObjectMapper();
+		String result = mapper.writeValueAsString(beneficiaryList);
+		return result;
+	}
+
+	private void setBeneficiaryGender(List<BeneficiaryModel> iBeneficiary) {
+		for (BeneficiaryModel beneficiaryModel : iBeneficiary) {
+			if (null != beneficiaryModel.getM_gender() && beneficiaryModel.getM_gender().getGenderName() != null)
+				beneficiaryModel.setGenderName(beneficiaryModel.getM_gender().getGenderName());
+		}
+
 	}
 
 	// Advance search
@@ -277,12 +292,12 @@ public class IEMRSearchUserServiceImpl implements IEMRSearchUserService {
 			BigInteger numBig = new BigInteger(i_beneficiary.getBeneficiaryID());
 			identitySearchDTO.setBeneficiaryId(numBig);
 		}
-		
-		if(i_beneficiary.getIs1097() != null && i_beneficiary.getIs1097() == true) {
-            i_beneficiary.setIs1097(true);
-        }else {
-            i_beneficiary.setIs1097(false);
-        }
+
+		if (i_beneficiary.getIs1097() != null && i_beneficiary.getIs1097() == true) {
+			i_beneficiary.setIs1097(true);
+		} else {
+			i_beneficiary.setIs1097(false);
+		}
 
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 		List<BeneficiariesDTO> listBen = identityBeneficiaryService
@@ -307,6 +322,7 @@ public class IEMRSearchUserServiceImpl implements IEMRSearchUserService {
 					sexualOrientationMapper.sexualOrientationByIDToModel(beneficiary.getSexualOrientationID()));
 			beneficiary.setGovtIdentityType(
 					govtIdentityTypeMapper.govtIdentityTypeModelByIDToModel(beneficiary.getGovtIdentityTypeID()));
+
 			beneficiary.setI_bendemographics(benCompleteMapper.createBenDemographicsModel(beneficiaryModel));
 			beneficiary.getI_bendemographics().setHealthCareWorkerType(healthCareWorkerMapper
 					.getModelByWorkerID(beneficiary.getI_bendemographics().getHealthCareWorkerID()));
