@@ -32,6 +32,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iemr.common.data.kmfilemanager.KMFileManager;
 import com.iemr.common.data.scheme.Scheme;
 import com.iemr.common.repository.scheme.SchemeRepository;
@@ -143,7 +145,9 @@ public class SchemeServiceImpl implements SchemeService {
 			logger.info("addKMFile request: " + list.toString());
 			String kmFileManagerResp = kmFileManagerService.addKMFile(list.toString());
 			logger.info("addKMFile response " + kmFileManagerResp);
-			KMFileManager[] kmFileManagerArray = inputMapper.gson().fromJson(kmFileManagerResp, KMFileManager[].class);
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			KMFileManager[] kmFileManagerArray = objectMapper.readValue(kmFileManagerResp, KMFileManager[].class);
 			for (KMFileManager kmFileManager : kmFileManagerArray) {
 				schemeRequest.setKmFileManagerID(kmFileManager.getKmFileManagerID());
 			}

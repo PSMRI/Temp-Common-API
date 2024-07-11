@@ -46,7 +46,6 @@ import io.swagger.v3.oas.annotations.Operation;
 
 
 
-@PropertySource("classpath:application.properties")
 @RestController
 @RequestMapping(value = "/carestream")
 public class CareStreamCreateOrderController {

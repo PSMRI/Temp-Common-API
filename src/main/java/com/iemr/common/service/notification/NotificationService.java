@@ -48,7 +48,7 @@ public interface NotificationService {
 
 	String getEmergencyContacts(String request) throws IEMRException;
 
-	String getSupervisorEmergencyContacts(String request) throws IEMRException;
+	String getSupervisorEmergencyContacts(String request) throws IEMRException, JsonMappingException, JsonProcessingException;
 
 	String createEmergencyContacts(String request)
 			throws NoSuchAlgorithmException, IOException, IEMRException, Exception;

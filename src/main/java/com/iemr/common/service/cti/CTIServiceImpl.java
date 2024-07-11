@@ -756,6 +756,7 @@ public class CTIServiceImpl implements CTIService {
 		OutputResponse output = new OutputResponse();
 		String blockNumberURL;
 		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		BlockUnblockNumber agent = objectMapper.readValue(request, BlockUnblockNumber.class);
 		blockNumberURL = ConfigProperties.getPropertyByName("block-api-URL");
 		String ctiServerIP = ConfigProperties.getPropertyByName("cti-server-ip");
@@ -766,7 +767,7 @@ public class CTIServiceImpl implements CTIService {
 		logger.info("blockNumber calls calling url: " + blockNumberURL);
 		String unblockResponse = this.callUrl(blockNumberURL);// httpUtils.get(ctiDisconnectURL);
 		logger.info("blockNumber API returned " + unblockResponse);
-		BlockUnblockNumber result = inputMapper.gson().fromJson(unblockResponse, BlockUnblockNumber.class);
+		BlockUnblockNumber result = objectMapper.readValue(unblockResponse, BlockUnblockNumber.class);
 		CTIResponse ctiResponse = result.getResponse();
 		if (ctiResponse.getResponse_code().equals(STD_API_SUCCESS)) {
 			agent.setResponse(ctiResponse);
@@ -782,6 +783,7 @@ public class CTIServiceImpl implements CTIService {
 		OutputResponse output = new OutputResponse();
 		String unblockNumberURL;
 		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		BlockUnblockNumber agent = objectMapper.readValue(request, BlockUnblockNumber.class);
 		unblockNumberURL = ConfigProperties.getPropertyByName("unblock-api-URL");
 		String ctiServerIP = ConfigProperties.getPropertyByName("cti-server-ip");

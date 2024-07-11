@@ -254,24 +254,14 @@ public class SMSServiceImpl implements SMSService {
 		SMSTemplate smsTemplate = null;
 		for (SMSRequest request : requests) {
 			SMSNotification sms;
-			// SMSTemplate smsTemplate =
-			// smsTemplateRepository.findOne(request.getSmsTemplateID());
-			// List<SMSParametersMap> smsParameters =
-			// smsParameterMapRepository.findSMSParametersMapBySmsTemplateID(request.getSmsTemplateID());
-			// sms = prepareSMS(smsTemplate, smsParameters, request, authToken);
-
-			// Shubham Shekhar,16-10-2020,TM Prescription SMS
+			
 			smsTemplate = smsTemplateRepository.findBySmsTemplateID(request.getSmsTemplateID());
 			if (null != smsTemplate && smsTemplate.getSmsTemplateName().equalsIgnoreCase(prescription)) {
-//			if (smsTemplate.getSmsTypeID() == request.getSmsTypeID())
-//			{
 				sentSMS = prepareTMSMS(request, authToken);
-				// }
 			} else {
 				sms = prepareSMS(request, authToken);
 				sentSMS.add(sms);
 			}
-
 		}
 		return sentSMS.toString();
 	}
@@ -309,56 +299,9 @@ public class SMSServiceImpl implements SMSService {
 			if (smsTemplate != null && smsTemplate.getSmsTemplateName().equalsIgnoreCase(prescription)) {
 				sms = getTMPrescription(smsToSend, request, beneficiary, sms);
 			}
-//			for (SMSParametersMap smsParametersMap : smsParameters) {
-//				String variable = smsParametersMap.getSmsParameterName();// SMSParamName
-//				String paramType = smsParametersMap.getSmsParameter().getSmsParameterType(); // SMSParamSource
-//				String className = smsParametersMap.getSmsParameter().getDataClassName(); // DataClassName
-//				String methodName = smsParametersMap.getSmsParameter().getDataName(); // DataVariableName
-//				String variableValue = "";
-//				switch (paramType) {
-//				case "Beneficiary":
-//					variableValue = getBeneficiaryData(className, methodName, request, beneficiary);
-//				    benID=variableValue;
-//					break;
-//				
-//				default:
-//					break;
-//				}
-//				if (variable.equalsIgnoreCase("SMS_PHONE_NO")) {
-//					if (request.getIsBloodBankSMS() == true) {
-//						T_RequestedBloodBank requestedBloodBank = prescribedDrugRepository
-//								.getBloodBankAddress(request.getRequestedBloodBankID());
-//						String callerContact = requestedBloodBank.getBBMobileNo() != null
-//								? requestedBloodBank.getBBMobileNo() + " "
-//								: "";
-//						sms.setPhoneNo(callerContact);
-//					} else {
-//						sms.setPhoneNo(variableValue);
-//					}
-//
-//				} else {
-//					smsToSend = smsToSend.replace("$$" + variable + "$$", variableValue);
-//				}
-//			}
-
-//			if (smsTemplate.getSmsTypeID() == 15 && request.getMoAdvice() != null) {
-//				smsToSend = smsToSend.concat(request.getMoAdvice());
-//			}
 		}
-//		if (request.getAlternateNo() != null) {
-//			sms.setPhoneNo(request.getAlternateNo());
-//		}
-
-//		if(smsTemplate.getSmsTypeID() == 24)
-//		{
-//			if(TMsms!="" && TMsms!=null)
-//			TMsms = TMsms.replace("$$ben$$",benID);
-//			smsToSend=TMsms;
-//		}
-
 		if (sms.getSms() != null && sms.getSms().length() > 120 && smsTemplate != null
 				&& smsTemplate.getSmsTemplateName().equalsIgnoreCase(prescription))
-
 		{
 			double num = sms.getSms().length() / 120.0;
 			String text = "";
@@ -397,38 +340,7 @@ public class SMSServiceImpl implements SMSService {
 		return sentSMS;
 	}
 
-//   private List<String> parseTemplate(String parse)
-//   {
-//	   List<String> sp=new ArrayList<String>();
-//	   // sp=sp[0].split("$$");
-//	    String x="$$";
-////		String[] sp = parse.split("{")
-////                .Where(x => x.contains("}"))
-////                .Select(x => new string(x.TakeWhile(c => c != '}').ToArray()))
-////                .ToArray();
-//	    int b=0,index=0;
-//	    for(int a=0;a<parse.length();a++)
-//	    {x="$$";
-//	    	if(parse.charAt(a)=='$' && parse.charAt(a+1)=='$')
-//	    	{
-//	    		for(b=a+2;b<parse.length();b++)
-//	    		{
-//	    			if(parse.charAt(b)=='$' && parse.charAt(b+1)=='$')
-//	    			{
-//	    				x=x+"$$";
-//	    				break;
-//	    			}
-//	    				
-//	    			else
-//	    				x=x+parse.charAt(b);
-//	    		}
-//	    		sp.add(x);
-//	    		a=b+1;
-//	    	}
-//	    	//System.out.println(sp[a]);
-//	    }
-//	    return sp;
-//   }
+
 	// Shubham Shekhar,16-10-2020,TM Prescription SMS
 	private SMSNotification getTMPrescription(String template, SMSRequest request, BeneficiaryModel beneficiary,
 			SMSNotification sms) throws Exception {
@@ -447,10 +359,7 @@ public class SMSServiceImpl implements SMSService {
 		// List<String> diagnose=parseTemplate(str);
 		List<SMSParametersMap> smsParameters = smsParameterMapRepository
 				.findSMSParametersMapBySmsTemplateID(request.getSmsTemplateID());
-//				if (smsTemplate.getSmsTypeID() == 24)
-//				{
-//					TMsms=getTMPrescription(smsToSend,request,beneficiary);
-//				}
+
 		List<String> variables = new ArrayList<String>();
 		List<String> useVariable = new ArrayList<String>();
 		String benID = "";
@@ -482,19 +391,10 @@ public class SMSServiceImpl implements SMSService {
 				} else {
 					sms.setPhoneNo(variableValue);
 				}
-
-//			} else {
-//				template = template.replace("$$" + variable + "$$", variableValue);
-//			}
 			}
 		}
 		for (int k = 0; k < variables.size(); k++) {
 			switch (variables.get(k).toLowerCase()) {
-//        	case "$$ben$$":
-//        		Class clazz = Class.forName(className);
-//    			Method method = clazz.getDeclaredMethod("get" + methodName, null);
-//    			variableValue = method.invoke(beneficiary, null).toString();
-//        		break;
 			case "beneficiaryid":
 				variableValue = benID;
 				// benID=variableValue;
@@ -611,10 +511,6 @@ public class SMSServiceImpl implements SMSService {
 			List<SMSParametersMap> smsParameters = smsParameterMapRepository
 					.findSMSParametersMapBySmsTemplateID(request.getSmsTemplateID());
 			int i = 0;
-//					if (smsTemplate.getSmsTypeID() == 24)
-//					{
-//						TMsms=getTMPrescription(smsToSend,request,beneficiary);
-//					}
 			for (SMSParametersMap smsParametersMap : smsParameters) {
 				String variable = smsParametersMap.getSmsParameterName();// SMSParamName
 				String paramType = smsParametersMap.getSmsParameter().getSmsParameterType(); // SMSParamSource
@@ -708,44 +604,10 @@ public class SMSServiceImpl implements SMSService {
 			sms.setPhoneNo(request.getBenPhoneNo());
 		}
 
-//		if(smsTemplate.getSmsTypeID() == 24)
-//		{
-//			if(TMsms!="" && TMsms!=null)
-//			TMsms = TMsms.replace("$$ben$$",benID);
-//			smsToSend=TMsms;
-//		}
 
-//		if(smsToSend.length()>160 && smsTemplate.getSmsTypeID() == 24)
-//		{
-//			double num=smsToSend.length()/160.0;String text="";int start=0,end=160;
-//			if(num >(smsToSend.length()/160))
-//				num++;
-//			for(int i=1;i<=num;i++)
-//			{
-//				text=smsToSend.substring(start, end);
-//				SMSNotification sms1 = new SMSNotification();
-//				sms1.setSmsStatus(SMSNotification.NOT_SENT);
-//				sms1.setCreatedBy(request.getCreatedBy());
-//				sms1.setSmsTriggerDate(new Timestamp(Calendar.getInstance().getTime().getTime()));
-//				sms1.setBeneficiaryRegID(request.getBeneficiaryRegID());
-//				sms1.setReceivingUserID(request.getUserID());
-//				sms1.setPhoneNo(sms.getPhoneNo());
-//				sms1.setSms(text);
-//				sms1 = smsNotification.save(sms1);
-//				start=end;
-//				if((end+160)<smsToSend.length())
-//					end=end+160;
-//				else
-//					end=end+(smsToSend.length()-160);
-//			}
-//			
-//		}
-//		else
-		// {
 		sms.setSms(smsToSend);
 		sms = smsNotification.save(sms);
-		// }
-		// publishSMS();
+	
 		return sms;
 	}
 
@@ -819,11 +681,6 @@ public class SMSServiceImpl implements SMSService {
 			variableValue = age;
 			break;
 		case "imrmmrname":
-//			String imrtitle = beneficiary.getM_title() != null ? (beneficiary.getM_title().getTitleName() !=null ? beneficiary.getM_title().getTitleName()+ " ":"") : "";
-//			String imrfname = beneficiary.getFirstName() != null ? beneficiary.getFirstName() + " " : "";
-//			String imrmname = beneficiary.getMiddleName() != null ? beneficiary.getMiddleName() + " " : "";
-//			String imrlname = beneficiary.getLastName() != null ? beneficiary.getLastName() + " " : "";
-//			variableValue = imrtitle + imrfname + imrmname + imrlname;
 			String imrName = request.getInformerName() != null ? request.getInformerName() : "";
 			variableValue = imrName;
 			break;
@@ -949,15 +806,12 @@ public class SMSServiceImpl implements SMSService {
 				SMSServiceImpl.publishingSMS = true;
 				Boolean doSendSMS = ConfigProperties.getBoolean("send-sms");
 				String sendSMSURL = ConfigProperties.getPropertyByName("send-message-url");
-//				String sendSMSAPI = SMSServiceImpl.SMS_GATEWAY_URL + "/" + sendSMSURL;
 				String senderName = ConfigProperties.getPropertyByName("sms-username");
 				String senderPassword = ConfigProperties.getPropertyByName("sms-password");
-//				String senderNumber = ConfigProperties.getPropertyByName("sms-sender-number");
 				String sourceAddress = ConfigProperties.getPropertyByName("source-address");
 				String smsMessageType = ConfigProperties.getPropertyByName("sms-message-type");
 				String smsEntityID = ConfigProperties.getPropertyByName("sms-entityid");
-//				sendSMSAPI = sendSMSAPI.replace("USERNAME", senderName).replace("PASSWORD", senderPassword)
-//						.replace("SENDER_NUMBER", senderNumber);
+
 				java.util.Date date = new java.util.Date();
 				java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 				String text = sqlDate.toString();
@@ -972,36 +826,25 @@ public class SMSServiceImpl implements SMSService {
 
 				StringBuffer phoneNo = new StringBuffer();
 				for (SMSNotification sms : smsNotificationsToSend) {
-//					String smsPublishURL = sendSMSAPI;
-
 					try {
-
 						if (sms.getPhoneNo() != null && sms.getPhoneNo().length() > 10)
 							phoneNo = new StringBuffer(sms.getPhoneNo().substring(sms.getPhoneNo().length() - 10));
 						else
 							phoneNo = new StringBuffer(sms.getPhoneNo());
-
-						// for fetching dltTemplateId
 						String dltTemplateId = smsTemplateRepository.findDLTTemplateID(sms.getSmsTemplateID());
 						if (dltTemplateId == null)
 							throw new Exception("No dltTemplateId template ID mapped");
 
 						SmsAPIRequestModel smsAPICredentials104 = new SmsAPIRequestModel(senderName, phoneNo,
 								sms.getSms(), sourceAddress, smsMessageType, dltTemplateId, smsEntityID);
-
 						MultiValueMap<String, String> headersLogin = new LinkedMultiValueMap<String, String>();
 						headersLogin.add("Content-Type", "application/json");
 						String auth = senderName + ":" + senderPassword;
 						headersLogin.add("Authorization",
 								"Basic " + Base64.getEncoder().encodeToString(auth.getBytes()));
-						// smsPublishURL = smsPublishURL.replace("SMS_TEXT",
-						// URLEncoder.encode(sms.getSms(), "UTF-8"))
-
 						logger.info("SMS API login request OBj " + smsAPICredentials104.toString());
-
 						sms.setSmsStatus(SMSNotification.IN_PROGRESS);
 						sms = smsNotification.save(sms);
-
 						HttpEntity<Object> requestLogin = new HttpEntity<Object>(smsAPICredentials104, headersLogin);
 						ResponseEntity<String> responseLogin = restTemplateLogin.exchange(sendSMSURL, HttpMethod.POST,
 								requestLogin, String.class);
@@ -1011,8 +854,7 @@ public class SMSServiceImpl implements SMSService {
 							String messageRequestId = null;
 							if (obj != null)
 								messageRequestId = obj.getString("messageRequestId");
-//							String messageRequestId = obj.getString("MessageRequestId");
-//							logger.info("SMS Sent successfully by calling API " + smsPublishURL);
+
 							sms.setTransactionError(null);
 							sms.setTransactionID(messageRequestId);
 							sms.setIsTransactionError(false);
@@ -1032,64 +874,6 @@ public class SMSServiceImpl implements SMSService {
 						sms.setSmsStatus(SMSNotification.NOT_SENT);
 						sms = smsNotification.save(sms);
 					}
-
-//						if (sms.getPhoneNo() != null && sms.getPhoneNo().length() > 10)
-//							phoneNo = new StringBuffer(sms.getPhoneNo().substring(sms.getPhoneNo().length() - 10));
-//						else
-//							phoneNo = new StringBuffer(sms.getPhoneNo());
-
-//						smsPublishURL = smsPublishURL.replace("SMS_TEXT", sms.getSms()).replace("RECEIVER_NUMBER",
-//								phoneNo);
-//						sms.setSmsStatus(SMSNotification.IN_PROGRESS);
-//						sms = smsNotification.save(sms);
-//						logger.info("Calling API to send SMS " + smsPublishURL);
-//						ResponseEntity<String> response = httpUtils.getV1(smsPublishURL);
-//						if (response.getStatusCodeValue() == 200) {
-//							String smsResponse = response.getBody();
-//							JSONObject obj = new JSONObject(smsResponse);
-//							String jobID = obj.getString("JobId");
-//							switch (smsResponse) {
-//							case "0x200 - Invalid Username or Password":
-//							case "0x201 - Account suspended due to one of several defined reasons":
-//							case "0x202 - Invalid Source Address/Sender ID. As per GSM standard, the sender ID should "
-//									+ "be within 11 characters":
-//							case "0x203 - Message length exceeded (more than 160 characters) if concat is set to 0":
-//							case "0x204 - Message length exceeded (more than 459 characters) in concat is set to 1":
-//							case "0x205 - DRL URL is not set":
-//							case "0x206 - Only the subscribed service type can be accessed – "
-//									+ "make sure of the service type you are trying to connect with":
-//							case "0x207 - Invalid Source IP – kindly check if the IP is responding":
-//							case "0x208 - Account deactivated/expired":
-//							case "0x209 - Invalid message length (less than 160 characters) if concat is set to 1":
-//							case "0x210 - Invalid Parameter values":
-//							case "0x211 - Invalid Message Length (more than 280 characters)":
-//							case "0x212 - Invalid Message Length":
-//							case "0x213 - Invalid Destination Number":
-//								throw new Exception(smsResponse);
-//							default:
-////								logger.info("SMS Sent successfully by calling API " + smsPublishURL);
-//								sms.setTransactionError(null);
-//								sms.setTransactionID(jobID);
-//								sms.setIsTransactionError(false);
-//								sms.setSmsSentDate(new Timestamp(Calendar.getInstance().getTime().getTime()));
-//								sms.setSmsStatus(SMSNotification.SENT);
-//								sms = smsNotification.save(sms);
-//								break;
-//							}
-//						} else {
-//							throw new Exception(response.getStatusCodeValue() + " and error "
-//									+ response.getStatusCode().toString());
-//						}
-//					} catch (Exception e) {
-//						logger.error("Failed to send sms on phone no/benRegID: " + sms.getPhoneNo() + "/"
-//								+ sms.getBeneficiaryRegID() + " with error " + e.getMessage(), e);
-//						sms.setTransactionError(e.getMessage());
-//						sms.setIsTransactionError(true);
-//						sms.setTransactionID(null);
-//						sms.setSmsStatus(SMSNotification.NOT_SENT);
-//						sms = smsNotification.save(sms);
-//					}
-
 				}
 			} catch (Exception e) {
 				logger.error("publishSMS failed with error " + e.getMessage());
@@ -1145,22 +929,14 @@ public class SMSServiceImpl implements SMSService {
 			String dosage = prescribedDrug.getDosage() != null ? prescribedDrug.getDosage() + " " : "";
 			variableValue = dosage;
 			break;
-//		case "dosageinstruction":
-//			String drugForm = prescribedDrug.getM_104drugmapping().getRemarks() != null
-//					? prescribedDrug.getM_104drugmapping().getRemarks() + " "
-//					: "";
-//			variableValue = drugForm;
-//			break;
+
 		case "usage":
 			String drugForm = prescribedDrug.getM_104drugmapping().getRemarks() != null
 					? prescribedDrug.getM_104drugmapping().getRemarks() + " "
 					: "";
 			variableValue = drugForm;
 			break;
-//		case "frequency":
-//			String frequency = prescribedDrug.getFrequency() != null ? prescribedDrug.getFrequency() + " " : "";
-//			variableValue = frequency;
-//			break;
+
 		case "timeToConsume":
 			String frequency = prescribedDrug.getFrequency() != null ? prescribedDrug.getFrequency() + " " : "";
 			variableValue = frequency;
@@ -1240,12 +1016,6 @@ public class SMSServiceImpl implements SMSService {
 					: "";
 			variableValue = contactMobile;
 			break;
-		/*
-		 * case "Contact LandLine Numbers": String contactLandline =
-		 * bloodRequest.getBbMobileNo() != null ? bloodRequest.getBbMobileNo() + " " :
-		 * ""; variableValue = "Contact LandLine Numbers" + " " + contactLandline;
-		 * break;
-		 */
 		default:
 			break;
 		}
@@ -1258,6 +1028,7 @@ public class SMSServiceImpl implements SMSService {
 		Directoryservice directoryservice = prescribedDrugRepository
 				.getDirectoryservice(request.getDirectoryServiceID());
 		String variableValue = "";
+		if(null != directoryservice && null != directoryservice.getInstitute()) {
 		switch (methodName.toLowerCase()) {
 		case "institutename":
 			String instituteName = directoryservice.getInstitute().getInstitutionName() != null
@@ -1289,30 +1060,11 @@ public class SMSServiceImpl implements SMSService {
 					: "";
 			variableValue = address;
 			break;
-		/*
-		 * case "contactperson1": String contactPerson1 =
-		 * directoryservice.getInstitute().getContactPerson1() != null ?
-		 * directoryservice.getInstitute().getContactPerson1() + " " : ""; variableValue
-		 * = contactPerson1; break; case "contactphone1": String contactPhone1 =
-		 * directoryservice.getInstitute().getContactNo1() != null ?
-		 * directoryservice.getInstitute().getContactNo1() + " " : ""; variableValue =
-		 * contactPhone1; break; case "contactemail1": String contactEmail1 =
-		 * directoryservice.getInstitute().getContactPerson1_Email() != null ?
-		 * directoryservice.getInstitute().getContactPerson1_Email() + " " : "";
-		 * variableValue = contactEmail1; break; case "contactperson2": String
-		 * contactPerson2 = directoryservice.getInstitute().getContactPerson2() != null
-		 * ? directoryservice.getInstitute().getContactPerson2() + " " : "";
-		 * variableValue = contactPerson2; case "contactphone2": String contactPhone2 =
-		 * directoryservice.getInstitute().getContactNo2() != null ?
-		 * directoryservice.getInstitute().getContactNo2() + " " : ""; variableValue =
-		 * contactPhone2; break; case "contactemail2": String contactEmail2 =
-		 * directoryservice.getInstitute().getContactPerson2_Email() != null ?
-		 * directoryservice.getInstitute().getContactPerson2_Email() + " " : "";
-		 * variableValue = contactEmail2;
-		 */
+		
 		default:
 			break;
 		}
+	}
 		return variableValue;
 	}
 
@@ -1334,33 +1086,7 @@ public class SMSServiceImpl implements SMSService {
 					: "";
 			variableValue = typeOfRequest;
 			break;
-		/*
-		 * case "historyOfDiet": String historyOfDiet =
-		 * foodSafetyCopmlaint.getHistoryOfDiet() != null ?
-		 * foodSafetyCopmlaint.getHistoryOfDiet() + " " : ""; variableValue =
-		 * historyOfDiet; break; case "fromWhen": if(foodSafetyCopmlaint.getFromWhen()
-		 * != null) { Timestamp time = foodSafetyCopmlaint.getFromWhen(); DateFormat df
-		 * = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); String fromWhen =
-		 * df.format(time); variableValue = fromWhen + " "; } break; case "typeOfFood":
-		 * String typeOfFood = foodSafetyCopmlaint.getTypeOfFood() != null ?
-		 * foodSafetyCopmlaint.getTypeOfFood() + " " : ""; variableValue = typeOfFood;
-		 * break; case "foodConsumedFrom": String foodConsumedFrom =
-		 * foodSafetyCopmlaint.getFoodConsumedFrom() != null ?
-		 * foodSafetyCopmlaint.getFoodConsumedFrom() + " " : ""; variableValue =
-		 * foodConsumedFrom; break; case "associatedSymptoms": String associatedSymptoms
-		 * = foodSafetyCopmlaint.getAssociatedSymptoms() != null ?
-		 * foodSafetyCopmlaint.getAssociatedSymptoms() + " " : ""; variableValue =
-		 * associatedSymptoms; break; case "districtname": String districtName =
-		 * foodSafetyCopmlaint.getDistrictID() != null ?
-		 * foodSafetyCopmlaint.getDistrict().getDistrictName() + " " : ""; variableValue
-		 * = districtName; break; case "blockname": String blockName =
-		 * foodSafetyCopmlaint.getDistrictBlockID() != null ?
-		 * foodSafetyCopmlaint.getDistrictBlock().getBlockName() + " " : "";
-		 * variableValue = blockName; break; case "villagename": String villagename =
-		 * foodSafetyCopmlaint.getVillageID() != null ?
-		 * foodSafetyCopmlaint.getDistrictBranchMapping().getVillageName() + " " : "";
-		 * variableValue = villagename; break;
-		 */
+		
 		default:
 			break;
 		}

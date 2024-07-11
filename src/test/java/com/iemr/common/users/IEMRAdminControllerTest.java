@@ -24,7 +24,6 @@ package com.iemr.common.users;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -33,10 +32,7 @@ import com.iemr.common.service.users.IEMRAdminUserService;
 import com.iemr.common.service.users.IEMRAdminUserServiceImpl;
 import com.iemr.common.utils.exception.IEMRException;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class IEMRAdminControllerTest
-{
+public class IEMRAdminControllerTest {
 
 	private static IEMRAdminUserService testService;
 
@@ -55,11 +51,9 @@ public class IEMRAdminControllerTest
 	private static final String OUTPUT_ROLES_BY_PROVIDER_ID_FAILURE_1 = "";
 
 //	@Before
-	public void initializeTest() throws JsonMappingException, JsonProcessingException
-	{
+	public void initializeTest() throws JsonMappingException, JsonProcessingException {
 		testService = mock(IEMRAdminUserServiceImpl.class);
-		try
-		{
+		try {
 			/* Success mocks */
 			when(testService.getRolesByProviderID(INPUT_ROLES_BY_PROVIDER_ID_SUCCESS_1))
 					.thenReturn(OUTPUT_ROLES_BY_PROVIDER_ID_SUCCESS_1);
@@ -69,26 +63,8 @@ public class IEMRAdminControllerTest
 			/* Failure mocks */
 			when(testService.getRolesByProviderID(INPUT_ROLES_BY_PROVIDER_ID_FAILURE_1))
 					.thenReturn(OUTPUT_ROLES_BY_PROVIDER_ID_FAILURE_1);
-		} catch (IEMRException e)
-		{
+		} catch (IEMRException e) {
 			e.printStackTrace();
 		}
 	}
 }
-
-//	@Test
-//	public void test001GetRolesByProviderIDSuccess()
-//	{
-//		try
-//		{
-//			assertTrue(testService.getRolesByProviderID(INPUT_ROLES_BY_PROVIDER_ID_SUCCESS_1)
-//					.equals(OUTPUT_ROLES_BY_PROVIDER_ID_SUCCESS_1));
-//			assertTrue(testService.getRolesByProviderID(INPUT_ROLES_BY_PROVIDER_ID_SUCCESS_2)
-//					.equals(OUTPUT_ROLES_BY_PROVIDER_ID_SUCCESS_2));
-//		} catch (IEMRException e)
-//		{
-//			e.printStackTrace();
-//		}
-//	}
-//
-//}

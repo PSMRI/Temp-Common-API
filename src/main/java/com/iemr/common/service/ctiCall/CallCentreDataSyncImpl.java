@@ -22,11 +22,9 @@
 package com.iemr.common.service.ctiCall;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -37,11 +35,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import com.iemr.common.data.callhandling.BeneficiaryCall;
-import com.iemr.common.data.cti.CTIVoiceFile;
 import com.iemr.common.data.report.CTIData;
 import com.iemr.common.data.report.CTIResponse;
-import com.iemr.common.data.report.CallReport;
-import com.iemr.common.data.report.QaReportModel;
 import com.iemr.common.repository.report.CallReportRepo;
 import com.iemr.common.service.cti.CTIService;
 import com.iemr.common.utils.config.ConfigProperties;
@@ -85,21 +80,20 @@ public class CallCentreDataSyncImpl implements CallCentreDataSync {
 
 	@Override
 	public void ctiDataSync() {
-		List<Object[]> resultSet = null;
-		Date date = new Date();
-		java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-		String text = sqlDate.toString();
-		Timestamp endDate = new Timestamp(sqlDate.getTime());
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(sqlDate);
-		logger.info("CZduration: " + CZduration);
-		calendar.add(Calendar.DATE, -(Integer.parseInt(CZduration)));
-		Date beforeDate = calendar.getTime();
-		Timestamp startDate = new Timestamp(beforeDate.getTime());
-		// application properties will have a config date variable.
-		logger.info("startDate: " + startDate);
-		logger.info("endDate: " + endDate);
-		List<BeneficiaryCall> list = callReportRepo.getAllBenCallIDetails(startDate, endDate);
+		LocalDate currentDate = LocalDate.now();
+	       // Calculate three days before the current date
+	       LocalDate startDate = currentDate.minusDays(3);
+	       // Calculate two days before the current date
+	       LocalDate endDate = currentDate.minusDays(2);
+	       // Convert LocalDate to LocalDateTime to set time as 00:00:00
+	       LocalDateTime startDateTime = startDate.atTime(0, 0, 0);
+	       LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+	       // Convert LocalDateTime to Timestamp
+	       Timestamp startTimeStamp = Timestamp.valueOf(startDateTime);
+	       Timestamp endTimeStamp = Timestamp.valueOf(endDateTime);
+		   logger.info("startDate: " + startTimeStamp);
+		logger.info("endDate: " + endTimeStamp);
+		List<BeneficiaryCall> list = callReportRepo.getAllBenCallIDetails(startTimeStamp, endTimeStamp);
 
 		if (!list.isEmpty()) {
 			
@@ -119,22 +113,13 @@ public class CallCentreDataSyncImpl implements CallCentreDataSync {
 						JSONObject requestFile = new JSONObject();
 						requestFile.put("agent_id", call.getAgentID());
 						requestFile.put("session_id", call.getCallID());
-//						OutputResponse response1 = ctiService.getVoiceFile(requestFile.toString(), "extra parameter");
-//						if (response1.getStatusCode() == OutputResponse.SUCCESS) {
-//							CTIVoiceFile getVoiceFile = InputMapper.gson().fromJson(response1.getData(),
-//									CTIVoiceFile.class);
-//							String recordingFilePath = getVoiceFile.getPath() + "/" + getVoiceFile.getFilename();
-////						beneficiaryCallRepository.updateVoiceFilePathNew(benificiaryCall.getAgentID(),
-////								benificiaryCall.getCallID(), recordingFilePath, null);
-//							recordingPath = ctiLoggerURL + "/" + recordingFilePath;
+
 						OutputResponse response1 = ctiService.getVoiceFileNew(requestFile.toString(), "extra parameter");
 						if(response1 != null && response1.getStatusCode() == 200) {
 							
 							CTIResponse ctiResponsePath = InputMapper.gson().fromJson(response1.getData(),
 									CTIResponse.class);
 							String recordingFilePath = ctiResponsePath.getResponse().toString();
-//							beneficiaryCallRepository.updateVoiceFilePathNew(call.getAgentID(),
-//									call.getCallID(), recordingFilePath.substring(20), null);
 							if(recordingFilePath.length() > 20)
 								recordingPath = recordingFilePath.substring(20);
 							logger.info("recordingPath: " + recordingPath);
@@ -163,14 +148,11 @@ public class CallCentreDataSyncImpl implements CallCentreDataSync {
 						call.setCZcallEndTime(callEndTime);
 						call.setCZcallStartTime(callStartTime);
 						callReportRepo.save(call);
-						
 						logger.info("calling CTI_CDR_CALL_INFO after API call save response " + call);
 					} catch (Exception e) {
 						logger.error("VoiceFile failed with error " + e.getMessage(), e);
 					}
-
 				}
-
 			}
 		}
 	}

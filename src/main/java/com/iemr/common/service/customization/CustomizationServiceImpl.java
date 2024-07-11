@@ -58,6 +58,7 @@ public class CustomizationServiceImpl implements CustomizationService {
 		try {
 			Set<ProjectCustomization> existingProjects = projectCustomizationRepo.findByProjectName(
 					projectCustomization.getProjectName(), projectCustomization.getServiceProviderId());
+
 			if (existingProjects.isEmpty()) {
 				projectCustomization.setDeleted(false);
 				projectCustomizationRepo.save(projectCustomization);
@@ -80,6 +81,7 @@ public class CustomizationServiceImpl implements CustomizationService {
 
 	@Override
 	public String updateProject(String request, String Authorization) throws Exception {
+
 		ProjectCustomization projectCustomization = InputMapper.gson().fromJson(request, ProjectCustomization.class);
 		try {
 			Integer serviceProviderId = projectCustomizationRepo

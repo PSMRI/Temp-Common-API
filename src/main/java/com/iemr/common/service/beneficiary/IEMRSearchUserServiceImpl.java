@@ -25,6 +25,7 @@ import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -341,7 +342,7 @@ public class IEMRSearchUserServiceImpl implements IEMRSearchUserService {
 		});
 
 		beneficiaryList.removeIf(Objects::isNull);
-		Collections.sort(beneficiaryList);
+		//Collections.sort(beneficiaryList);
 		return beneficiaryList;
 	}
 

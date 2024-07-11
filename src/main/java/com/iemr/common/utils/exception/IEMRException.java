@@ -30,7 +30,7 @@ public class IEMRException extends Exception
 	{
 		super(message);
 		this.message = message;
-		super.setStackTrace(cause.getStackTrace());
+		//super.setStackTrace(cause.getStackTrace());
 	}
 
 	public IEMRException(String message)

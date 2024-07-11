@@ -41,6 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iemr.common.data.institute.Designation;
@@ -250,6 +251,7 @@ public class NotificationServiceImpl implements NotificationService
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata")); // Set the timezone to IST
 		objectMapper.setDateFormat(dateFormat);
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		Notification[] notificationRequests = objectMapper.readValue(request, Notification[].class);
 		for (Notification notificationRequest : notificationRequests)
 		{
@@ -265,6 +267,7 @@ public class NotificationServiceImpl implements NotificationService
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata")); // Set the timezone to IST
 		objectMapper.setDateFormat(dateFormat);
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		Notification notification = objectMapper.readValue(notificationRequest.toString(), Notification.class);
 		notification.setKmFileManager(null);
 		notification = notificationRepository.save(notification);
@@ -308,14 +311,17 @@ public class NotificationServiceImpl implements NotificationService
 			List<KMFileManager> list = new ArrayList<KMFileManager>();
 			list.add(notificationRequest.getKmFileManager());
 			String kmFileManagerResp = kmFileManagerService.addKMFile(list.toString());
-			KMFileManager[] kmFileManagerArray = inputMapper.gson().fromJson(kmFileManagerResp, KMFileManager[].class);
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			KMFileManager[] kmFileManagerArray = objectMapper.readValue(kmFileManagerResp, KMFileManager[].class);
+			//KMFileManager[] kmFileManagerArray = inputMapper.gson().fromJson(kmFileManagerResp, KMFileManager[].class);
 			for (KMFileManager kmFileManager : kmFileManagerArray)
 			{
 				notificationRequest.setKmFileManagerID(kmFileManager.getKmFileManagerID());
 			}
 			if (kmFileManagerArray.length > 0)
 			{
-				notificationResponse = inputMapper.gson().fromJson(notificationRequest.toString(), Notification.class);
+				notificationResponse = objectMapper.readValue(notificationRequest.toString(), Notification.class);
 			}
 			// } catch (Exception e)
 			// {
@@ -449,10 +455,13 @@ public class NotificationServiceImpl implements NotificationService
 	}
 
 	@Override
-	public String getSupervisorEmergencyContacts(String request) throws IEMRException
+	public String getSupervisorEmergencyContacts(String request) throws IEMRException, JsonMappingException, JsonProcessingException
 	{
 		List<EmergencyContacts> emergencyContacts = new ArrayList<EmergencyContacts>();
-		EmergencyContacts emergencyContactRequest = inputMapper.gson().fromJson(request, EmergencyContacts.class);
+		ObjectMapper objectMapper = new ObjectMapper();	
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		EmergencyContacts emergencyContactRequest =objectMapper.readValue(request, EmergencyContacts.class);
+		//EmergencyContacts emergencyContactRequest = inputMapper.gson().fromJson(request, EmergencyContacts.class);
 		Integer providerServiceMapID = emergencyContactRequest.getProviderServiceMapID();
 		Integer notificationTypeID = emergencyContactRequest.getNotificationTypeID();
 		// emergencyContacts = emergencyContactsRepository.getSupervisorEmergencyContacts(providerServiceMapID,
@@ -498,7 +507,9 @@ public class NotificationServiceImpl implements NotificationService
 	{
 		Integer updateCount = 0;
 		String result = "Failed to update the given request.";
-		EmergencyContacts emergencyContactRequest = inputMapper.gson().fromJson(request, EmergencyContacts.class);
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		EmergencyContacts emergencyContactRequest = objectMapper.readValue(request, EmergencyContacts.class);
 		updateCount = emergencyContactsRepository.updateEmergencyContacts(emergencyContactRequest.getEmergContactID(),
 				emergencyContactRequest.getDesignationID(), emergencyContactRequest.getEmergContactNo(),
 				emergencyContactRequest.getEmergContactDesc(), emergencyContactRequest.getProviderServiceMapID(),

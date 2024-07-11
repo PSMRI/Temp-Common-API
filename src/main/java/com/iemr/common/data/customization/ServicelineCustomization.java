@@ -23,6 +23,7 @@ public class ServicelineCustomization {
 	@Expose
 	private Integer id;
 	
+
 	@Column(name = "ServiceLineId")
 	@Expose
 	private Integer serviceLineId;

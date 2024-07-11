@@ -171,6 +171,8 @@ public class Notification
 
 	@Transient
 	private OutputMapper outputMapper = new OutputMapper();
+	@Transient
+	private boolean isUploaded;
 
 	@Transient
 	private List<Integer> roleIDs;

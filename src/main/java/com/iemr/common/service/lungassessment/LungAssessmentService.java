@@ -27,7 +27,7 @@ public interface LungAssessmentService {
 
 	public String getLungAssessmentAdminLogin(String email, String password) throws Exception;
 
-	public Boolean verifyCough(MultipartFile file, String authToken, Long patientId) throws Exception;
+	public Boolean verifyCough(MultipartFile file, String authToken, Long patientId,String tempFileName) throws Exception;
 
 	String getAssesment(String assesmentId) throws Exception;
 

@@ -42,13 +42,18 @@ public interface CallReportRepo extends CrudRepository<BeneficiaryCall, Integer>
 			+ "and report.createdDate >= :startDate and report.createdDate <= :endDate ")
 	public List<BeneficiaryCall> getAllBenCallIDetails(@Param("startDate") Timestamp startDate, @Param("endDate") Timestamp endDate);//start date and end date as param for x days.
 
-	@Query("SELECT COUNT(*) FROM BeneficiaryCall call WHERE call.callID = :sessionID and call.phoneNo = :phoneNo")
-	public int getBenCallDetailsBySessionIDAndPhone(@Param("sessionID") String sessionID,@Param("phoneNo") String phoneNo);
+	@Query("SELECT call FROM BeneficiaryCall call WHERE call.callID = :sessionID and call.phoneNo = :phoneNo")
+	public BeneficiaryCall getBenCallDetailsBySessionIDAndPhone(@Param("sessionID") String sessionID,@Param("phoneNo") String phoneNo);
 	
 	@Transactional
 	@Modifying
 	@Query("update BeneficiaryCall set isOutbound= :isOutbound where callID = :callID and phoneNo= :phoneNo")
 	public int updateIsOutboundForCall(@Param("isOutbound") boolean isOutbound, @Param("callID") String callID, @Param("phoneNo") String phoneNo );
+
+	@Transactional
+	@Modifying
+	@Query("update BeneficiaryCall set isOutbound= :isOutbound, callTypeID= :callTypeID where callID = :callID and phoneNo= :phoneNo")
+	public int updateIsOutboundForCallWithCallType(@Param("isOutbound") boolean isOutbound, @Param("callID") String callID, @Param("phoneNo") String phoneNo, @Param("callTypeID") Integer callTypeID );
 }
 
 

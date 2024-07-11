@@ -62,7 +62,13 @@ public class HTTPRequestInterceptor implements HandlerInterceptor {
 		boolean status = true;
 		logger.info("In info preHandle we are Intercepting the Request");
 		logger.debug("In preHandle we are Intercepting the Request");
-		String authorization = request.getHeader("Authorization");
+	//	String authorization = request.getHeader("Authorization");
+		String authorization = null;
+		String preAuth = request.getHeader("Authorization");
+		if(null != preAuth && preAuth.contains("Bearer "))
+			authorization=preAuth.replace("Bearer ", "");
+		else
+			authorization = preAuth;
 		logger.debug("RequestURI::" + request.getRequestURI() + " || Authorization ::" + authorization
 				+ " || method :: " + request.getMethod());
 		if (!request.getMethod().equalsIgnoreCase("OPTIONS")) {
@@ -123,7 +129,13 @@ public class HTTPRequestInterceptor implements HandlerInterceptor {
 			throws Exception {
 		try {
 			logger.debug("In postHandle we are Intercepting the Request");
-			String authorization = request.getHeader("Authorization");
+		//	String authorization = request.getHeader("Authorization");
+			String authorization = null;
+			String postAuth = request.getHeader("Authorization");
+			if(null != postAuth && postAuth.contains("Bearer "))
+				authorization=postAuth.replace("Bearer ", "");
+			else
+				authorization = postAuth;
 			logger.debug("RequestURI::" + request.getRequestURI() + " || Authorization ::" + authorization);
 			if (authorization != null) {
 				sessionObject.updateSessionObject(authorization, sessionObject.getSessionObject(authorization));

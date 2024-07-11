@@ -44,7 +44,6 @@ import lombok.Data;
 @Entity
 @Table(name = "t_bencall")
 @Data
-@JsonIgnoreProperties("instNames")
 public class BeneficiaryCall {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -110,7 +109,7 @@ public class BeneficiaryCall {
 	@Column(name = "SubCategory")
 	private String subCategory;
 
-	@Expose
+	//@Expose
 	@Column(name = "CDICallStatus", insertable = false, updatable = true)
 	private String cDICallStatus;
 
@@ -120,7 +119,7 @@ public class BeneficiaryCall {
 
 	@Expose
 	@Column(name = "IsOutbound")
-	private Boolean isOutbound;
+	private boolean isOutbound;
 
 	@Expose
 	@Column(name = "IsCalledEarlier")

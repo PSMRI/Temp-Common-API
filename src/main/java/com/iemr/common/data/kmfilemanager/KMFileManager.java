@@ -114,6 +114,9 @@ public class KMFileManager {
 	@Transient
 	@Expose
 	private String fileContent;
+	@Transient
+	@Expose
+	private boolean isUploaded;
 
 	@Transient
 	private OutputMapper outputMapper = new OutputMapper();

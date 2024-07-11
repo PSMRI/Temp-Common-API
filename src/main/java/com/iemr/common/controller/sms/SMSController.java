@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iemr.common.model.sms.CreateSMSRequest;
@@ -204,6 +205,7 @@ public class SMSController {
 		logger.info("sendSMS received request");
 		logger.debug("sendSMS received a request " + OutputMapper.gson().toJson(request));
 		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		SMSRequest[] requests = objectMapper.readValue(request, SMSRequest[].class);
 		try {
 			response.setResponse(smsService.sendSMS(Arrays.asList(requests), serverRequest.getHeader("Authorization")));

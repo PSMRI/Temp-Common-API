@@ -45,6 +45,10 @@ import com.openkm.sdk4j.exception.UserQuotaExceededException;
 import com.openkm.sdk4j.exception.VersionException;
 import com.openkm.sdk4j.exception.VirusDetectedException;
 import com.openkm.sdk4j.exception.WebserviceException;
+
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 public class OpenKMServiceImpl implements KMService {
@@ -77,6 +81,7 @@ public class OpenKMServiceImpl implements KMService {
 			guestUser = ConfigProperties.getPropertyByName("km-guest-user");
 			guestPassword = ConfigProperties.getPropertyByName("km-guest-password");
 			connector = OpenKMConnector.initialize(url, username, password);
+			
 		}
 	}
 

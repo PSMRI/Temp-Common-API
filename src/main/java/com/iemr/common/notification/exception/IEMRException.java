@@ -28,7 +28,7 @@ public class IEMRException extends Exception {
 	public IEMRException(String message, Throwable cause) {
 		super(message);
 		this.message = message;
-		super.setStackTrace(cause.getStackTrace());
+		//super.setStackTrace(cause.getStackTrace());
 	}
 
 	public IEMRException(String message) {

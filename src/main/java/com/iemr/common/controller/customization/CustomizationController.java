@@ -1,7 +1,6 @@
 package com.iemr.common.controller.customization;
 
 
-
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
@@ -65,6 +64,7 @@ public class CustomizationController {
 	}
 	
 	@CrossOrigin()
+
 	@Operation(summary = "Update project")
 	@RequestMapping(value = "/updateProject", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
 	public String updateProject(@RequestBody String request,
@@ -72,7 +72,6 @@ public class CustomizationController {
 
 		OutputResponse response = new OutputResponse();
 		try {
-
 			response.setResponse(customizationService.updateProject(request, Authorization));
 		} catch (Exception e) {
 
@@ -97,7 +96,7 @@ public class CustomizationController {
 		}
 		return response.toString();
 	}
-	
+
 	@CrossOrigin()
 	@Operation(summary = "Fetch project serviceline")
 	@RequestMapping(value = "/fetchProjectServiceline", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON, headers = "Authorization")

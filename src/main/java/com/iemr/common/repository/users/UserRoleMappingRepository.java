@@ -96,12 +96,12 @@ public interface UserRoleMappingRepository extends CrudRepository<UserServiceRol
 	List<UserServiceRoleMapping> getMappingsByUserIDAndProviderServiceMapID(@Param("userID") Long userID,
 			@Param("providerServiceMapID") Integer providerServiceMapID);
 
-	@Query("select distinct user.agentID from UserServiceRoleMapping user where Deleted = false and "
-			+ "user.providerServiceMapID = :providerServiceMapID and user.agentID !=null order by user.agentID")
+	@Query("select distinct user.agentID from UserServiceRoleMapping user where user.Deleted = false and "
+			+ "user.providerServiceMapID = :providerServiceMapID and user.agentID is not null order by user.agentID")
 	List<String> getAgentByProviderServiceMapID(@Param("providerServiceMapID") Integer providerServiceMapID);
 
 	@Query("select distinct user.agentID from UserServiceRoleMapping user join user.m_Role role "
-			+ "where user.Deleted = false and user.providerServiceMapID = :providerServiceMapID and role.RoleID = :roleID and user.agentID !=null order by user.agentID")
+			+ "where user.Deleted = false and user.providerServiceMapID = :providerServiceMapID and role.RoleID = :roleID and user.agentID is not null order by user.agentID")
 	List<String> getAgentByRoleID(@Param("providerServiceMapID") Integer providerServiceMapID,
 			@Param("roleID") Integer roleID);
 }

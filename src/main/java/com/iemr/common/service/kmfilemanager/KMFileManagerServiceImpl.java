@@ -43,6 +43,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iemr.common.data.kmfilemanager.KMFileManager;
 import com.iemr.common.repository.category.SubCategoryRepository;
@@ -114,6 +115,7 @@ public class KMFileManagerServiceImpl implements KMFileManagerService {
 	// @Transactional(propagation = Propagation.REQUIRES_NEW)
 	public String addKMFile(String request) throws IOException, NoSuchAlgorithmException, IEMRException {
 		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		KMFileManager[] kmFileManagerArray = objectMapper.readValue(request, KMFileManager[].class);
 		ArrayList<KMFileManager> kmFileManagers = new ArrayList<KMFileManager>();
 		kmFileManagers = addKMFile(new ArrayList(Arrays.asList(kmFileManagerArray)));

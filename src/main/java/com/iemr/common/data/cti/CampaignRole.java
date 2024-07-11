@@ -21,7 +21,7 @@
 */
 package com.iemr.common.data.cti;
 
-import javax.persistence.Transient;
+import jakarta.persistence.Transient;
 
 import com.google.gson.JsonArray;
 import com.google.gson.annotations.Expose;

@@ -53,10 +53,12 @@ public abstract class BenPhoneMapperDecorator implements BenPhoneMapper {
 
 					Phone phone = phones.get(phoneIdx);
 					model.setBenPhMapID(Long.parseLong(benFamilyDTO.getBenFamilyMapId().toString()));
+					if(null != benificiaryRegID)
 					model.setBenificiaryRegID(Long.parseLong(benificiaryRegID.toString()));
 					if (benFamilyDTO.getAssociatedBenRegId() != null) {
 						model.setParentBenRegID(Long.parseLong(benFamilyDTO.getAssociatedBenRegId().toString()));
 					} else {
+						if(null != benificiaryRegID)
 						model.setParentBenRegID(Long.parseLong(benificiaryRegID.toString()));
 					}
 					model.setBenRelationshipID(benFamilyDTO.getRelationshipID());

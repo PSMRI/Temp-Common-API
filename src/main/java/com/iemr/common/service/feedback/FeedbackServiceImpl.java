@@ -915,11 +915,12 @@ public class FeedbackServiceImpl implements FeedbackService {
 
 	@Override
 	public String saveFeedbackRequest(String feedbackRequestString) throws Exception {
-		FeedbackRequest feedbackRequest = inputMapper.gson().fromJson(feedbackRequestString, FeedbackRequest.class);
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		FeedbackRequest feedbackRequest = objectMapper.readValue(feedbackRequestString, FeedbackRequest.class);
 		feedbackRequest = feedbackRequestRepository.save(feedbackRequest);
 
-		// temp OBJ
-		FeedbackDetails feedbackDetailTemp = InputMapper.gson().fromJson(feedbackRequestString, FeedbackDetails.class);
+		FeedbackDetails feedbackDetailTemp = objectMapper.readValue(feedbackRequestString, FeedbackDetails.class);
 
 		if (feedbackRequest.getFeedbackRequestID() != null) {
 			FeedbackDetails feedbackDetail = feedbackRepository.getFeedbackDetail(feedbackRequest.getFeedbackID());

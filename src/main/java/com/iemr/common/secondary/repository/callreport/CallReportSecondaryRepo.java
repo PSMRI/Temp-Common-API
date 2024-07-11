@@ -101,7 +101,7 @@ public interface CallReportSecondaryRepo  extends CrudRepository<SecondaryCallRe
 	public List<Object[]> getUnblockedUserReport(@Param("startDateTime") Timestamp startDateTime,
 	@Param("endDateTime") Timestamp endDateTime,@Param("providerServiceMapID") Integer providerServiceMapID);
 	
-	@Query(value="call Pr_1097Sexualorientation(:startDateTime,:endDateTime,:state,:district,:sexualOrientation,:providerServiceMapID)", nativeQuery=true)
+	@Query(value="call db_iemr.Pr_1097Sexualorientation(:startDateTime,:endDateTime,:state,:district,:sexualOrientation,:providerServiceMapID)", nativeQuery=true)
 	public List<Object[]> getAllBySexualOrientationReport(@Param("startDateTime") Timestamp startTimestamp,
 	@Param("endDateTime") Timestamp endTimestamp,@Param("state") String state,
 	@Param("district") String district,@Param("sexualOrientation") String sexual_Orientation,
@@ -132,14 +132,14 @@ public interface CallReportSecondaryRepo  extends CrudRepository<SecondaryCallRe
 	@Param("endDateTime") Timestamp endDateTime,@Param("locationID") Long locationID,
 	@Param("providerServiceMapID") Integer providerServiceMapID);
 
-	@Query(value="call Pr_1097LanguageDistribution(:startDateTime,:endDateTime,:state,:district,:beneficiaryPreferredLanguage,:providerServiceMapID)", nativeQuery=true)
+	@Query(value="call db_iemr.Pr_1097LanguageDistribution(:startDateTime,:endDateTime,:state,:district,:beneficiaryPreferredLanguage,:providerServiceMapID)", nativeQuery=true)
 	public List<Object[]> getLanguageDistributionReport(@Param("startDateTime") Timestamp startDateTime,
 	@Param("endDateTime") Timestamp endDateTime,@Param("state") String state,
 	@Param("district") String district,@Param("beneficiaryPreferredLanguage") String beneficiaryPreferredLanguage,
 	@Param("providerServiceMapID") Integer providerServiceMapID);
 
 
-	@Query(value="call Pr_1097AgegroupDistribution(:startDateTime,:endDateTime,:state,:district,:minAge,:maxAge,:providerServiceMapID)", nativeQuery=true)
+	@Query(value="call db_iemr.Pr_1097AgegroupDistribution(:startDateTime,:endDateTime,:state,:district,:minAge,:maxAge,:providerServiceMapID)", nativeQuery=true)
 	public List<Object[]> getAllByAgeGroup(@Param("startDateTime") Timestamp startTimestamp,
 	@Param("endDateTime") Timestamp endTimestamp, @Param("state") String state, @Param("district") String district, 
 	@Param("minAge") Integer minAge, @Param("maxAge") Integer maxAge, @Param("providerServiceMapID") Integer providerServiceMapID);
@@ -150,7 +150,7 @@ public interface CallReportSecondaryRepo  extends CrudRepository<SecondaryCallRe
 	@Param("beneficiaryCallType") String beneficiaryCallType,@Param("beneficiaryCallSubType") String beneficiaryCallSubType, @Param("beneficiaryPreferredLanguage") String beneficiaryPreferredLanguage, @Param("gender") String gender,
 	@Param("beneficiarySexualOrientation") String beneficiarySexualOrientation, @Param("providerServiceMapID") Integer providerServiceMapID);
 
-	@Query(value="call Pr_1097GenderDistribution(:startDateTime,:endDateTime,:state,:district,:gender,:providerServiceMapID)", nativeQuery=true)
+	@Query(value="call db_iemr.Pr_1097GenderDistribution(:startDateTime,:endDateTime,:state,:district,:gender,:providerServiceMapID)", nativeQuery=true)
 	public List<Object[]> getAllByGender(@Param("startDateTime") Timestamp startDateTime,
 	@Param("endDateTime") Timestamp endDateTime, @Param("state") String state, @Param("district") String district,
 	@Param("gender") String gender, @Param("providerServiceMapID") Integer providerServiceMapID);
