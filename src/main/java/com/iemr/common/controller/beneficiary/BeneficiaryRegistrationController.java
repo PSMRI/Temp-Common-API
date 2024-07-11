@@ -53,8 +53,6 @@ import com.google.gson.JsonParser;
 import com.iemr.common.data.beneficiary.BenPhoneMap;
 import com.iemr.common.data.beneficiary.BeneficiaryRegistrationData;
 import com.iemr.common.data.directory.Directory;
-import com.iemr.common.data.users.UserServiceRoleMapping;
-
 import com.iemr.common.model.beneficiary.BeneficiaryModel;
 import com.iemr.common.service.beneficiary.BenRelationshipTypeService;
 import com.iemr.common.service.beneficiary.BeneficiaryOccupationService;
@@ -219,7 +217,7 @@ public class BeneficiaryRegistrationController {
 		return response.toString();
 	}
 
-	@Operation(summary = "Create a new beneficiary")
+	@Operation(summary = "Create a new beneficiary for customization")
 	@CrossOrigin()
 	@RequestMapping(value = "/createBeneficiary", method = RequestMethod.POST, produces = "application/json", consumes = "application/json", headers = "Authorization")
 	public String createBeneficiary(@RequestBody String request, HttpServletRequest httpRequest)
@@ -232,7 +230,7 @@ public class BeneficiaryRegistrationController {
 		BeneficiaryModel beneficiaryModel = objectMapper.readValue(request, BeneficiaryModel.class);
 		beneficiaryModel.setOtherFields(otherFields);
 
-		logger.info("Create beneficiary request " + beneficiaryModel);
+		logger.info("Create beneficiary request for customization " + beneficiaryModel);
 		try {
 
 			response.setResponse(registerBenificiaryService.save(beneficiaryModel, httpRequest));
@@ -241,7 +239,7 @@ public class BeneficiaryRegistrationController {
 			response.setError(e);
 		}
 
-		logger.info("create beneficiary response " + response.toString());
+		logger.info("create beneficiary response for customization " + response.toString());
 		return response.toString();
 	}
 
@@ -261,7 +259,6 @@ public class BeneficiaryRegistrationController {
 				otherFieldsJson.add(fieldName, entry.getValue());
 			}
 		}
-		// String otherFieldsJsonString = otherFieldsJson.toString();
 		return otherFieldsJson.toString();
 	}
 
@@ -293,17 +290,14 @@ public class BeneficiaryRegistrationController {
 			} else if (benificiaryDetails.getHealthIDNumber() != null) {
 				iBeneficiary = iemrSearchUserService.userExitsCheckWithHealthIdNo_ABHAIdNo(
 						benificiaryDetails.getHealthIDNumber(), auth, benificiaryDetails.getIs1097());
-				// search by family id
 			} else if (benificiaryDetails.getFamilyId() != null) {
 				iBeneficiary = iemrSearchUserService.userExitsCheckWithFamilyId(benificiaryDetails.getFamilyId(), auth,
 						benificiaryDetails.getIs1097());
-				// search by identity
 			} else if (benificiaryDetails.getIdentity() != null) {
 				iBeneficiary = iemrSearchUserService.userExitsCheckWithGovIdentity(benificiaryDetails.getIdentity(),
 						auth, benificiaryDetails.getIs1097());
 			}
 			setBeneficiaryGender(iBeneficiary);
-		//	response.setResponse(OutputMapper.gson().toJson(iBeneficiary));
 			ObjectMapper mapper = new ObjectMapper();
 			String result = mapper.writeValueAsString(iBeneficiary);
 			response.setResponse(result);
@@ -491,13 +485,9 @@ public class BeneficiaryRegistrationController {
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			// ObjectMapper objectMapper = new ObjectMapper();
 			JsonElement json = JsonParser.parseString(benificiaryRequest);
 			String otherFields = checkExtraFields(json);
 			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			// BeneficiaryModel beneficiaryModel =
-			// objectMapper.readValue(benificiaryRequest, BeneficiaryModel.class);
-			// beneficiaryModel.setOtherFields(otherFields);
 			BeneficiaryModel benificiaryDetails = objectMapper.readValue(benificiaryRequest, BeneficiaryModel.class);
 			benificiaryDetails.setOtherFields(otherFields);
 			updateCount = registerBenificiaryService.updateBenificiary(benificiaryDetails, auth);
