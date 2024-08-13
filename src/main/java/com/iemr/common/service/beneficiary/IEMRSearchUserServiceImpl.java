@@ -188,22 +188,42 @@ public class IEMRSearchUserServiceImpl implements IEMRSearchUserService {
 			throws Exception {
 		// result list
 		List<BeneficiaryModel> beneficiaryList = new ArrayList<BeneficiaryModel>();
-		// search patient by ben id, call Identity API
-		List<BeneficiariesDTO> listBen = identityBeneficiaryService.getBeneficiaryListByHealthID_ABHAAddress(healthID,
-				auth, is1097);
+		List<BeneficiariesDTO> listBen = null;
+		if (healthID.contains("@")) {
+			listBen = identityBeneficiaryService.getBeneficiaryListByHealthID_ABHAAddress(healthID, auth, is1097);
+		} else {
+			String healthIdNumber = getHealthId(healthID);
+			listBen = identityBeneficiaryService.getBeneficiaryListByHealthIDNo_ABHAIDNo(healthIdNumber, auth, is1097);
+		}
 
 		beneficiaryList = getBeneficiaryListFromMapper(listBen);
 		return beneficiaryList;
 	}
-
+	private String getHealthId(String healthID) {
+		String healthIdNumber = null;
+		if (null != healthID) {
+			if (healthID.length() == 17) {
+				healthIdNumber = healthID;
+			} else {
+				StringBuilder stringBuilder = new StringBuilder();
+				stringBuilder.append(healthID.substring(0, 2)).append("-");
+				stringBuilder.append(healthID.substring(2, 6)).append("-");
+				stringBuilder.append(healthID.substring(6, 10)).append("-");
+				stringBuilder.append(healthID.substring(10));
+				String formattedHealthID = stringBuilder.toString();
+				healthIdNumber = formattedHealthID;
+			}
+		}
+		return healthIdNumber;
+	}
 	// search patient by healthidNo / ABHA Id No
 	@Override
 	public List<BeneficiaryModel> userExitsCheckWithHealthIdNo_ABHAIdNo(String healthIDNo, String auth, Boolean is1097)
 			throws Exception {
 		// result list
 		List<BeneficiaryModel> beneficiaryList = new ArrayList<BeneficiaryModel>();
-		// search patient by ben id, call Identity API
-		List<BeneficiariesDTO> listBen = identityBeneficiaryService.getBeneficiaryListByHealthIDNo_ABHAIDNo(healthIDNo,
+		String healthId = getHealthId(healthIDNo);
+		List<BeneficiariesDTO> listBen = identityBeneficiaryService.getBeneficiaryListByHealthIDNo_ABHAIDNo(healthId,
 				auth, is1097);
 
 		beneficiaryList = getBeneficiaryListFromMapper(listBen);
