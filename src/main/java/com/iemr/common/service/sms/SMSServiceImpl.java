@@ -1155,10 +1155,10 @@ public class SMSServiceImpl implements SMSService {
 					: "";
 			variableValue = drugForm;
 			break;
-//		case "frequency":
-//			String frequency = prescribedDrug.getFrequency() != null ? prescribedDrug.getFrequency() + " " : "";
-//			variableValue = frequency;
-//			break;
+		case "frequency":
+			String freq = prescribedDrug.getFrequency() != null ? prescribedDrug.getFrequency() + " " : "";
+			variableValue = freq;
+			break;
 		case "timeToConsume":
 			String frequency = prescribedDrug.getFrequency() != null ? prescribedDrug.getFrequency() + " " : "";
 			variableValue = frequency;
