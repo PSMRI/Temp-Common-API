@@ -22,37 +22,12 @@ Common API is a microservice whch acts as a gateway for AMRIT. There are many AP
 * CRM Reports
 * Appointment Scheduling
 
-## Building From Source
-This microservice is built on Java, Spring boot framework and MySQL DB.
+## Environment and Setup
+For setting up the development environment, please refer to the [Developer Guide](https://piramal-swasthya.gitbook.io/amrit/developer-guide/development-environment-setup) .
 
-### Prerequisites 
-* JDK 1.8
-* Maven 
+## API Guide
+Detailed information on API endpoints can be found in the [API Guide](https://piramal-swasthya.gitbook.io/amrit/architecture/api-guide).
 
-$ ./mvn clean install
-
-## Installation
-This service has been tested on Wildfly as the application server.
-
-### Prerequisites 
-* Wildfly (or any compatible app server)
-* Redis
-* MySQL Database
-
-## Environment and setup
-
-1. Install dependencies `mvn clean install`
-2. You can copy `common_example.properties` to `common_local.properties` and edit the file accordingly. The file is under `src/main/environment` folder.
-3. Run the spring server with local configuration `mvn spring-boot:run -DENV_VAR=local`
-
-## Integrations
-* C_Zentrix
-* Everwell
-* Openkm
-* Door to door App
-* Swaasa
-* LOINCs
-* SnomedCT
 
 ## Usage
 All features have been exposed as REST endpoints. Refer to the SWAGGER API specification for details.
