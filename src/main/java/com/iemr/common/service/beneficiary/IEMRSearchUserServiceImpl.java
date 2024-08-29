@@ -198,7 +198,7 @@ public class IEMRSearchUserServiceImpl implements IEMRSearchUserService {
 				JsonNode otherFieldsNode = objectMapper.readTree(beneficiaryModel.getOtherFields());
 
 				// Convert createdDate to a string
-				String createdDateString = beneficiaryModel.getCreatedDate().toString(); 
+				String createdDateString = beneficiaryModel.getCreatedDate().toString();
 
 				// Add createdDate to the JSON node
 				((ObjectNode) otherFieldsNode).put("createdDate", createdDateString);
@@ -219,10 +219,9 @@ public class IEMRSearchUserServiceImpl implements IEMRSearchUserService {
 		List<BeneficiaryModel> beneficiaryList = new ArrayList<BeneficiaryModel>();
 		// search patient by ben id, call Identity API
 		List<BeneficiariesDTO> listBen = null;
-		if(healthID.contains("@")) {
-			listBen = identityBeneficiaryService.getBeneficiaryListByHealthID_ABHAAddress(healthID,
-					auth, is1097);
-		}else {
+		if (healthID.contains("@")) {
+			listBen = identityBeneficiaryService.getBeneficiaryListByHealthID_ABHAAddress(healthID, auth, is1097);
+		} else {
 			String healthIdNumber = getHealthId(healthID);
 			listBen = identityBeneficiaryService.getBeneficiaryListByHealthIDNo_ABHAIDNo(healthIdNumber, auth, is1097);
 		}
@@ -232,6 +231,7 @@ public class IEMRSearchUserServiceImpl implements IEMRSearchUserService {
 		}
 		return beneficiaryList;
 	}
+
 	private String getHealthId(String healthID) {
 		String healthIdNumber = null;
 		if (null != healthID) {
@@ -249,6 +249,7 @@ public class IEMRSearchUserServiceImpl implements IEMRSearchUserService {
 		}
 		return healthIdNumber;
 	}
+
 	// search patient by healthidNo / ABHA Id No
 	@Override
 	public List<BeneficiaryModel> userExitsCheckWithHealthIdNo_ABHAIdNo(String healthIDNo, String auth, Boolean is1097)
@@ -372,13 +373,9 @@ public class IEMRSearchUserServiceImpl implements IEMRSearchUserService {
 		benDetailForOutboundDTOList.forEach(beneficiaryModel -> {
 
 			BeneficiaryModel beneficiary = benCompleteMapper.benDetailForOutboundDTOToIBeneficiary(beneficiaryModel);
-//			if (beneficiary.getAge() == 0) {
-//				beneficiary.setAge(beneficiary.getActualAge());
-//			}
-			if (beneficiary.getAge() == null) {
-				if(beneficiary.getActualAge() != null) {
-					beneficiary.setAge(beneficiary.getActualAge());
-				}
+
+			if (beneficiary.getAge() == null && beneficiary.getActualAge() != null) {
+				beneficiary.setAge(beneficiary.getActualAge());
 			}
 			beneficiary.setBenPhoneMaps(benPhoneMapper.benPhoneMapToResponseByID(beneficiaryModel));
 			beneficiary.setSexualOrientation(
