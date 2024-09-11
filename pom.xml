@@ -170,17 +170,17 @@
 		</dependency>
 
 
-		<!--<dependency>
+		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.16.1</version>
+			<version>2.17.2</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>org.json</artifactId>
 					<groupId>json</groupId>
 				</exclusion>
 			</exclusions>
-		</dependency>-->
+		</dependency>
 
 		<dependency>
 			<groupId>org.json</groupId>
@@ -261,7 +261,7 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.3.0</version>
+			<version>2.6.0</version>
 
 		</dependency>
 
@@ -415,7 +415,7 @@
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>5.2.5</version>
+			<version>5.3.0</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>org.apache.xmlgraphics</artifactId>
@@ -453,7 +453,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>6.1.6</version>
+			<version>6.1.12</version>
 		</dependency>
 		
     <dependency>
@@ -466,7 +466,7 @@
     <dependency>
         <groupId>org.glassfish.jersey.core</groupId>
         <artifactId>jersey-common</artifactId>
-        <version>2.30.1</version>
+        <version>3.1.8</version>
     </dependency>
     <dependency>
         <groupId>org.glassfish.jersey.core</groupId>
@@ -493,8 +493,17 @@
 	</dependencies>
 
 	<build>
-		<finalName>commonapi-v1.0</finalName>
+		<finalName>commonapi-v3.0.0</finalName>
 		<plugins>
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>10.0.3</version>
+				<configuration>
+					<format>HTML</format>
+					<nvdApiServerId>nvd</nvdApiServerId>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
