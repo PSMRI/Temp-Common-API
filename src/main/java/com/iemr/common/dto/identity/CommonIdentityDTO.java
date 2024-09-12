@@ -89,6 +89,8 @@ public class CommonIdentityDTO {
 	private String title;
 	private Integer zoneId;
 	private String monthlyFamilyIncome;
+	
+	private List<Float> faceEmbedding;
 
 	// address
 	private Address currentAddress;
