@@ -372,12 +372,6 @@ public class CustomizationServiceImpl implements CustomizationService {
 			if (sectionAndFieldsMapping.getId() != null) {
 				SectionAndFieldsMapping response = sectionAndFieldsMappingRepo.getById(sectionAndFieldsMapping.getId());
 				if (response != null) {
-					if(null != sectionAndFieldsMapping.getSectionId())
-						response.setSectionId(sectionAndFieldsMapping.getSectionId());
-					
-					if(null != sectionAndFieldsMapping.getServiceProviderId())
-						response.setServiceProviderId(sectionAndFieldsMapping.getServiceProviderId());
-						
 					if (sectionAndFieldsMapping.getFieldName() != null)
 						response.setFieldName(sectionAndFieldsMapping.getFieldName());
 					if (sectionAndFieldsMapping.getIsRequired() != null)
