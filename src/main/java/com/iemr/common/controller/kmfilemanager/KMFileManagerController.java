@@ -46,6 +46,8 @@ import com.iemr.common.utils.response.OutputResponse;
 
 import io.lettuce.core.dynamic.annotation.Param;
 import io.swagger.v3.oas.annotations.Operation;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iemr.common.data.common.DocFileManager;
 
 
@@ -128,9 +130,10 @@ public class KMFileManagerController {
 	@RequestMapping(value = "/getKMFileDownloadURL", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON, headers = "Authorization")
 	public String getKMFileDownloadURL(@Param(value = "{}") @RequestBody String request) {
 		OutputResponse response = new OutputResponse();
+		ObjectMapper objectMapper = new ObjectMapper();
 		logger.info("add file request is " + request);
 		try {
-			KMFileManager kmFileManager = InputMapper.getInstance().fromJson(request, KMFileManager.class);
+			KMFileManager kmFileManager = objectMapper.readValue(request, KMFileManager.class);
 			String s = schemeServiceImpl.getFilePath(kmFileManager);
 			if (s != null)
 				response.setResponse(s);
