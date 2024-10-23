@@ -59,6 +59,8 @@ public class KMFileManagerController {
 	
 	@Autowired
 	private CommonServiceImpl commonServiceImpl;
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@Autowired
 	public void setKmFileManagerService(KMFileManagerService kmFileManagerService) {
@@ -130,7 +132,6 @@ public class KMFileManagerController {
 	@RequestMapping(value = "/getKMFileDownloadURL", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON, headers = "Authorization")
 	public String getKMFileDownloadURL(@Param(value = "{}") @RequestBody String request) {
 		OutputResponse response = new OutputResponse();
-		ObjectMapper objectMapper = new ObjectMapper();
 		logger.info("add file request is " + request);
 		try {
 			KMFileManager kmFileManager = objectMapper.readValue(request, KMFileManager.class);
