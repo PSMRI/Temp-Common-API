@@ -96,6 +96,10 @@ public class SectionAndFieldsMapping {
 	@Column(name = "FieldTitle")
 	private String fieldTitle;
 	
+	@Column(name = "ProjectID")
+	@Expose
+	private Integer projectId;
+	
 	@Transient
 	private String[] options;
 

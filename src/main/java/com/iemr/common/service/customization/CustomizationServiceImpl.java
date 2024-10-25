@@ -180,14 +180,15 @@ public class CustomizationServiceImpl implements CustomizationService {
 		try {
 
 			if (sectionFieldsMappingDTO != null && sectionFieldsMappingDTO.getFields() != null
-					&& sectionFieldsMappingDTO.getFields().size() > 0) {
+					&& sectionFieldsMappingDTO.getFields().size() > 0 && sectionFieldsMappingDTO.getProjectId() != null) {
 				SectionAndFieldsMapping sectionAndFieldsMapping;
 				List<SectionAndFieldsMapping> sectionAndFieldsMappingList = new ArrayList<>();
 				for (SectionAndFieldsMapping sectionFieldsMapping : sectionFieldsMappingDTO.getFields()) {
 					List<SectionAndFieldsMapping> byFieldName = sectionAndFieldsMappingRepo
-							.getByFieldName(sectionFieldsMapping.getFieldName(),sectionFieldsMapping.getServiceProviderId());
+							.getByFieldName(sectionFieldsMapping.getFieldName(),sectionFieldsMapping.getServiceProviderId(),sectionFieldsMappingDTO.getProjectId());
 					sectionAndFieldsMapping = new SectionAndFieldsMapping();
 					sectionAndFieldsMapping.setSectionId(sectionFieldsMappingDTO.getSectionId());
+					sectionAndFieldsMapping.setProjectId(sectionFieldsMappingDTO.getProjectId());
 					sectionAndFieldsMapping.setCreatedBy(sectionFieldsMappingDTO.getCreatedBy());
 					sectionAndFieldsMapping.setAllowMax(sectionFieldsMapping.getAllowMax());
 					sectionAndFieldsMapping.setFieldName(sectionFieldsMapping.getFieldName());
@@ -286,14 +287,14 @@ public class CustomizationServiceImpl implements CustomizationService {
 		try {
 			List<SectionAndFieldsMapping> resultSet = sectionAndFieldsMappingRepo
 					.findSectionIdAndSectionNameAndServiceProviderId(sectionAndFieldsMapping.getSectionId(),
-							sectionAndFieldsMapping.getServiceProviderId());
+							sectionAndFieldsMapping.getServiceProviderId(), sectionAndFieldsMapping.getProjectId());
 
 			String sectionName = sectionMasterCustomizationRepo.findSectionName(sectionAndFieldsMapping.getSectionId());
 			Map<String, Object> responseMap = new HashMap<>();
 			responseMap.put("sectionId", sectionAndFieldsMapping.getSectionId());
 			responseMap.put("sectionName", sectionName);
 			responseMap.put("serviceProviderId", sectionAndFieldsMapping.getServiceProviderId());
-
+			responseMap.put("projectId", sectionAndFieldsMapping.getProjectId());
 			List<Map<String, Object>> fieldsList = new ArrayList<>();
 			for (SectionAndFieldsMapping field : resultSet) {
 				Map<String, Object> fieldMap = new HashMap<>();
@@ -372,6 +373,8 @@ public class CustomizationServiceImpl implements CustomizationService {
 			if (sectionAndFieldsMapping.getId() != null) {
 				SectionAndFieldsMapping response = sectionAndFieldsMappingRepo.getById(sectionAndFieldsMapping.getId());
 				if (response != null) {
+					if(sectionAndFieldsMapping.getProjectId() != null)
+						response.setProjectId(sectionAndFieldsMapping.getProjectId());
 					if (sectionAndFieldsMapping.getFieldName() != null)
 						response.setFieldName(sectionAndFieldsMapping.getFieldName());
 					if (sectionAndFieldsMapping.getIsRequired() != null)
