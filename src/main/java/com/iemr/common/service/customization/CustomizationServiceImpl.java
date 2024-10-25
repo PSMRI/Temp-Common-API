@@ -285,6 +285,9 @@ public class CustomizationServiceImpl implements CustomizationService {
 		SectionAndFieldsMapping sectionAndFieldsMapping = InputMapper.gson().fromJson(request,
 				SectionAndFieldsMapping.class);
 		try {
+			if(sectionAndFieldsMapping.getProjectId() == null) {
+				throw new IllegalArgumentException("ProjectId is required");
+			}
 			List<SectionAndFieldsMapping> resultSet = sectionAndFieldsMappingRepo
 					.findSectionIdAndSectionNameAndServiceProviderId(sectionAndFieldsMapping.getSectionId(),
 							sectionAndFieldsMapping.getServiceProviderId(), sectionAndFieldsMapping.getProjectId());
@@ -373,8 +376,11 @@ public class CustomizationServiceImpl implements CustomizationService {
 			if (sectionAndFieldsMapping.getId() != null) {
 				SectionAndFieldsMapping response = sectionAndFieldsMappingRepo.getById(sectionAndFieldsMapping.getId());
 				if (response != null) {
-					if(sectionAndFieldsMapping.getProjectId() != null)
+					if(sectionAndFieldsMapping.getProjectId() != null) {
+						ProjectCustomization project = projectCustomizationRepo.findById(sectionAndFieldsMapping.getProjectId())
+								.orElseThrow(() -> new IllegalArgumentException("Invalid projectId"));
 						response.setProjectId(sectionAndFieldsMapping.getProjectId());
+					}
 					if (sectionAndFieldsMapping.getFieldName() != null)
 						response.setFieldName(sectionAndFieldsMapping.getFieldName());
 					if (sectionAndFieldsMapping.getIsRequired() != null)

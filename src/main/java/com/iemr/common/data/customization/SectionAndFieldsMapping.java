@@ -11,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
@@ -98,6 +100,8 @@ public class SectionAndFieldsMapping {
 	
 	@Column(name = "ProjectID")
 	@Expose
+	@NotNull(message="ProjectId is Required")
+	@Min(value=1, message = "ProjectId must be possitive")
 	private Integer projectId;
 	
 	@Transient
