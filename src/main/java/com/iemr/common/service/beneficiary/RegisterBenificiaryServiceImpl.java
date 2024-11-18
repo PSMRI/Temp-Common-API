@@ -114,6 +114,7 @@ public class RegisterBenificiaryServiceImpl implements RegisterBenificiaryServic
 		Integer updatedRows = 0;
 
 		IdentityEditDTO identityEditDTO = identityBenEditMapper.BenToIdentityEditMapper(benificiaryDetails);
+		identityEditDTO.setCommunity(benificiaryDetails.getI_bendemographics().getCommunityName());
 		if (benificiaryDetails.getBeneficiaryIdentities() != null
 				&& benificiaryDetails.getBeneficiaryIdentities().size() > 0) {
 			identityEditDTO.setIdentities(Identity.createIdentity(benificiaryDetails.getBeneficiaryIdentities(),

@@ -78,7 +78,7 @@ public class BeneficiariesDTO {
 	private String otherFields;
 	private String genderName;
 	private String maritalStatusName;
-
+	private String community;
 	// End Outreach
 
 	// Start 1097
