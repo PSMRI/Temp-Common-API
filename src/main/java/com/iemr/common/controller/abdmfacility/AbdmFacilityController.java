@@ -28,7 +28,7 @@ public class AbdmFacilityController {
 	@CrossOrigin
 	@Operation(summary = "Get Abdm facility mapped to worklocation")
 	@GetMapping(value = { "/getWorklocationMappedAbdmFacility/{workLocationId}" })
-	public String getStoreStockDetails(@PathVariable int workLocationId, @RequestHeader(value = "Authorization") String Authorization) {
+	public String getAbdmFacilityDetails(@PathVariable int workLocationId, @RequestHeader(value = "Authorization") String Authorization) {
 
 		OutputResponse response = new OutputResponse();
 
