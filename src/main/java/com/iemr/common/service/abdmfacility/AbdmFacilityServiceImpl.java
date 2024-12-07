@@ -14,7 +14,7 @@ public class AbdmFacilityServiceImpl implements AbdmFacilityService{
 	
 	@Override
 	public String getMappedAbdmFacility(int psmId) {
-		ProviderServiceAddressMapping res = abdmFacilityRepo.getAbdamFacility(psmId);
+		ProviderServiceAddressMapping res = abdmFacilityRepo.getAbdmFacility(psmId);
 		return res.toString();
 		
 	}
