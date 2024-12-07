@@ -10,8 +10,8 @@ import com.iemr.common.data.users.ProviderServiceAddressMapping;
 @Repository
 public interface AbdmFacilityRepository extends CrudRepository<ProviderServiceAddressMapping, Integer> {
 	
-	@Query("SELECT v from ProviderServiceAddressMapping v where v.pSAddMapID=:pssmID order by 1 desc")
-	ProviderServiceAddressMapping getAbdamFacility(@Param("pssmID") int pssmID);
+	@Query("SELECT v from ProviderServiceAddressMapping v where v.pSAddMapID = :pssmID")
+	ProviderServiceAddressMapping getAbdmFacility(@Param("pssmID") int pssmID);
 
 }
  
