@@ -20,9 +20,9 @@ import jakarta.servlet.http.HttpServletRequest;
 public class JwtAuthenticationUtil {
 
 	@Autowired
-	private final CookieUtil cookieUtil;
+	private CookieUtil cookieUtil;
 	@Autowired
-	private final JwtUtil jwtUtil;
+	private JwtUtil jwtUtil;
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	@Autowired
