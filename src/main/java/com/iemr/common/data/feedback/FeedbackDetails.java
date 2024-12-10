@@ -100,6 +100,10 @@ public class FeedbackDetails {
 
 	@Transient
 	private String instituteName = "";
+	
+	@Column(name = "BeneficiaryConsent")
+	@Expose
+	private Boolean beneficiaryConsent;
 
 	@Column(name = "DesignationID")
 	@Expose
@@ -304,7 +308,7 @@ public class FeedbackDetails {
 	public FeedbackDetails(Long feedbackID, Long institutionID,String instiName, Integer designationID, Integer severityID,
 			Integer feedbackTypeID, Integer feedbackStatusID, String feedback, Long beneficiaryRegID, Integer serviceID,
 			Integer userID, String sMSPhoneNo, Timestamp serviceAvailDate, Boolean deleted, String createdBy,
-			Timestamp createdDate, String modifiedBy, Timestamp lastModDate, String feedbackAgainst) {
+			Timestamp createdDate, String modifiedBy, Timestamp lastModDate, String feedbackAgainst, Boolean beneficiaryConsent) {
 		super();
 		this.feedbackID = feedbackID;
 		this.institutionID = institutionID;
@@ -325,7 +329,8 @@ public class FeedbackDetails {
 		this.modifiedBy = modifiedBy;
 		this.lastModDate = lastModDate;
 		this.feedbackAgainst = feedbackAgainst;
-	}
+		this.beneficiaryConsent = beneficiaryConsent;
+		}
 
 	public FeedbackDetails(Long feedbackID, Integer severityID, Integer feedbackTypeID, Integer feedbackStatusID,
 			String feedback, String createdBy, String feedbackAgainst) {
@@ -466,6 +471,16 @@ public class FeedbackDetails {
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
 	}
+	
+	public Boolean getbeneficiaryConsent() {
+		return beneficiaryConsent;
+	}
+
+	public void setbeneficiaryConsent(Boolean beneficiaryConsent) {
+		this.beneficiaryConsent = beneficiaryConsent;
+	}
+	
+	
 
 	public String getCreatedBy() {
 		return createdBy;
@@ -555,7 +570,7 @@ public class FeedbackDetails {
 			Integer stateID, States state, Integer districtID, Districts district, Integer blockID,
 			DistrictBlock districtBlock, Integer districtBranchID, DistrictBranchMapping districtBranchMapping,
 			Integer instituteTypeID, InstituteType instituteType, Integer feedbackNatureID,
-			FeedbackNatureDetail feedbackNatureDetail, String feedbackAgainst) {
+			FeedbackNatureDetail feedbackNatureDetail, String feedbackAgainst, Boolean beneficiaryConsent) {
 		FeedbackDetails feedbackDetails = new FeedbackDetails();
 		feedbackDetails.feedbackID = feedbackID;
 		feedbackDetails.mUser = mUser;
@@ -624,6 +639,7 @@ public class FeedbackDetails {
 		feedbackDetails.feedbackNatureID = feedbackNatureID;
 		feedbackDetails.feedbackNatureDetail = feedbackNatureDetail;
 		feedbackDetails.feedbackAgainst = feedbackAgainst;
+		feedbackDetails.beneficiaryConsent = beneficiaryConsent;
 		return feedbackDetails;
 	}
 
