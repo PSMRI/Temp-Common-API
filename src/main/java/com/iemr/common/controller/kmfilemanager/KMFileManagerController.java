@@ -46,6 +46,8 @@ import com.iemr.common.utils.response.OutputResponse;
 
 import io.lettuce.core.dynamic.annotation.Param;
 import io.swagger.v3.oas.annotations.Operation;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iemr.common.data.common.DocFileManager;
 
 
@@ -57,6 +59,8 @@ public class KMFileManagerController {
 	
 	@Autowired
 	private CommonServiceImpl commonServiceImpl;
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@Autowired
 	public void setKmFileManagerService(KMFileManagerService kmFileManagerService) {
@@ -130,7 +134,7 @@ public class KMFileManagerController {
 		OutputResponse response = new OutputResponse();
 		logger.info("add file request is " + request);
 		try {
-			KMFileManager kmFileManager = InputMapper.getInstance().fromJson(request, KMFileManager.class);
+			KMFileManager kmFileManager = objectMapper.readValue(request, KMFileManager.class);
 			String s = schemeServiceImpl.getFilePath(kmFileManager);
 			if (s != null)
 				response.setResponse(s);

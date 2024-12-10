@@ -14,6 +14,7 @@ public class SectionFieldsMappingDTO {
 	private String sectionName;
 	private String createdBy;
 	private Integer serviceProviderId;
+	private Integer projectId;
 	private List<SectionAndFieldsMapping> fields;
 
 }

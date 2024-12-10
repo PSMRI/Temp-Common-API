@@ -168,4 +168,5 @@ public class IdentityEditDTO {
 	private boolean emergencyRegistration;
 	private String otherFields;
 //	private Object otherFields;
+	private String communityName;
 }
