@@ -471,12 +471,11 @@ public class FeedbackDetails {
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
 	}
-	
-	public Boolean getbeneficiaryConsent() {
+	public Boolean getBeneficiaryConsent() {
 		return beneficiaryConsent;
 	}
 
-	public void setbeneficiaryConsent(Boolean beneficiaryConsent) {
+	public void setBeneficiaryConsent(Boolean beneficiaryConsent) {
 		this.beneficiaryConsent = beneficiaryConsent;
 	}
 	
