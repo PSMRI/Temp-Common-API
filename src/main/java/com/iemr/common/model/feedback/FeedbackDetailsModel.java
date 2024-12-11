@@ -99,4 +99,5 @@ public class FeedbackDetailsModel
 	private String modifiedBy;
 	private Timestamp lastModDate;
 	private String feedbackAgainst;
+	private Boolean beneficiaryConsent;
 }
