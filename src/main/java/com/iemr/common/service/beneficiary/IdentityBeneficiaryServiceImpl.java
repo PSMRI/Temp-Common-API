@@ -421,7 +421,7 @@ public class IdentityBeneficiaryServiceImpl implements IdentityBeneficiaryServic
 		JsonParser parser = new JsonParser();
 
 		String result;
-		String requestBody = new Gson().toJson(identityEditDTO);
+		String requestBody = OutputMapper.gsonWithoutExposeRestriction().toJson(identityEditDTO);
 		HashMap<String, Object> header = new HashMap<>();
 		if (auth != null) {
 			header.put("Authorization", auth);
