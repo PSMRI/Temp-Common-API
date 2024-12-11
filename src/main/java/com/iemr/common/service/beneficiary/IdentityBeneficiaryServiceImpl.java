@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -420,7 +421,7 @@ public class IdentityBeneficiaryServiceImpl implements IdentityBeneficiaryServic
 		JsonParser parser = new JsonParser();
 
 		String result;
-		String requestBody = OutputMapper.gsonWithoutExposeRestriction().toJson(identityEditDTO);
+		String requestBody = new Gson().toJson(identityEditDTO);
 		HashMap<String, Object> header = new HashMap<>();
 		if (auth != null) {
 			header.put("Authorization", auth);
