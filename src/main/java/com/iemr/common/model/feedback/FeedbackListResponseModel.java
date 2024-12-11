@@ -105,4 +105,5 @@ public class FeedbackListResponseModel {
 	private String requestType;
 	private EpidemicOutbreak epidemicOutbreak;
 	private BalVivahComplaint balVivahComplaint;
+	
 }
