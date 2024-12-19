@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.core.MediaType;
 
@@ -36,6 +37,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -93,6 +95,8 @@ public class IEMRAdminController {
 	private CookieUtil cookieUtil;
 	@Autowired
 	private JwtAuthenticationUtil jwtAuthenticationUtil;
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
 
 	private AESUtil aesUtil;
 
@@ -162,6 +166,15 @@ public class IEMRAdminController {
 			if (mUser.size() == 1) {
 				String Jwttoken = jwtUtil.generateToken(m_User.getUserName(), mUser.get(0).getUserID().toString());
 				logger.info("jwt token is:" + Jwttoken);
+				
+				User user = new User(); // Assuming the Users class exists
+	            user.setUserID(mUser.get(0).getUserID());
+	            user.setUserName(mUser.get(0).getUserName());
+	            
+	            String redisKey = "user_" + mUser.get(0).getUserID(); // Use user ID to create a unique key
+
+	            // Store the user in Redis (set a TTL of 30 minutes)
+	            redisTemplate.opsForValue().set(redisKey, user, 30, TimeUnit.MINUTES);
 
 				// Set Jwttoken in the response cookie
 				cookieUtil.addJwtTokenToCookie(Jwttoken, httpResponse);

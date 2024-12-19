@@ -1,15 +1,18 @@
 package com.iemr.common.utils;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.iemr.common.data.users.User;
+import com.iemr.common.repository.users.IEMRUserRepositoryCustom;
 import com.iemr.common.service.users.IEMRAdminUserServiceImpl;
 import com.iemr.common.utils.exception.IEMRException;
 
@@ -23,6 +26,10 @@ public class JwtAuthenticationUtil {
 	private CookieUtil cookieUtil;
 	@Autowired
 	private JwtUtil jwtUtil;
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
+	@Autowired
+	private IEMRUserRepositoryCustom iEMRUserRepositoryCustom;
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	@Autowired
@@ -71,8 +78,12 @@ public class JwtAuthenticationUtil {
 
 			String userId = claims.get("userId", String.class);
 
-			// Fetch user based on userId from the database or cache
-			User user = iEMRAdminUserServiceImpl.getUserById(Long.parseLong(userId));
+			// Check if user data is present in Redis
+			User user = getUserFromCache(userId);
+			if (user == null) {
+				// If not in Redis, fetch from DB and cache the result
+				user = fetchUserFromDB(userId);
+			}
 			if (user == null) {
 				throw new IEMRException("Invalid User ID.");
 			}
@@ -82,5 +93,38 @@ public class JwtAuthenticationUtil {
 			logger.error("Validation failed: " + e.getMessage(), e);
 			throw new IEMRException("Validation error: " + e.getMessage(), e);
 		}
+	}
+
+	private User getUserFromCache(String userId) {
+		String redisKey = "user_" + userId; // The Redis key format
+		User user = (User) redisTemplate.opsForValue().get(redisKey);
+
+		if (user == null) {
+			logger.warn("User not found in Redis. Will try to fetch from DB.");
+		} else {
+			logger.info("User fetched successfully from Redis.");
+		}
+
+		return user; // Returns null if not found
+	}
+	
+	private User fetchUserFromDB(String userId) {
+	    // This method will only be called if the user is not found in Redis.
+	    String redisKey = "user_" + userId; // Redis key format
+
+	    // Fetch user from DB
+	    User user = iEMRUserRepositoryCustom.findByUserID(Long.parseLong(userId));
+
+	    if (user != null) {
+	        // Cache the user in Redis for future requests (cache for 30 minutes)
+	        redisTemplate.opsForValue().set(redisKey, user, 30, TimeUnit.MINUTES);
+
+	        // Log that the user has been stored in Redis
+	        logger.info("User stored in Redis with key: " + redisKey);
+	    } else {
+	        logger.warn("User not found for userId: " + userId);
+	    }
+
+	    return user;
 	}
 }
