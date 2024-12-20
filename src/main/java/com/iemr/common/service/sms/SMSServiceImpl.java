@@ -801,8 +801,9 @@ public class SMSServiceImpl implements SMSService {
 	@Override
 	public void publishSMS() {
 		RestTemplate restTemplateLogin = new RestTemplate();
-		if (!SMSServiceImpl.publishingSMS) {
-			try {
+
+		try {
+			if (!SMSServiceImpl.publishingSMS) {
 				SMSServiceImpl.publishingSMS = true;
 				Boolean doSendSMS = ConfigProperties.getBoolean("send-sms");
 				String sendSMSURL = ConfigProperties.getPropertyByName("send-message-url");
@@ -875,11 +876,11 @@ public class SMSServiceImpl implements SMSService {
 						sms = smsNotification.save(sms);
 					}
 				}
-			} catch (Exception e) {
-				logger.error("publishSMS failed with error " + e.getMessage());
-			} finally {
-				SMSServiceImpl.publishingSMS = false;
 			}
+		} catch (Exception e) {
+			logger.error("publishSMS failed with error " + e.getMessage());
+		} finally {
+			SMSServiceImpl.publishingSMS = false;
 		}
 	}
 
