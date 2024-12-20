@@ -179,8 +179,6 @@ public class IEMRAdminController {
 				// Set Jwttoken in the response cookie
 				cookieUtil.addJwtTokenToCookie(Jwttoken, httpResponse);
 
-				resMap.put("Jwttoken", Jwttoken);
-				logger.info("response coming from jwt:" + resMap);
 				createUserMapping(mUser.get(0), resMap, serviceRoleMultiMap, serviceRoleMap, serviceRoleList,
 						previlegeObj);
 			} else {

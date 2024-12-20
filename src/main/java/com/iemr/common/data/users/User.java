@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.Expose;
 import com.iemr.common.data.callhandling.OutboundCallRequest;
 import com.iemr.common.data.feedback.FeedbackDetails;

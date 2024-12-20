@@ -29,6 +29,8 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.session.data.redis.config.ConfigureRedisAction;
 
+import com.iemr.common.data.users.User;
+
 @Configuration
 public class RedisConfig {
 
@@ -38,15 +40,15 @@ public class RedisConfig {
 	}
 
 	@Bean
-	public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
-		RedisTemplate<String, Object> template = new RedisTemplate<>();
+	public RedisTemplate<String, User> redisTemplate(RedisConnectionFactory factory) {
+		RedisTemplate<String, User> template = new RedisTemplate<>();
 		template.setConnectionFactory(factory);
 
-		// Use StringRedisSerializer for keys
+		// Use StringRedisSerializer for keys (userId)
 		template.setKeySerializer(new StringRedisSerializer());
 
-		// Use Jackson2JsonRedisSerializer for values (objects)
-		Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
+		// Use Jackson2JsonRedisSerializer for values (Users objects)
+		Jackson2JsonRedisSerializer<User> serializer = new Jackson2JsonRedisSerializer<>(User.class);
 		template.setValueSerializer(serializer);
 
 		return template;
