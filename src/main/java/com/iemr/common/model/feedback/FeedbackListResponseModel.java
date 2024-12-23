@@ -100,8 +100,10 @@ public class FeedbackListResponseModel {
 	private String modifiedBy;
 	private Timestamp lastModDate;
 	private String feedbackAgainst;
+	private Boolean beneficiaryConsent;
 
 	private String requestType;
 	private EpidemicOutbreak epidemicOutbreak;
 	private BalVivahComplaint balVivahComplaint;
+	
 }
