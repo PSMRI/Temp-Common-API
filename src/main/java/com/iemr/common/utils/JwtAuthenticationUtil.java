@@ -107,24 +107,24 @@ public class JwtAuthenticationUtil {
 
 		return user; // Returns null if not found
 	}
-	
+
 	private User fetchUserFromDB(String userId) {
-	    // This method will only be called if the user is not found in Redis.
-	    String redisKey = "user_" + userId; // Redis key format
+		// This method will only be called if the user is not found in Redis.
+		String redisKey = "user_" + userId; // Redis key format
 
-	    // Fetch user from DB
-	    User user = iEMRUserRepositoryCustom.findByUserID(Long.parseLong(userId));
+		// Fetch user from DB
+		User user = iEMRUserRepositoryCustom.findByUserID(Long.parseLong(userId));
 
-	    if (user != null) {
-	        // Cache the user in Redis for future requests (cache for 30 minutes)
-	        redisTemplate.opsForValue().set(redisKey, user, 30, TimeUnit.MINUTES);
+		if (user != null) {
+			// Cache the user in Redis for future requests (cache for 30 minutes)
+			redisTemplate.opsForValue().set(redisKey, user, 30, TimeUnit.MINUTES);
 
-	        // Log that the user has been stored in Redis
-	        logger.info("User stored in Redis with key: " + redisKey);
-	    } else {
-	        logger.warn("User not found for userId: " + userId);
-	    }
+			// Log that the user has been stored in Redis
+			logger.info("User stored in Redis with key: " + redisKey);
+		} else {
+			logger.warn("User not found for userId: " + userId);
+		}
 
-	    return user;
+		return user;
 	}
 }
