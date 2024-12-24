@@ -177,7 +177,7 @@ public class IEMRAdminController {
 	            redisTemplate.opsForValue().set(redisKey, user, 30, TimeUnit.MINUTES);
 
 				// Set Jwttoken in the response cookie
-				cookieUtil.addJwtTokenToCookie(Jwttoken, httpResponse);
+				cookieUtil.addJwtTokenToCookie(Jwttoken, httpResponse, request);
 
 				createUserMapping(mUser.get(0), resMap, serviceRoleMultiMap, serviceRoleMap, serviceRoleList,
 						previlegeObj);

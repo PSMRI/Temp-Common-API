@@ -24,12 +24,15 @@ public class CookieUtil {
 		return Optional.empty();
 	}
 
-	public void addJwtTokenToCookie(String Jwttoken, HttpServletResponse response) {
+	public void addJwtTokenToCookie(String Jwttoken, HttpServletResponse response, HttpServletRequest request) {
 		// Create a new cookie with the JWT token
 		Cookie cookie = new Cookie("Jwttoken", Jwttoken);
 		cookie.setHttpOnly(true); // Prevent JavaScript access for security
 		cookie.setMaxAge(60 * 60 * 24); // 1 day expiration time
 		cookie.setPath("/"); // Make the cookie available for the entire application
+		if ("https".equalsIgnoreCase(request.getScheme())) {
+			cookie.setSecure(true); // Secure flag only on HTTPS
+		}
 		response.addCookie(cookie); // Add the cookie to the response
 	}
 
