@@ -49,4 +49,5 @@ public @Data class FeedbackResponseModel
 	private Timestamp createdDate;
 	private String modifiedBy;
 	private Timestamp lastModDate;
+	private Boolean beneficiaryConsent;
 }
