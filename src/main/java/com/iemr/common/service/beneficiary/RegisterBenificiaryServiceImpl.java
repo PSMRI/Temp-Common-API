@@ -114,10 +114,8 @@ public class RegisterBenificiaryServiceImpl implements RegisterBenificiaryServic
 		Integer updatedRows = 0;
 
 		IdentityEditDTO identityEditDTO = identityBenEditMapper.BenToIdentityEditMapper(benificiaryDetails);
-		if(null != benificiaryDetails.getI_bendemographics()) {
-			identityEditDTO.setCommunity(benificiaryDetails.getI_bendemographics().getCommunityName());
-			identityEditDTO.setCommunityName(benificiaryDetails.getI_bendemographics().getCommunityName());
-		}
+		setDemographicDetails(identityEditDTO,benificiaryDetails);
+		
 		if (benificiaryDetails.getBeneficiaryIdentities() != null
 				&& benificiaryDetails.getBeneficiaryIdentities().size() > 0) {
 			identityEditDTO.setIdentities(Identity.createIdentity(benificiaryDetails.getBeneficiaryIdentities(),
@@ -130,6 +128,29 @@ public class RegisterBenificiaryServiceImpl implements RegisterBenificiaryServic
 				benificiaryDetails.getIs1097());
 
 		return updatedRows;
+	}
+
+	private void setDemographicDetails(IdentityEditDTO identityEditDTO, BeneficiaryModel benificiaryDetails) {
+		if(null != benificiaryDetails.getI_bendemographics()) {
+			identityEditDTO.setCommunity(benificiaryDetails.getI_bendemographics().getCommunityName());
+			identityEditDTO.setCommunityName(benificiaryDetails.getI_bendemographics().getCommunityName());
+			if(null != benificiaryDetails.getReligion())
+				identityEditDTO.setReligion(benificiaryDetails.getReligion());
+			else if(null != benificiaryDetails.getI_bendemographics().getReligion())
+				identityEditDTO.setReligion(benificiaryDetails.getI_bendemographics().getReligion());
+			else 
+				identityEditDTO.setReligion(benificiaryDetails.getI_bendemographics().getReligionName());
+			if(null != benificiaryDetails.getOccupation())
+				identityEditDTO.setOccupationName(benificiaryDetails.getOccupation());
+			else
+				identityEditDTO.setOccupationName(benificiaryDetails.getI_bendemographics().getOccupation());
+			identityEditDTO.setEducation(benificiaryDetails.getI_bendemographics().getEducationName());
+			if(null != benificiaryDetails.getIncomeStatus())
+				identityEditDTO.setIncomeStatus(benificiaryDetails.getIncomeStatus());
+			else
+				identityEditDTO.setIncomeStatus(benificiaryDetails.getI_bendemographics().getIncomeStatus());
+		}
+		
 	}
 
 	private int updateDemographics(BeneficiaryDemographicsModel i_BenDemographics) {
@@ -147,6 +168,10 @@ public class RegisterBenificiaryServiceImpl implements RegisterBenificiaryServic
 		CommonIdentityDTO identityDTO = identityMapper.beneficiaryModelCommonIdentityDTO(beneficiaryModel);
 		if(null != beneficiaryModel.getI_bendemographics()) {
 			identityDTO.setCommunity(beneficiaryModel.getI_bendemographics().getCommunityName());
+			identityDTO.setReligion(beneficiaryModel.getI_bendemographics().getReligionName());
+			identityDTO.setOccupationName(beneficiaryModel.getI_bendemographics().getOccupation());
+			identityDTO.setEducation(beneficiaryModel.getI_bendemographics().getEducationName());
+			identityDTO.setIncomeStatus(beneficiaryModel.getI_bendemographics().getIncomeStatusName());
 		}
 		// identityDTO.setOtherFields(beneficiaryModel.getOtherFields());
 		identityDTO.setFaceEmbedding(beneficiaryModel.getFaceEmbedding());
