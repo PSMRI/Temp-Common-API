@@ -166,13 +166,7 @@ public class RegisterBenificiaryServiceImpl implements RegisterBenificiaryServic
 		// logger.info("benificiaryDetails: " + beneficiaryModel);
 
 		CommonIdentityDTO identityDTO = identityMapper.beneficiaryModelCommonIdentityDTO(beneficiaryModel);
-		if(null != beneficiaryModel.getI_bendemographics()) {
-			identityDTO.setCommunity(beneficiaryModel.getI_bendemographics().getCommunityName());
-			identityDTO.setReligion(beneficiaryModel.getI_bendemographics().getReligionName());
-			identityDTO.setOccupationName(beneficiaryModel.getI_bendemographics().getOccupation());
-			identityDTO.setEducation(beneficiaryModel.getI_bendemographics().getEducationName());
-			identityDTO.setIncomeStatus(beneficiaryModel.getI_bendemographics().getIncomeStatusName());
-		}
+		setSaveDemographicDetails(identityDTO,beneficiaryModel);
 		// identityDTO.setOtherFields(beneficiaryModel.getOtherFields());
 		identityDTO.setFaceEmbedding(beneficiaryModel.getFaceEmbedding());
 		identityDTO.setEmergencyRegistration(beneficiaryModel.isEmergencyRegistration());
@@ -201,6 +195,28 @@ public class RegisterBenificiaryServiceImpl implements RegisterBenificiaryServic
 			}
 		}
 		return OutputMapper.gson().toJson(beneficiary);
+	}
+
+	private void setSaveDemographicDetails(CommonIdentityDTO identityDTO, BeneficiaryModel beneficiaryModel) {
+		if(null != beneficiaryModel.getI_bendemographics()) {
+			identityDTO.setCommunity(beneficiaryModel.getI_bendemographics().getCommunityName());
+			if(null != beneficiaryModel.getReligion())
+				identityDTO.setReligion(beneficiaryModel.getReligion());
+			else if(null != beneficiaryModel.getI_bendemographics().getReligion())
+				identityDTO.setReligion(beneficiaryModel.getI_bendemographics().getReligion());
+			else 
+				identityDTO.setReligion(beneficiaryModel.getI_bendemographics().getReligionName());
+			if(null != beneficiaryModel.getOccupation())
+				identityDTO.setOccupationName(beneficiaryModel.getOccupation());
+			else
+				identityDTO.setOccupationName(beneficiaryModel.getI_bendemographics().getOccupation());
+			identityDTO.setEducation(beneficiaryModel.getI_bendemographics().getEducationName());
+			if(null != beneficiaryModel.getIncomeStatus())
+				identityDTO.setIncomeStatus(beneficiaryModel.getIncomeStatus());
+			else
+				identityDTO.setIncomeStatus(beneficiaryModel.getI_bendemographics().getIncomeStatus());
+		}
+		
 	}
 
 	@Override
