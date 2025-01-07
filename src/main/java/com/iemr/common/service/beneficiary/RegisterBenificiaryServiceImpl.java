@@ -210,7 +210,8 @@ public class RegisterBenificiaryServiceImpl implements RegisterBenificiaryServic
 				identityDTO.setOccupationName(beneficiaryModel.getOccupation());
 			else
 				identityDTO.setOccupationName(beneficiaryModel.getI_bendemographics().getOccupation());
-			identityDTO.setEducation(beneficiaryModel.getI_bendemographics().getEducationName());
+			if(null != beneficiaryModel.getI_bendemographics())
+				identityDTO.setEducation(beneficiaryModel.getI_bendemographics().getEducationName());
 			if(null != beneficiaryModel.getIncomeStatus())
 				identityDTO.setIncomeStatus(beneficiaryModel.getIncomeStatus());
 			else
