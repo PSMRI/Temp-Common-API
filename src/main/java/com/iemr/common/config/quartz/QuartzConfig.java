@@ -97,7 +97,8 @@ public class QuartzConfig {
 		Trigger[] triggers = { processMQTriggerForUnblock().getObject(), processMQTriggerForSMS().getObject(),
 				processMQTriggerForEmail().getObject(), processMQTriggerForRegistration().getObject(),
 				processMQTriggerForEverwellDataSync().getObject(), processMQTriggerForCtiDataSync().getObject(),
-				processMQTriggerForAvniRegistration().getObject(), processMQTriggerForNHMDashboardData().getObject() };
+				processMQTriggerForAvniRegistration().getObject(),
+				processMQTriggerForNHMDashboardData().getObject(), processMQTriggerForGrievanceDataSync().getObject() };
 
 		quartzScheduler.setTriggers(triggers);
 
@@ -226,6 +227,33 @@ public class QuartzConfig {
 		return cronTriggerFactoryBean;
 	}
 
+	//-----------------Grievance Data Sync Scheduler----------------------------------------------
+
+	@Bean
+	public JobDetailFactoryBean processMQJobForGrievanceDataSync() {
+		JobDetailFactoryBean jobDetailFactory;
+		jobDetailFactory = new JobDetailFactoryBean();
+		jobDetailFactory.setJobClass(ScheduleForGrievanceDataSync.class);
+		jobDetailFactory.setGroup(quartzJobGroup);
+		return jobDetailFactory;
+	}
+	
+	@Bean
+	public CronTriggerFactoryBean processMQTriggerForGrievanceDataSync() {
+		Boolean startJob = ConfigProperties.getBoolean("start-grievancedatasync-scheduler");
+		CronTriggerFactoryBean cronTriggerFactoryBean = new CronTriggerFactoryBean();
+		String scheduleConfig = quartzJobDefaultSchedule;
+		if (startJob) {
+			scheduleConfig = ConfigProperties.getPropertyByName("cron-scheduler-grievancedatasync");
+		}
+		cronTriggerFactoryBean.setJobDetail(processMQJobForGrievanceDataSync().getObject());
+		cronTriggerFactoryBean.setCronExpression(scheduleConfig);
+		cronTriggerFactoryBean.setGroup(quartzJobGroup);
+		return cronTriggerFactoryBean;
+	}
+	
+	
+	
 	// --------------------------------------------------------------------------------------------------------------
 	@Bean
 	public JobDetailFactoryBean processMQJobForCtiDataSync() {
