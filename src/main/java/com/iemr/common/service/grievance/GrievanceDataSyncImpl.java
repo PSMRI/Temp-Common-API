@@ -46,17 +46,22 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 
 	    RestTemplate restTemplateLogin = new RestTemplate();
 
-	    @Autowired
-	    private GrievanceDataRepo grievanceDataRepo;
+	    private final GrievanceDataRepo grievanceDataRepo;
+	    private final GrievanceTransactionRepo grievanceTransactionRepo;
+	    private final GrievanceFetchBenDetailsRepo grievanceFetchBenDetailsRepo;
+	    private final LocationStateRepository locationStateRepository;
 
+	    // Constructor-based injection
 	    @Autowired
-	    private GrievanceTransactionRepo grievanceTransactionRepo;
-	    
-	    @Autowired
-	    private GrievanceFetchBenDetailsRepo grievanceFetchBenDetailsRepo;
-
-	    @Autowired
-	    private LocationStateRepository locationStateRepository;
+	    public GrievanceDataSyncImpl(GrievanceDataRepo grievanceDataRepo, 
+	                         GrievanceTransactionRepo grievanceTransactionRepo, 
+	                         GrievanceFetchBenDetailsRepo grievanceFetchBenDetailsRepo,
+	                         LocationStateRepository locationStateRepository) {
+	        this.grievanceDataRepo = grievanceDataRepo;
+	        this.grievanceTransactionRepo = grievanceTransactionRepo;
+	        this.grievanceFetchBenDetailsRepo = grievanceFetchBenDetailsRepo;
+	        this.locationStateRepository = locationStateRepository;
+	    }
 
 	    @Value("${greivanceUserAuthenticate}")
 	    private String grievanceUserAuthenticate;
@@ -80,10 +85,13 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	    private Long GRIEVANCE_TOKEN_EXP;
 
 	    
-	    public List<Map<String, Object>> dataSyncToGrievance(String grievanceAuthorization, String registeringUser,
-	            String Authorization) {
+//	    public List<Map<String, Object>> dataSyncToGrievance(String grievanceAuthorization, String registeringUser,
+//	            String Authorization) {
 
+	    	public List<Map<String, Object>> dataSyncToGrievance() {
+	    	
 	        int count = 0;
+	        String registeringUser = "";
 	        List<Map<String, Object>> responseData = new ArrayList<>();
 	        List<GrievanceDetails> grievanceDetailsListAS = null;
 	        try {
@@ -134,49 +142,12 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	                        jsnOBJ = jsnElmnt.getAsJsonObject();
 	                        JsonObject grievanceJsonData = jsnOBJ.getAsJsonObject("data");
 
+	                        registeringUser = grievanceJsonData.get("userName").getAsString();
+	                        
 	                        if (Integer.parseInt(jsnOBJ.get("TotalRecords").toString()) > 0) {
 	                            GrievanceDetails[] grievanceDetailsArray = InputMapper.gson().fromJson(jsnOBJ.get("Data").toString(), GrievanceDetails[].class);
 	                            List<GrievanceDetails> grievanceDetailsList = Arrays.asList(grievanceDetailsArray);
 
-	                            // Fetch transaction details and integrate them with the grievance details
-//	                            for (GrievanceDetails grievance : grievanceDetailsList) {
-//	                                String complaintId = grievance.getGrievanceId();
-//	                                String formattedComplaintId = complaintId.replace("\\/", "/");
-//	                                grievance.setGrievanceId(formattedComplaintId);
-//
-//	                                // Fetch related grievance transaction details
-//	                                List<GrievanceTransactionDetails> transactionDetailsList = fetchGrievanceTransactions(formattedComplaintId);
-//
-//	                                if (transactionDetailsList != null && !transactionDetailsList.isEmpty()) {
-//	                                    // Save transactions to the t_grievance_transaction table
-//	                                    grievanceTransactionRepo.saveAll(transactionDetailsList);
-//	                                    // Add the transaction list to the grievance object
-//	                                    grievance.setGrievanceTransactionDetails(transactionDetailsList);
-//	                                }
-//
-//	                                // Adding other grievance-related fields
-//	                                grievance.setSubjectOfComplaint(grievanceJsonData.get("subject").getAsString());
-//	                                ArrayList<Object[]> lists = grievanceFetchBenDetailsRepo.findByComplaintId(formattedComplaintId);
-//
-//	                                for (Object[] objects : lists) {
-//	                                    if (objects != null && objects.length <= 4) {
-//	                                        grievance.setComplaintId((String) objects[0]);
-//	                                        grievance.setBeneficiaryRegId((Long) objects[1]);
-//	                                        grievance.setBencallId((Long) objects[2]);
-//	                                        grievance.setProviderServiceMapId((Integer) objects[3]);
-//	                                        String state = locationStateRepository.findByStateIDForGrievance((Integer) objects[4]);
-//	                                        grievance.setState(state);
-//	                                    }
-//	                                }
-//
-//	                                grievance.setAgentId(grievance.getAgentId());
-//	                                grievance.setDeleted(grievance.getDeleted());
-//	                                grievance.setCreatedBy(registeringUser);
-//	                                grievance.setProcessed('N');
-//	                                grievance.setIsAllocated(false);
-//	                                grievance.setCallCounter(0);
-//	                                grievance.setRetryNeeded(true);
-//	                            }
 
 	                           //////////////////////
 	                         // Loop through the fetched grievance list and integrate transaction details
@@ -327,7 +298,6 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 
 	            HttpEntity<Object> request = new HttpEntity<Object>(headers);
 	            RestTemplate restTemplate = new RestTemplate();
-	          //  ResponseEntity<String> response = restTemplate.exchange(updateGrievanceTransactionDetails, HttpMethod.POST, request, String.class);
 
 	            ResponseEntity<String> response = restTemplate.exchange(updateGrievanceTransactionDetails + grievanceId, HttpMethod.POST, request, String.class);
 
@@ -351,7 +321,7 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	    }
 
 	    private void generateGrievanceAuthToken() {
-	        String Authorization = "";
+	        String authorization = "";
 	        String registeringUser = "";
 	        MultiValueMap<String, String> requestData = new LinkedMultiValueMap<String, String>();
 	        requestData.add("username", grievanceUserName);
@@ -377,7 +347,7 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	                    + jsnOBJ.get("access_token").getAsString();
 	            
 	            JsonObject grievanceLoginJsonData = jsnOBJ.getAsJsonObject("data");
-	            Authorization = grievanceLoginJsonData.get("key").getAsString();
+	            authorization = grievanceLoginJsonData.get("key").getAsString();
 	            registeringUser = grievanceLoginJsonData.get("userName").getAsString();
 	            
 	            logger.info("Auth key generated at : " + System.currentTimeMillis() + ", Key : " + GRIEVANCE_AUTH_TOKEN);
@@ -393,8 +363,7 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 
 	            int count = 3;
 	            while (count > 0) {
-	                List<Map<String, Object>> savedGrievanceData = dataSyncToGrievance(GRIEVANCE_AUTH_TOKEN, registeringUser,
-	                        Authorization);
+	                List<Map<String, Object>> savedGrievanceData = dataSyncToGrievance();
 	                if (savedGrievanceData != null)
 	                    break;
 	                else

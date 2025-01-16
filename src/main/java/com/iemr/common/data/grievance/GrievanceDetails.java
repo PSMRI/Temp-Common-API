@@ -102,7 +102,7 @@ public class GrievanceDetails {
 	
 	@Expose
 	@Column(name = "Processed")
-	private Character Processed = 'N'; 
+	private Character processed = 'N'; 
 	
 	@Column(name = "CreatedBy")
 	@Expose
@@ -174,7 +174,7 @@ public class GrievanceDetails {
 		this.isRegistered = isRegistered;
 		this.callCounter = callCounter;
 		this.deleted = deleted;
-		this.Processed = processed;
+		this.processed = processed;
 		this.createdBy = createdBy;
 		this.createdDate = createdDate;
 		this.modifiedBy = modifiedBy;
@@ -334,11 +334,11 @@ public class GrievanceDetails {
     }
 
     public Character getProcessed() {
-        return Processed;
+        return processed;
     }
 
     public void setProcessed(Character processed) {
-        this.Processed = processed;
+        this.processed = processed;
     }
 
     public String getCreatedBy() {

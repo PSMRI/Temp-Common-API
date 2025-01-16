@@ -170,7 +170,7 @@ public class QuartzConfig {
 		Boolean startJob = ConfigProperties.getBoolean("start-email-scheduler");
 		CronTriggerFactoryBean cronTriggerFactoryBean = new CronTriggerFactoryBean();
 		String scheduleConfig = quartzJobDefaultSchedule;
-		if (startJob) {
+		if (Boolean.TRUE.equals(startJob)) {
 			scheduleConfig = ConfigProperties.getPropertyByName("cron-scheduler-email");
 		}
 		cronTriggerFactoryBean.setJobDetail(processMQJobForEmail().getObject());
