@@ -15,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Entity
@@ -62,6 +63,7 @@ public class GrievanceDetails {
 	
 	@Expose
 	@Column(name = "Severety")
+	@NotBlank(message = "Severety is required")
 	private String severety;
 	
 	@Expose
@@ -118,17 +120,17 @@ public class GrievanceDetails {
 	
 	@Expose
 	@Column(name = "VanSerialNo")
-	private Integer VanSerialNo;
+	private Integer vanSerialNo;
 	@Expose
 	@Column(name = "VanID")
-	private Integer VanID;
+	private Integer vanID;
 	
 	@Expose
 	@Column(name = "VehicalNo")
-	private String VehicalNo;
+	private String vehicalNo;
 	@Expose
 	@Column(name = "ParkingPlaceID")
-	private Integer ParkingPlaceID;
+	private Integer parkingPlaceID;
 	@Expose
 	@Column(name = "SyncedBy")
 	private String syncedBy;
@@ -177,10 +179,10 @@ public class GrievanceDetails {
 		this.createdDate = createdDate;
 		this.modifiedBy = modifiedBy;
 		this.lastModDate = lastModDate;
-		this.VanSerialNo = vanSerialNo;
-		this.VanID = vanID;
-		this.VehicalNo = vehicalNo;
-		this.ParkingPlaceID = parkingPlaceID;
+		this.vanSerialNo = vanSerialNo;
+		this.vanID = vanID;
+		this.vehicalNo = vehicalNo;
+		this.parkingPlaceID = parkingPlaceID;
 		this.syncedBy = syncedBy;
 		this.syncedDate = syncedDate;
 		this.isCompleted = isCompleted;
@@ -372,35 +374,35 @@ public class GrievanceDetails {
     }
 
     public Integer getVanSerialNo() {
-        return VanSerialNo;
+        return vanSerialNo;
     }
 
     public void setVanSerialNo(Integer vanSerialNo) {
-        this.VanSerialNo = vanSerialNo;
+        this.vanSerialNo = vanSerialNo;
     }
 
     public Integer getVanId() {
-        return VanID;
+        return vanID;
     }
 
     public void setVanId(Integer vanId) {
-        this.VanID = vanId;
+        this.vanID = vanId;
     }
 
     public String getVehicleNo() {
-        return VehicalNo;
+        return vehicalNo;
     }
 
     public void setVehicleNo(String vehicleNo) {
-        this.VehicalNo = vehicleNo;
+        this.vehicalNo = vehicleNo;
     }
 
     public Integer getParkingPlaceId() {
-        return ParkingPlaceID;
+        return parkingPlaceID;
     }
 
     public void setParkingPlaceId(Integer parkingPlaceId) {
-        this.ParkingPlaceID = parkingPlaceId;
+        this.parkingPlaceID = parkingPlaceId;
     }
 
     public String getSyncedBy() {

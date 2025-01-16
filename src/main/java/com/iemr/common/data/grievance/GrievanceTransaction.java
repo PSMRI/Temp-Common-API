@@ -5,6 +5,8 @@ import javax.persistence.*;
 
 import com.google.gson.annotations.Expose;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.Date;
@@ -25,10 +27,14 @@ public class GrievanceTransaction {
 
     @Column(name = "FileName", nullable = false, length = 500)
     @Expose
+    @NotBlank(message = "File name is required")
+    @Size(max = 500, message = "File name cannot exceed 500 characters")
     private String fileName;
 
     @Column(name = "FileType", nullable = false, length = 300)
     @Expose
+    @NotBlank(message = "File name is required")
+    @Size(max = 300, message = "File type cannot exceed 300 characters")
     private String fileType;
 
     @Column(name = "Redressed", nullable = false)
