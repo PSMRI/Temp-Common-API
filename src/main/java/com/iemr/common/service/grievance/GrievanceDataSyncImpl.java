@@ -41,7 +41,7 @@ package com.iemr.common.service.grievance;
 
 @Service
 @PropertySource("classpath:application.properties")
-public class GrievanceDataSyncImpl {
+public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	    Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	    RestTemplate restTemplateLogin = new RestTemplate();
@@ -76,9 +76,10 @@ public class GrievanceDataSyncImpl {
 	    @Value("${grievanceDataSyncDuration}")
 	    private String grievanceDataSyncDuration;
 
-	    private static String GRIEVANCE_AUTH_TOKEN;
-	    private static Long GRIEVANCE_TOKEN_EXP;
+	    private String GRIEVANCE_AUTH_TOKEN;
+	    private Long GRIEVANCE_TOKEN_EXP;
 
+	    
 	    public List<Map<String, Object>> dataSyncToGrievance(String grievanceAuthorization, String registeringUser,
 	            String Authorization) {
 
@@ -124,7 +125,7 @@ public class GrievanceDataSyncImpl {
 	                if (response != null && response.hasBody()) {
 	                    JSONObject obj = new JSONObject(response.getBody());
 	                    if (obj != null && obj.has("data") && obj.has("statusCode") && obj.getInt("statusCode") == 200) {
-	                        logger.info("Grievance data details response: " + response.getBody());
+	                        logger.info("Grievance data details response received successfully ");
 
 	                        String responseStr = response.getBody();
 	                        JsonObject jsnOBJ = new JsonObject();
@@ -193,7 +194,7 @@ public class GrievanceDataSyncImpl {
 	                                grievance.setComplaintId(formattedComplaintId);
 
 	                                // Fetch related grievance transaction details
-	                                List<GrievanceTransaction> transactionDetailsList = fetchGrievanceTransactions(formattedComplaintId);
+	                                List<GrievanceTransaction> transactionDetailsList = fetchGrievanceTransactions(grievance.getGrievanceId());
 
 	                                if (transactionDetailsList != null && !transactionDetailsList.isEmpty()) {
 	                                    // Loop through each transaction and set individual properties
@@ -315,7 +316,7 @@ public class GrievanceDataSyncImpl {
 	        return responseData;
 	    }
 
-	    private List<GrievanceTransaction> fetchGrievanceTransactions(String complaintId) {
+	    private List<GrievanceTransaction> fetchGrievanceTransactions(Long grievanceId) {
 	        List<GrievanceTransaction> transactionDetailsList = new ArrayList<>();
 	        try {
 	            HttpHeaders headers = new HttpHeaders();
@@ -326,8 +327,12 @@ public class GrievanceDataSyncImpl {
 
 	            HttpEntity<Object> request = new HttpEntity<Object>(headers);
 	            RestTemplate restTemplate = new RestTemplate();
-	            ResponseEntity<String> response = restTemplate.exchange(updateGrievanceTransactionDetails, HttpMethod.POST, request, String.class);
+	          //  ResponseEntity<String> response = restTemplate.exchange(updateGrievanceTransactionDetails, HttpMethod.POST, request, String.class);
 
+	            ResponseEntity<String> response = restTemplate.exchange(updateGrievanceTransactionDetails + grievanceId, HttpMethod.POST, request, String.class);
+
+	            
+	            
 	            if (response != null && response.hasBody()) {
 	                JSONObject obj = new JSONObject(response.getBody());
 	                if (obj != null && obj.has("data") && obj.has("statusCode") && obj.getInt("statusCode") == 200) {
@@ -340,7 +345,7 @@ public class GrievanceDataSyncImpl {
 	                }
 	            }
 	        } catch (Exception e) {
-	            logger.error("Error fetching grievance transaction details for complaintId " + complaintId, e);
+	            logger.error("Error fetching grievance transaction details for grievanceId " + grievanceId, e);
 	        }
 	        return transactionDetailsList;
 	    }

@@ -85,6 +85,10 @@ public class GrievanceTransaction {
     @Column(name = "LastModDate")
     @Expose
     private Date lastModDate;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gwid", insertable = false, updatable = false)
+    private GrievanceDetails grievanceDetails;
 
     // Getters and Setters
 
