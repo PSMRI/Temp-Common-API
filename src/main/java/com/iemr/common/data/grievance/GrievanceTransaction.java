@@ -228,7 +228,7 @@ public class GrievanceTransaction {
     	this.status = status;
     }
     
-    public String comment( ) {
+    public String getComment( ) {
     	return comment;
     }
     
