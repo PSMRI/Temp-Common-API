@@ -46,6 +46,10 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 
 	    RestTemplate restTemplateLogin = new RestTemplate();
 
+	    private static final String USER_AGENT_HEADER = "user-agent";
+	    private static final String USER_AGENT_VALUE = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36";
+	    private static final String STATUS_CODE = "statusCode";
+	    
 	    private final GrievanceDataRepo grievanceDataRepo;
 	    private final GrievanceTransactionRepo grievanceTransactionRepo;
 	    private final GrievanceFetchBenDetailsRepo grievanceFetchBenDetailsRepo;
@@ -85,9 +89,6 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	    private Long GRIEVANCE_TOKEN_EXP;
 
 	    
-//	    public List<Map<String, Object>> dataSyncToGrievance(String grievanceAuthorization, String registeringUser,
-//	            String Authorization) {
-
 	    	public List<Map<String, Object>> dataSyncToGrievance() {
 	    	
 	        int count = 0;
@@ -109,19 +110,14 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 
 	                HttpHeaders headers = new HttpHeaders();
 	                headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-	                headers.add("user-agent",
-	                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
+	                headers.add(USER_AGENT_HEADER, USER_AGENT_VALUE);
 	                headers.add("AUTHORIZATION", GRIEVANCE_AUTH_TOKEN);
 
 	                Date date = new Date();
 	                java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-	                String text = sqlDate.toString();
-	                Timestamp currentDate = new Timestamp(sqlDate.getTime());
 	                Calendar calendar = Calendar.getInstance();
 	                calendar.setTime(sqlDate);
 	                calendar.add(Calendar.DATE, -Integer.parseInt(grievanceDataSyncDuration));
-	                Date beforeDate = calendar.getTime();
-	                Timestamp lastDate = new Timestamp(beforeDate.getTime());
 
 	                // Request object
 	                HttpEntity<Object> request = new HttpEntity<Object>(headers);
@@ -132,7 +128,7 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 
 	                if (response != null && response.hasBody()) {
 	                    JSONObject obj = new JSONObject(response.getBody());
-	                    if (obj != null && obj.has("data") && obj.has("statusCode") && obj.getInt("statusCode") == 200) {
+	                    if (obj != null && obj.has("data") && obj.has(STATUS_CODE) && obj.getInt(STATUS_CODE) == 200) {
 	                        logger.info("Grievance data details response received successfully ");
 
 	                        String responseStr = response.getBody();
@@ -292,8 +288,7 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	        try {
 	            HttpHeaders headers = new HttpHeaders();
 	            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-	            headers.add("user-agent",
-	                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
+	            headers.add(USER_AGENT_HEADER, USER_AGENT_VALUE);
 	            headers.add("AUTHORIZATION", GRIEVANCE_AUTH_TOKEN);
 
 	            HttpEntity<Object> request = new HttpEntity<Object>(headers);
@@ -305,7 +300,7 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	            
 	            if (response != null && response.hasBody()) {
 	                JSONObject obj = new JSONObject(response.getBody());
-	                if (obj != null && obj.has("data") && obj.has("statusCode") && obj.getInt("statusCode") == 200) {
+	                if (obj != null && obj.has("data") && obj.has(STATUS_CODE) && obj.getInt(STATUS_CODE) == 200) {
 	                    JsonObject jsnOBJ = new JsonObject();
 	                    JsonParser jsnParser = new JsonParser();
 	                    JsonElement jsnElmnt = jsnParser.parse(response.getBody());
@@ -329,8 +324,7 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	        requestData.add("grant_type", "password");
 	        HttpHeaders httpHeaders = new HttpHeaders();
 	        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-	        httpHeaders.add("user-agent",
-	                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
+	        httpHeaders.add(USER_AGENT_HEADER, USER_AGENT_VALUE);
 
 	        HttpEntity<MultiValueMap<String, String>> httpRequestEntity = new HttpEntity<MultiValueMap<String, String>>(
 	                requestData, httpHeaders);

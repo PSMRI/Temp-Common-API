@@ -28,9 +28,9 @@ public class ScheduleForGrievanceDataSync implements Job {
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException
 	{
-		logger.info("Started job for grievance data sync " , arg0.getClass().getName());
+		logger.info("Started job for grievance data sync {}", arg0.getClass().getName());
 		grievanceDataSync.dataSyncToGrievance();
-		logger.info("Completed job for grievance data sync " , arg0.getClass().getName());
+		logger.info("Completed job for grievance data sync {}" , arg0.getClass().getName());
 	}
 
 	
