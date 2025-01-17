@@ -50,6 +50,10 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	    private static final String USER_AGENT_VALUE = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36";
 	    private static final String STATUS_CODE = "statusCode";
 	    
+	    private static final String FILE_NAME = "fileName";
+	    private static final String FILE_TYPE = "fileType";
+
+	    
 	    private final GrievanceDataRepo grievanceDataRepo;
 	    private final GrievanceTransactionRepo grievanceTransactionRepo;
 	    private final GrievanceFetchBenDetailsRepo grievanceFetchBenDetailsRepo;
@@ -174,8 +178,8 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	                                        // Assuming these fields are coming from your API response
 	                                        transactionDetails.setActionTakenBy(transactionDetailsJson.get("actionTakenBy").getAsString());
 	                                        transactionDetails.setStatus(transactionDetailsJson.get("status").getAsString());
-	                                        transactionDetails.setFileName(transactionDetailsJson.has("fileName") ? transactionDetailsJson.get("fileName").getAsString() : null);
-	                                        transactionDetails.setFileType(transactionDetailsJson.has("fileType") ? transactionDetailsJson.get("fileType").getAsString() : null);
+	                                        transactionDetails.setFileName(transactionDetailsJson.has(FILE_NAME) ? transactionDetailsJson.get(FILE_NAME).getAsString() : null);
+	                                        transactionDetails.setFileType(transactionDetailsJson.has(FILE_TYPE) ? transactionDetailsJson.get(FILE_TYPE).getAsString() : null);
 	                                        transactionDetails.setRedressed(transactionDetailsJson.get("redressed").getAsString());
 	                                        transactionDetails.setCreatedAt(Timestamp.valueOf(transactionDetailsJson.get("createdAt").getAsString()));
 	                                        transactionDetails.setUpdatedAt(Timestamp.valueOf(transactionDetailsJson.get("updatedAt").getAsString()));
@@ -235,8 +239,8 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	                                    Map<String, Object> transactionData = new HashMap<>();
 	                                    transactionData.put("actionTakenBy", transaction.getActionTakenBy());
 	                                    transactionData.put("status", transaction.getStatus());
-	                                    transactionData.put("fileName", transaction.getFileName());
-	                                    transactionData.put("fileType", transaction.getFileType());
+	                                    transactionData.put(FILE_NAME, transaction.getFileName());
+	                                    transactionData.put(FILE_TYPE, transaction.getFileType());
 	                                    transactionData.put("redressed", transaction.getRedressed());
 	                                    transactionData.put("createdAt", transaction.getCreatedAt().toString());
 	                                    transactionData.put("updatedAt", transaction.getUpdatedAt().toString());
