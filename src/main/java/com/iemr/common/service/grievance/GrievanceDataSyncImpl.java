@@ -348,14 +348,24 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 
 	            int count = 3;
 	            while (count > 0) {
+	            	try {
 	                List<Map<String, Object>> savedGrievanceData = dataSyncToGrievance();
 	                if (savedGrievanceData != null)
 	                    break;
-	                else
+	                else {
 	                    count--;
+	              
+	                if (count > 0) {
+	                	Thread.sleep(5000);	                
+	                	}
+	                }
+	            	
+	            }  catch(InterruptedException e) {
+	            	Thread.currentThread().interrupt();
+	            	break;
 	            }
 	        }
 	    }
 	}
 
-
+}
