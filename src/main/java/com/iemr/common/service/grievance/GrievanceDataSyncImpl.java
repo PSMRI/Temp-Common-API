@@ -171,7 +171,6 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	                                        JsonObject transactionDetailsJson = grievanceJsonData.getAsJsonObject("transactionDetails"); // or another relevant path
 	                                        
 	                                        // Adding properties for each transaction detail
-	                                       // transactionDetails.setComplaintId(formattedComplaintId);
 	                                        // Assuming these fields are coming from your API response
 	                                        transactionDetails.setActionTakenBy(transactionDetailsJson.get("actionTakenBy").getAsString());
 	                                        transactionDetails.setStatus(transactionDetailsJson.get("status").getAsString());
@@ -227,8 +226,7 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	                                combinedData.put("complaint", grievance.getComplaint());
 	                                combinedData.put("beneficiaryRegID", grievance.getBeneficiaryRegId());
 	                                combinedData.put("providerServiceMapId", grievance.getProviderServiceMapId());
-	                             //   combinedData.put("firstName", grievance.getFirstName());
-	                             //   combinedData.put("lastName", grievance.getLastName());
+	                
 	                                combinedData.put("primaryNumber", grievance.getPrimaryNumber());
 
 	                                // Add transaction data
@@ -255,23 +253,18 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	                                combinedData.put("createdDate", grievance.getCreatedDate());
 	                                combinedData.put("lastModDate", grievance.getLastModDate());
 	                                combinedData.put("isCompleted", grievance.getIsCompleted());
-	                             //   combinedData.put("gender", grievance.getGender());
-	                             //   combinedData.put("district", grievance.getDistrict());
-	                             //   combinedData.put("beneficiaryID", grievance.getBeneficiaryId());
-	                             //   combinedData.put("age", grievance.getAge());
+	                      
 	                                combinedData.put("retryNeeded", grievance.getRetryNeeded());
 	                                combinedData.put("callCounter", grievance.getCallCounter());
-	                            //    combinedData.put("lastCall", grievance.getLastCall());
 
 	                                responseData.add(combinedData);
 	                            }
 	                        
 
 	                            // Return the combined response as required
-	                     //       return responseData;
 
 	                        } else {
-	                            logger.info("No records found for page = " + count);
+	                            logger.info("No records found for page = {}" , count);
 	                            count = -1;
 	                        }
 	                    }
@@ -316,8 +309,7 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	    }
 
 	    private void generateGrievanceAuthToken() {
-	        String authorization = "";
-	        String registeringUser = "";
+	       
 	        MultiValueMap<String, String> requestData = new LinkedMultiValueMap<String, String>();
 	        requestData.add("username", grievanceUserName);
 	        requestData.add("password", grievancePassword);
@@ -341,10 +333,9 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	                    + jsnOBJ.get("access_token").getAsString();
 	            
 	            JsonObject grievanceLoginJsonData = jsnOBJ.getAsJsonObject("data");
-	            authorization = grievanceLoginJsonData.get("key").getAsString();
-	            registeringUser = grievanceLoginJsonData.get("userName").getAsString();
+	           
 	            
-	            logger.info("Auth key generated at : " + System.currentTimeMillis() + ", Key : " + GRIEVANCE_AUTH_TOKEN);
+	            logger.info("Auth key generated at : {}" , System.currentTimeMillis() + ", Key : {}" , GRIEVANCE_AUTH_TOKEN);
 
 	            Date date = new Date();
 	            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
