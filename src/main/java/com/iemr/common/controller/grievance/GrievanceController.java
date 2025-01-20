@@ -2,6 +2,7 @@ package com.iemr.common.controller.grievance;
 
 
 import com.iemr.common.service.grievance.GrievanceDataSync;
+import com.iemr.common.utils.exception.IEMRException;
 import com.iemr.common.utils.response.OutputResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,13 +10,12 @@ import io.swagger.v3.oas.annotations.Operation;
 
 import javax.ws.rs.core.MediaType;
 
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -37,7 +37,16 @@ public class GrievanceController {
        	OutputResponse responseData = new OutputResponse();
        	try {
    			responseData.setResponse(grievanceDataSync.fetchUnallocatedGrievanceCount());
-   		} catch (Exception e) {
+   		}
+       	catch (IEMRException e) {
+       		logger.error("Business logic error in UnallocatedGrievanceCount" + e.getMessage(), e);
+       		responseData.setError(e);
+       	}
+       	catch (JSONException e) {
+       		logger.error("JSON processing error in UnallocatedGrievanceCount" + e.getMessage(), e);
+       		responseData.setError(e);
+       	}
+       	catch (Exception e) {
    			logger.error("UnallocatedGrievanceCount failed with error" + e.getMessage(), e);
    			responseData.setError(e);
    		}

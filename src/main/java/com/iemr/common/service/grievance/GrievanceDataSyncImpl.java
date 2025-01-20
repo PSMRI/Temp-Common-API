@@ -378,12 +378,13 @@ public class GrievanceDataSyncImpl implements GrievanceDataSync {
 	        logger.debug("Request received for fetchUnallocatedGrievanceCount");
 
 	        Long unallocatedCount = grievanceDataRepo.fetchUnallocatedGrievanceCount();
-
-	        // Create a response JSON object
-	        JSONObject result = new JSONObject();
-	        result.put("count", unallocatedCount);  // Store the count of unallocated grievances
 	        
-	        // Return the result as a string
+	        if (unallocatedCount == null) {
+	        	throw new IEMRException("Failed to fetch unallocated grievance count");
+	        }
+	        
+	        JSONObject result = new JSONObject();
+	        result.put("count", unallocatedCount);	        
 	        return result.toString();
 	    }
 
