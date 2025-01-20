@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,13 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class GrievanceController {
 	final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    @Autowired
+    
     private GrievanceDataSync grievanceDataSync;
 
+    @Autowired
+    public GrievanceController(GrievanceDataSync grievanceDataSync) {
+    	this.grievanceDataSync = grievanceDataSync;
+    }
     
     @CrossOrigin()
    	@Operation(summary = "/unallocatedGrievanceCount")
-   	@RequestMapping(value = "/unallocatedGrievanceCount", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
+   	@PostMapping(value = "/unallocatedGrievanceCount", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON, headers = "Authorization")
        public String fetchUnallocatedGrievanceCount() {
        	OutputResponse responseData = new OutputResponse();
        	try {
